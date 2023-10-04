@@ -22,8 +22,7 @@ export default function CreateDriver3() {
     }
   });
   const location = useLocation();
-  const driversFeatureId = location?.state?.featureId;
-  const activeWare = GetAPI("activewarehouse", driversFeatureId);
+  const activeWare = GetAPI("activewarehouse");
   const [timeline] = useState("3");
   const [loader, setLoader] = useState(false);
   const [license, setLicense] = useState({
@@ -57,7 +56,7 @@ export default function CreateDriver3() {
       formData.append("backImage", license.backImage);
       formData.append("warehouseId", license.warehouseId.value);
       formData.append("userId", location?.state?.userId);
-      let res = await PostAPI("registerstep3", driversFeatureId, formData);
+      let res = await PostAPI("licenseinfo", formData);
       if (res?.data?.status === "1") {
         navigate("/drivers");
         success_toaster(res?.data?.message);
@@ -98,7 +97,7 @@ export default function CreateDriver3() {
                       className={`
                     ${
                       timeline === "1" || timeline === "2" || timeline === "3"
-                        ? "bg-themePurple text-white"
+                        ? "bg-themeBlue text-white"
                         : "bg-black bg-opacity-20"
                     } min-w-[40px] min-h-[40px] rounded-fullest flex justify-center items-center`}
                     >
@@ -107,7 +106,7 @@ export default function CreateDriver3() {
                     <div
                       className={`${
                         timeline === "2" || timeline === "3"
-                          ? "border-y-themePurple"
+                          ? "border-y-themeBlue"
                           : "border-y-black border-opacity-20"
                       } w-full h-0 border-y mx-4`}
                     ></div>
@@ -115,7 +114,7 @@ export default function CreateDriver3() {
                       className={`
                     ${
                       timeline === "2" || timeline === "3"
-                        ? "bg-themePurple text-white"
+                        ? "bg-themeBlue text-white"
                         : "bg-black bg-opacity-20"
                     } min-w-[40px] min-h-[40px] rounded-fullest flex justify-center items-center`}
                     >
@@ -124,7 +123,7 @@ export default function CreateDriver3() {
                     <div
                       className={`${
                         timeline === "3"
-                          ? "border-y-themePurple"
+                          ? "border-y-themeBlue"
                           : "border-y-black border-opacity-20"
                       } w-full h-0 border-y mx-4`}
                     ></div>
@@ -132,7 +131,7 @@ export default function CreateDriver3() {
                       className={`
                     ${
                       timeline === "3"
-                        ? "bg-themePurple text-white"
+                        ? "bg-themeBlue text-white"
                         : "bg-black bg-opacity-20"
                     } min-w-[40px] min-h-[40px] rounded-fullest flex justify-center items-center`}
                     >
@@ -218,7 +217,7 @@ export default function CreateDriver3() {
                     <button
                       type="submit"
                       onClick={licenseFunc}
-                      className="bg-themePurple w-40 font-medium text-xl text-white py-2.5 px-5 rounded border border-themePurple hover:text-themePurple hover:bg-transparent"
+                      className="bg-themeBlue w-40 font-medium text-xl text-white py-2.5 px-5 rounded border border-themeBlue hover:text-themeBlue hover:bg-transparent"
                     >
                       Create
                     </button>
@@ -227,7 +226,7 @@ export default function CreateDriver3() {
               )}
             </form>
             <div className="col-span-4 bg-white rounded-md space-y-5 p-8">
-              <h2 className="font-bold text-xl text-themePurple">
+              <h2 className="font-bold text-xl text-themeBlue">
                 Your Entries
               </h2>
               <hr className="border-none h-0.5 bg-black bg-opacity-10" />

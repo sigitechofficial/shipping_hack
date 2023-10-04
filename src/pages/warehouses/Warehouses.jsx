@@ -37,13 +37,10 @@ export default function Warehouses() {
     }
     return result;
   };
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const warehousesFeatureId =
-    featureData && featureData.find((ele) => ele.title === "Warehouses")?.id;
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState(null);
-  const { data, reFetch } = GetAPI("allwarehouses", warehousesFeatureId);
+  const { data, reFetch } = GetAPI("allwarehouses");
   const [loader, setLoader] = useState(false);
   const [visible, setVisible] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -85,7 +82,7 @@ export default function Warehouses() {
     setupdateWarehouse({ ...updateWarehouse, [e.target.name]: e.target.value });
   };
   const searchAddress = async () => {
-    let res = await PostAPI("getaddresses", warehousesFeatureId, {
+    let res = await PostAPI("getaddresses", {
       text: text,
     });
     if (res?.data?.status === "1") {
@@ -114,7 +111,7 @@ export default function Warehouses() {
     } else {
       setLoader(true);
       let res = updateWarehouse.newDBS
-        ? await PutAPI("updatewarehouse", warehousesFeatureId, {
+        ? await PutAPI("updatewarehouse", {
             email: updateWarehouse.email,
             name: updateWarehouse.name,
             countryCode: "+" + remover(updateWarehouse.countryCode),
@@ -124,7 +121,7 @@ export default function Warehouses() {
             password: updateWarehouse.password,
             warehouseId: updateWarehouse.warehouseId,
           })
-        : await PutAPI("updatewarehouse", warehousesFeatureId, {
+        : await PutAPI("updatewarehouse", {
             email: updateWarehouse.email,
             name: updateWarehouse.name,
             countryCode: "+" + remover(updateWarehouse.countryCode),
@@ -157,7 +154,7 @@ export default function Warehouses() {
   };
   const deleteWarehouseFunc = async () => {
     setDisabled(true);
-    let res = await PutAPI("deletewarehouse", warehousesFeatureId, {
+    let res = await PutAPI("deletewarehouse", {
       warehouseId: warehouseId,
     });
     if (res?.data?.status === "1") {
@@ -182,7 +179,7 @@ export default function Warehouses() {
       axios
         .get(
           BASE_URL +
-            `warehousedetails?featureId=${warehousesFeatureId}&id=${id}`,
+            `warehousedetails?id=${id}`,
           config
         )
         .then((dat) => {
@@ -512,7 +509,7 @@ export default function Warehouses() {
             <div className="flex justify-end">
               <Link
                 to={"/create-warehouse"}
-                className="py-2.5 px-12 rounded bg-themePurple font-medium text-base text-white border border-themePurple hover:bg-transparent hover:text-themePurple"
+                className="py-2.5 px-12 rounded bg-themeBlue font-medium text-base text-white border border-themeBlue hover:bg-transparent hover:text-themeBlue"
               >
                 Create Warehouse
               </Link>

@@ -37,9 +37,6 @@ import {
 } from "@chakra-ui/react";
 
 export default function Drivers() {
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const driversFeatureId =
-    featureData && featureData.find((ele) => ele.title === "Drivers")?.id;
   const navigate = useNavigate();
   const [tab, setTab] = useState("FreeLance");
   const [search, setSearch] = useState("");
@@ -48,8 +45,8 @@ export default function Drivers() {
   const [disabled, setDisabled] = useState(false);
   const [loader, setLoader] = useState(false);
   const [driverId, setDriverId] = useState(false);
-  const { data, reFetch } = GetAPI("alldrivers", driversFeatureId);
-  const activeWare = GetAPI("activewarehouse", driversFeatureId);
+  const { data, reFetch } = GetAPI("alldrivers");
+  const activeWare = GetAPI("activewarehouse");
   const [approveModal, setApproveModal] = useState(false);
   const closeApproveModal = () => {
     setDriverId("");
@@ -62,7 +59,7 @@ export default function Drivers() {
   };
   const changeDriverStatus = async (status, userId) => {
     setDisabled(true);
-    let change = await PutAPI("userstatus", driversFeatureId, {
+    let change = await PutAPI("userstatus", {
       status: status,
       userId: userId,
     });
@@ -81,7 +78,7 @@ export default function Drivers() {
   };
   const approveDriver = async () => {
     setDisabled(true);
-    let res = await PutAPI("approvedriver", driversFeatureId, {
+    let res = await PutAPI("approvedriver", {
       userId: driverId,
     });
     if (res?.data?.status === "1") {
@@ -96,7 +93,7 @@ export default function Drivers() {
   };
   const rejectDriver = async (userId) => {
     setDisabled(true);
-    let res = await PutAPI("rejectdriver", driversFeatureId, {
+    let res = await PutAPI("rejectdriver", {
       userId: userId,
     });
     if (res?.data?.status === "1") {
@@ -110,7 +107,7 @@ export default function Drivers() {
   };
   const checkDriverStep = async (driverId) => {
     setDisabled(true);
-    let res = await PostAPI("checkregstep", driversFeatureId, {
+    let res = await PostAPI("checkregstep", {
       driverId: driverId,
     });
     if (res?.data?.status === "1") {
@@ -118,13 +115,13 @@ export default function Drivers() {
       setDisabled(false);
     } else if (res?.data?.status === "2") {
       navigate("/create-driver/step-two", {
-        state: { userId: res?.data?.data?.id, featureId: driversFeatureId },
+        state: { userId: res?.data?.data?.id },
       });
       success_toaster(res?.data?.message);
       setDisabled(false);
     } else if (res?.data?.status === "3") {
       navigate("/create-driver/step-three", {
-        state: { userId: res?.data?.data?.id, featureId: driversFeatureId },
+        state: { userId: res?.data?.data?.id },
       });
       success_toaster(res?.data?.message);
       setDisabled(false);
@@ -142,47 +139,41 @@ export default function Drivers() {
       },
     };
     try {
-      axios
-        .get(
-          BASE_URL + `driverdetails?featureId=${driversFeatureId}&id=${id}`,
-          config
-        )
-        .then((dat) => {
-          if (dat.data?.status === "1") {
-            if (path === "details") {
-              navigate("/driver-details", {
-                state: {
-                  driDetails: dat?.data?.data,
-                  driverId: id,
-                  featureId: driversFeatureId,
-                },
-              });
-              info_toaster(dat?.data?.message);
-            } else if (path === "personal") {
-              navigate("/update-driver/personal-info", {
-                state: {
-                  driDetails: dat?.data?.data,
-                },
-              });
-            } else if (path === "vehicle") {
-              navigate("/update-driver/vehicle-info", {
-                state: {
-                  driDetails: dat?.data?.data,
-                },
-              });
-            } else if (path === "license") {
-              navigate("/update-driver/license-info", {
-                state: {
-                  driDetails: dat?.data?.data,
-                },
-              });
-            }
-          } else {
-            error_toaster(dat?.data?.message);
+      axios.get(BASE_URL + `driverdetails?id=${id}`, config).then((dat) => {
+        if (dat.data?.status === "1") {
+          if (path === "details") {
+            navigate("/driver-details", {
+              state: {
+                driDetails: dat?.data?.data,
+                driverId: id,
+              },
+            });
+            info_toaster(dat?.data?.message);
+          } else if (path === "personal") {
+            navigate("/update-driver/personal-info", {
+              state: {
+                driDetails: dat?.data?.data,
+              },
+            });
+          } else if (path === "vehicle") {
+            navigate("/update-driver/vehicle-info", {
+              state: {
+                driDetails: dat?.data?.data,
+              },
+            });
+          } else if (path === "license") {
+            navigate("/update-driver/license-info", {
+              state: {
+                driDetails: dat?.data?.data,
+              },
+            });
           }
-          setDisabled(false);
-          setLoader(false);
-        });
+        } else {
+          error_toaster(dat?.data?.message);
+        }
+        setDisabled(false);
+        setLoader(false);
+      });
     } catch (err) {
       setDisabled(false);
       setLoader(false);
@@ -663,7 +654,7 @@ export default function Drivers() {
                 <div className="font-medium text-xl text-center mb-4 mt-10">
                   Select from following which info you want to edit
                 </div>
-                <div className="flex justify-center items-center gap-x-5 mb-10 [&>button]:bg-transparent [&>button]:py-2.5 [&>button]:px-5 [&>button]:font-medium [&>button]:text-base [&>button]:text-themePurple [&>button]:rounded [&>button]:border [&>button]:border-themePurple">
+                <div className="flex justify-center items-center gap-x-5 mb-10 [&>button]:bg-transparent [&>button]:py-2.5 [&>button]:px-5 [&>button]:font-medium [&>button]:text-base [&>button]:text-themeBlue [&>button]:rounded [&>button]:border [&>button]:border-themeBlue">
                   <button
                     onClick={() =>
                       driverDetails(
@@ -671,7 +662,7 @@ export default function Drivers() {
                         "personal"
                       )
                     }
-                    className="hover:bg-themePurple hover:text-white"
+                    className="hover:bg-themeBlue hover:text-white"
                   >
                     Personal info
                   </button>
@@ -679,7 +670,7 @@ export default function Drivers() {
                     onClick={() =>
                       driverDetails(localStorage.getItem("driverId"), "vehicle")
                     }
-                    className="hover:bg-themePurple hover:text-white"
+                    className="hover:bg-themeBlue hover:text-white"
                   >
                     Vehicle info
                   </button>
@@ -687,7 +678,7 @@ export default function Drivers() {
                     onClick={() =>
                       driverDetails(localStorage.getItem("driverId"), "license")
                     }
-                    className="hover:bg-themePurple hover:text-white"
+                    className="hover:bg-themeBlue hover:text-white"
                   >
                     License info
                   </button>
@@ -728,7 +719,7 @@ export default function Drivers() {
               )} */}
               <Link
                 to={"/create-driver/step-one"}
-                className="py-2.5 px-12 rounded bg-themePurple font-medium text-base text-white border border-themePurple hover:bg-transparent hover:text-themePurple"
+                className="py-2.5 px-12 rounded bg-themeBlue font-medium text-base text-white border border-themeBlue hover:bg-transparent hover:text-themeBlue"
               >
                 Create Driver
               </Link>

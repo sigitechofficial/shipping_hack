@@ -21,8 +21,7 @@ export default function CreateDriver2() {
     }
   });
   const location = useLocation();
-  const driversFeatureId = location?.state?.featureId;
-  const activeVeh = GetAPI("getactivevehicles", driversFeatureId);
+  const activeVeh = GetAPI("getactivevehicles");
   const [timeline] = useState("2");
   const [loader, setLoader] = useState(false);
   const [vehicle, setVehicle] = useState({
@@ -66,7 +65,7 @@ export default function CreateDriver2() {
       vehicle.vehImages.forEach((file) => {
         formData.append("vehImages", file);
       });
-      let res = await PostAPI("registerstep2", driversFeatureId, formData);
+      let res = await PostAPI("vehilceinfo", formData);
       if (res?.data?.status === "1") {
         setVehicle({
           vehicleMake: "",
@@ -79,7 +78,6 @@ export default function CreateDriver2() {
         navigate("/create-driver/step-three", {
           state: {
             userId: res?.data?.data?.userId,
-            featureId: driversFeatureId,
           },
         });
         success_toaster(res?.data?.message);
@@ -113,7 +111,7 @@ export default function CreateDriver2() {
                       className={`
                     ${
                       timeline === "1" || timeline === "2" || timeline === "3"
-                        ? "bg-themePurple text-white"
+                        ? "bg-themeBlue text-white"
                         : "bg-black bg-opacity-20"
                     } min-w-[40px] min-h-[40px] rounded-fullest flex justify-center items-center`}
                     >
@@ -122,7 +120,7 @@ export default function CreateDriver2() {
                     <div
                       className={`${
                         timeline === "2" || timeline === "3"
-                          ? "border-y-themePurple"
+                          ? "border-y-themeBlue"
                           : "border-y-black border-opacity-20"
                       } w-full h-0 border-y mx-4`}
                     ></div>
@@ -130,7 +128,7 @@ export default function CreateDriver2() {
                       className={`
                     ${
                       timeline === "2" || timeline === "3"
-                        ? "bg-themePurple text-white"
+                        ? "bg-themeBlue text-white"
                         : "bg-black bg-opacity-20"
                     } min-w-[40px] min-h-[40px] rounded-fullest flex justify-center items-center`}
                     >
@@ -139,7 +137,7 @@ export default function CreateDriver2() {
                     <div
                       className={`${
                         timeline === "3"
-                          ? "border-y-themePurple"
+                          ? "border-y-themeBlue"
                           : "border-y-black border-opacity-20"
                       } w-full h-0 border-y mx-4`}
                     ></div>
@@ -147,7 +145,7 @@ export default function CreateDriver2() {
                       className={`
                     ${
                       timeline === "3"
-                        ? "bg-themePurple text-white"
+                        ? "bg-themeBlue text-white"
                         : "bg-black bg-opacity-20"
                     } min-w-[40px] min-h-[40px] rounded-fullest flex justify-center items-center`}
                     >
@@ -240,7 +238,7 @@ export default function CreateDriver2() {
                     <button
                       type="submit"
                       onClick={vehicleFunc}
-                      className="bg-themePurple w-40 font-medium text-xl text-white py-2.5 px-5 rounded border border-themePurple hover:text-themePurple hover:bg-transparent"
+                      className="bg-themeBlue w-40 font-medium text-xl text-white py-2.5 px-5 rounded border border-themeBlue hover:text-themeBlue hover:bg-transparent"
                     >
                       Create
                     </button>
@@ -249,9 +247,7 @@ export default function CreateDriver2() {
               )}
             </form>
             <div className="col-span-4 bg-white rounded-md space-y-5 p-8">
-              <h2 className="font-bold text-xl text-themePurple">
-                Your Entries
-              </h2>
+              <h2 className="font-bold text-xl text-themeBlue">Your Entries</h2>
               <hr className="border-none h-0.5 bg-black bg-opacity-10" />
               <div>
                 <h6 className="font-medium text-sm">Vehicle Make</h6>

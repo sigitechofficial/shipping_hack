@@ -16,7 +16,7 @@ export default function AddButton(props) {
   return (
     <button
       onClick={() => props.modal(true)}
-      className="py-2.5 px-12 rounded bg-themePurple font-medium text-base text-white border border-themePurple hover:bg-transparent hover:text-themePurple"
+      className="py-2.5 px-12 rounded bg-themeBlue font-medium text-base text-white border border-themeBlue hover:bg-transparent hover:text-themeBlue"
     >
       Add {props.text}
     </button>
@@ -27,7 +27,7 @@ export function BackButton() {
   return (
     <button
       onClick={() => window.history.back()}
-      className="flex items-center gap-x-2 font-medium text-base text-white bg-themePurple py-2.5 px-5 border border-themePurple rounded hover:bg-transparent hover:text-themePurple"
+      className="flex items-center gap-x-2 font-medium text-base text-white bg-themeBlue py-2.5 px-5 border border-themeBlue rounded hover:bg-transparent hover:text-themeBlue"
     >
       <HiArrowLeft />
       Back
@@ -41,9 +41,9 @@ export function TabButton(props) {
       onClick={() => props.set(props.text)}
       className={`font-medium text-xl px-5 py-2.5 ${
         props.tab === props.text
-          ? "bg-themePurple text-white"
-          : "text-themePurple bg-transparent"
-      } ${props.width} border border-themePurple`}
+          ? "bg-themeBlue text-white"
+          : "text-themeBlue bg-transparent"
+      } ${props.width} border border-themeBlue`}
     >
       {props.text}
     </button>
@@ -56,7 +56,7 @@ export function ModalButtons(props) {
       <button
         type="button"
         onClick={props.close}
-        className="py-2.5 w-24 rounded font-medium text-sm text-themePurple border border-themePurple hover:bg-themePurple hover:text-white"
+        className="py-2.5 w-24 rounded font-medium text-sm text-themeBlue border border-themeBlue hover:bg-themeBlue hover:text-white"
       >
         Cancel
       </button>
@@ -64,7 +64,7 @@ export function ModalButtons(props) {
         type="submit"
         onClick={props.action}
         disabled={props.disabled}
-        className="py-2.5 w-24 rounded font-medium text-sm text-white bg-themePurple border border-themePurple hover:bg-transparent hover:text-themePurple"
+        className="py-2.5 w-24 rounded font-medium text-sm text-white bg-themeBlue border border-themeBlue hover:bg-transparent hover:text-themeBlue"
       >
         {props.text}
       </button>
@@ -75,7 +75,7 @@ export function ModalButtons(props) {
 export function DTApproved() {
   return (
     <button
-      className={`text-white bg-themePurple border-themePurple hover:bg-transparent hover:text-themePurple py-2.5 px-5 rounded-md border`}
+      className={`text-white bg-themeBlue border-themeBlue hover:bg-transparent hover:text-themeBlue py-2.5 px-5 rounded-md border`}
     >
       Approved
     </button>
@@ -85,7 +85,7 @@ export function DTApproved() {
 export function DTPending() {
   return (
     <button
-      className={`"text-black bg-themeOrange border-themeOrange hover:bg-transparent hover:text-themeOrange py-2.5 px-5 rounded-md border`}
+      className={`text-black bg-themeOrange border-themeOrange hover:bg-transparent hover:text-themeOrange py-2.5 px-5 rounded-md border`}
     >
       Pending
     </button>
@@ -95,7 +95,7 @@ export function DTPending() {
 export function DTRejected() {
   return (
     <button
-      className={`"text-white bg-red-600 border-red-600 hover:bg-transparent hover:text-red-600 py-2.5 px-5 rounded-md border`}
+      className={`text-white bg-red-600 border-red-600 hover:bg-transparent hover:text-red-600 py-2.5 px-5 rounded-md border`}
     >
       Rejected
     </button>
@@ -150,7 +150,7 @@ export function DTEdit(props) {
       <button
         onClick={props.edit}
         disabled={props.disabled}
-        className={`"text-themePurple border-themePurple hover:bg-themePurple hover:text-white p-1 rounded-fullest border-2`}
+        className={`text-themeBlue border-themeBlue hover:bg-themeBlue hover:text-white p-1 rounded-fullest border-2`}
       >
         <MdModeEditOutline />
       </button>
@@ -177,7 +177,7 @@ export function DTVerify(props) {
     <Tooltip label="Approve" aria-label="A tooltip">
       <button
         onClick={props.verify}
-        className={`"text-yellow-400 border-yellow-400 hover:bg-yellow-400 hover:text-white p-1 rounded-fullest border-2`}
+        className={`text-yellow-400 border-yellow-400 hover:bg-yellow-400 hover:text-white p-1 rounded-fullest border-2`}
       >
         <BsExclamationLg />
       </button>

@@ -10,10 +10,17 @@ import Home from "./pages/home/Home";
 import Customers from "./pages/customers/Customers";
 import CustomerDetails from "./pages/customers/CustomerDetails";
 import Drivers from "./pages/drivers/Drivers";
+import CreateDriver1 from "./pages/drivers/CreateDriver1";
+import CreateDriver2 from "./pages/drivers/CreateDriver2";
+import CreateDriver3 from "./pages/drivers/CreateDriver3";
 import Warehouses from "./pages/warehouses/Warehouses";
+import CreateWarehouse from "./pages/warehouses/CreateWarehouse";
 import Bookings from "./pages/bookings/Bookings";
 import Vehicles from "./pages/vehicles/Vehicles";
+import Categories from "./pages/categories/Categories";
 import FAQ from "./pages/faq/FAQ";
+import Charges from "./pages/charges/Charges";
+import Support from "./pages/support/Support";
 
 export default function App() {
   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
@@ -61,8 +68,28 @@ export default function App() {
                 />
                 <Route
                   exact
+                  path="/create-driver/step-one"
+                  element={<ProtectedRoute Component={CreateDriver1} />}
+                />
+                <Route
+                  exact
+                  path="/create-driver/step-two"
+                  element={<ProtectedRoute Component={CreateDriver2} />}
+                />
+                <Route
+                  exact
+                  path="/create-driver/step-three"
+                  element={<ProtectedRoute Component={CreateDriver3} />}
+                />
+                <Route
+                  exact
                   path="/warehouses"
                   element={<ProtectedRoute Component={Warehouses} />}
+                />
+                <Route
+                  exact
+                  path="/create-warehouse"
+                  element={<ProtectedRoute Component={CreateWarehouse} />}
                 />
                 <Route
                   exact
@@ -76,8 +103,23 @@ export default function App() {
                 />
                 <Route
                   exact
+                  path="/categories"
+                  element={<ProtectedRoute Component={Categories} />}
+                />
+                <Route
+                  exact
+                  path="/charges"
+                  element={<ProtectedRoute Component={Charges} />}
+                />
+                <Route
+                  exact
                   path="/faqs"
                   element={<ProtectedRoute Component={FAQ} />}
+                />
+                <Route
+                  exact
+                  path="/support"
+                  element={<ProtectedRoute Component={Support} />}
                 />
               </Routes>
             </Router>

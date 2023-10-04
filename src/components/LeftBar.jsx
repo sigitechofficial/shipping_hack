@@ -3,7 +3,7 @@ import {
   // AiOutlineFontSize,
   AiOutlinePoweroff,
 } from "react-icons/ai";
-// import { BiPlusMedical } from "react-icons/bi";
+import { BiPlusMedical } from "react-icons/bi";
 import {
   BsBookHalf,
   // BsCoin
@@ -19,9 +19,15 @@ import {
   // FaUserTie,
   FaWarehouse,
 } from "react-icons/fa";
-// import { GiModernCity, GiPriceTag } from "react-icons/gi";
+import {
+  // GiModernCity,
+  GiPriceTag,
+} from "react-icons/gi";
 import { HiUsers } from "react-icons/hi";
-// import { MdCategory, MdLocationCity } from "react-icons/md";
+import {
+  MdCategory,
+  // MdLocationCity
+} from "react-icons/md";
 import {
   // RiCheckboxMultipleFill,
   // RiCoupon4Fill,
@@ -93,15 +99,16 @@ export default function LeftBar() {
           active={location === "/booking-details" && true}
         />
         <ListItem to={"/vehicles"} Icon={FaCar} title="Vehicle Types" />
+        <ListItem to={"/categories"} Icon={MdCategory} title="Categories" />
+        <ListItem to={"/charges"} Icon={GiPriceTag} title="Charges" />
         <ListItem to={"/faqs"} Icon={FaQuestion} title="FAQ's" />
+        <ListItem to={"/support"} Icon={BiPlusMedical} title="Support" />
         {/* <ListItem
           to={"/transporters"}
           Icon={RiUserReceivedLine}
           title="Transporters"
         /> */}
         {/* <ListItem to={"/employees"} Icon={FaUserTie} title="Employees" /> */}
-        {/* <ListItem to={"/charges"} Icon={GiPriceTag} title="Charges" /> */}
-        {/* <ListItem to={"/categories"} Icon={MdCategory} title="Categories" /> */}
         {/* <ListItem to={"/coupons"} Icon={RiCoupon4Fill} title="Coupons" /> */}
         {/* <ListItem to={"/sizes"} Icon={AiOutlineFontSize} title="Size System" /> */}
         {/* <ListItem to={"/units"} Icon={FaUnity} title="Unit System" /> */}
@@ -136,13 +143,12 @@ export default function LeftBar() {
           Icon={RiCheckboxMultipleFill}
           title="Roles & Permission"
         /> */}
-        {/* <ListItem to={"/support"} Icon={BiPlusMedical} title="Support" /> */}
       </ul>
       <ul className="xl:pr-2 pr-1 relative">
         <li>
           <button
             onClick={logoutFunc}
-            className={`w-full flex items-center gap-x-4 px-4 py-2 rounded text-black text-opacity-40 font-medium xl:text-lg text-base focus:bg-themePurple focus:text-themeOrange focus:text-opacity-100`}
+            className={`w-full flex items-center gap-x-4 px-4 py-2 rounded text-black text-opacity-40 font-medium xl:text-lg text-base focus:bg-themeBlue focus:text-themeOrange focus:text-opacity-100`}
           >
             <AiOutlinePoweroff size={24} />
             <span>Logout</span>

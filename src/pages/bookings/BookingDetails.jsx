@@ -66,7 +66,7 @@ export default function BookingDetails() {
             <div className="flex items-center gap-x-6">
               <div className="flex items-center gap-x-3">
                 <h4 className="font-medium text-xl">Status:</h4>
-                <div className="font-semibold text-lg text-themePurple border border-themePurple py-2 px-4 rounded">
+                <div className="font-semibold text-lg text-themeBlue border border-themeBlue py-2 px-4 rounded">
                   {data?.data?.bookingStatus}
                 </div>
               </div>
@@ -131,7 +131,7 @@ export default function BookingDetails() {
                 <div className="space-y-2">
                   <h5
                     className={`font-bold text-xl ${
-                      dark ? "text-white" : "text-themePurple"
+                      dark ? "text-white" : "text-themeBlue"
                     }`}
                   >
                     {data?.data?.senderDetails?.name}
@@ -170,7 +170,7 @@ export default function BookingDetails() {
                 <div className="space-y-2">
                   <h5
                     className={`font-bold text-xl ${
-                      dark ? "text-white" : "text-themePurple"
+                      dark ? "text-white" : "text-themeBlue"
                     }`}
                   >
                     {data?.data?.recipientDetails?.name}
@@ -211,7 +211,7 @@ export default function BookingDetails() {
                 <h1 className="font-medium text-2xl flex items-center gap-x-5">
                   <TbTruckDelivery
                     size={32}
-                    className={dark ? "text-white" : "text-themePurple"}
+                    className={dark ? "text-white" : "text-themeBlue"}
                   />
                   <span>Delivery Details</span>
                 </h1>
@@ -372,7 +372,7 @@ export default function BookingDetails() {
                 <h1 className="font-medium text-2xl flex items-center gap-x-5">
                   <BsBoxSeam
                     size={32}
-                    className={dark ? "text-white" : "text-themePurple"}
+                    className={dark ? "text-white" : "text-themeBlue"}
                   />
                   <span>Parcel Details</span>
                 </h1>
@@ -487,7 +487,7 @@ export default function BookingDetails() {
                       className={`w-fit rounded-fullest ${
                         dark
                           ? "bg-white text-black"
-                          : "bg-themePurple text-white"
+                          : "bg-themeBlue text-white"
                       } p-4`}
                     >
                       <FaUser size={28} />
@@ -495,7 +495,7 @@ export default function BookingDetails() {
                     <div className="space-y-1">
                       <h5
                         className={`font-bold text-xl ${
-                          dark ? "text-white" : "text-themePurple"
+                          dark ? "text-white" : "text-themeBlue"
                         }`}
                       >
                         {data?.data?.receivingDriver?.name}
@@ -542,7 +542,7 @@ export default function BookingDetails() {
                       className={`w-fit rounded-fullest ${
                         dark
                           ? "bg-white text-black"
-                          : "bg-themePurple text-white"
+                          : "bg-themeBlue text-white"
                       } p-4`}
                     >
                       <FaUser size={28} />
@@ -550,7 +550,7 @@ export default function BookingDetails() {
                     <div className="space-y-1">
                       <h5
                         className={`font-bold text-xl ${
-                          dark ? "text-white" : "text-themePurple"
+                          dark ? "text-white" : "text-themeBlue"
                         }`}
                       >
                         {data?.data?.transporterGuy?.name}
@@ -602,7 +602,7 @@ export default function BookingDetails() {
                       className={`w-fit rounded-fullest ${
                         dark
                           ? "bg-white text-black"
-                          : "bg-themePurple text-white"
+                          : "bg-themeBlue text-white"
                       } p-4`}
                     >
                       <FaUser size={28} />
@@ -610,7 +610,7 @@ export default function BookingDetails() {
                     <div className="space-y-1">
                       <h5
                         className={`font-bold text-xl ${
-                          dark ? "text-white" : "text-themePurple"
+                          dark ? "text-white" : "text-themeBlue"
                         }`}
                       >
                         {data?.data?.deliveryDriver?.name}

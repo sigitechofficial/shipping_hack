@@ -137,7 +137,7 @@ export default function Support() {
                     e.preventDefault();
                     updateSupport(email, data?.data?.email?.id, "email");
                   }}
-                  className="py-2 px-6 bg-themePurple text-white rounded border border-themePurple hover:bg-transparent hover:text-themePurple"
+                  className="py-2 px-6 bg-themeBlue text-white rounded border border-themeBlue hover:bg-transparent hover:text-themeBlue"
                 >
                   Save
                 </button>
@@ -216,7 +216,7 @@ export default function Support() {
                     e.preventDefault();
                     updateSupport(phone, data?.data?.phone?.id, "phone");
                   }}
-                  className="py-2 px-6 bg-themePurple text-white rounded border border-themePurple hover:bg-transparent hover:text-themePurple"
+                  className="py-2 px-6 bg-themeBlue text-white rounded border border-themeBlue hover:bg-transparent hover:text-themeBlue"
                 >
                   Save
                 </button>

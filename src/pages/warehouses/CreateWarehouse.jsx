@@ -215,21 +215,21 @@ export default function CreateWarehouse() {
                         password: "",
                       })
                     }
-                    className="bg-transparent w-40 font-medium text-xl text-themePurple py-2.5 px-5 rounded border border-themePurple hover:text-white hover:bg-themePurple"
+                    className="bg-transparent w-40 font-medium text-xl text-themeBlue py-2.5 px-5 rounded border border-themeBlue hover:text-white hover:bg-themeBlue"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     onClick={createWarehouseFunc}
-                    className="bg-themePurple w-40 font-medium text-xl text-white py-2.5 px-5 rounded border border-themePurple hover:text-themePurple hover:bg-transparent"
+                    className="bg-themeBlue w-40 font-medium text-xl text-white py-2.5 px-5 rounded border border-themeBlue hover:text-themeBlue hover:bg-transparent"
                   >
                     Create
                   </button>
                 </div>
               </form>
               <div className="col-span-4 bg-white rounded-md space-y-5 p-8">
-                <h2 className="font-bold text-xl text-themePurple">
+                <h2 className="font-bold text-xl text-themeBlue">
                   Your Entries
                 </h2>
                 <hr className="border-none h-0.5 bg-black bg-opacity-10" />

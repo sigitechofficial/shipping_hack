@@ -9,8 +9,8 @@ export default function StatusPill(props) {
       {props.pillStatus === "completed" ? (
         <div
           className={`${
-            dark ? "bg-white text-black" : "bg-themePurple text-white"
-          } w-10 h-10 rounded-fullest border border-themePurple flex`}
+            dark ? "bg-white text-black" : "bg-themeBlue text-white"
+          } w-10 h-10 rounded-fullest border border-themeBlue flex`}
         >
           <BsCheckLg size={22} className="m-auto" />
         </div>

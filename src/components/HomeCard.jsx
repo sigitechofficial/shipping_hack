@@ -20,7 +20,7 @@ export default function HomeCard(props) {
       >
         {props.title}
       </h6>
-      <h2 className={`font-bold text-3xl text-themePurple`}>
+      <h2 className={`font-bold text-3xl text-themeBlue`}>
         {props.quantity}
       </h2>
     </Link>

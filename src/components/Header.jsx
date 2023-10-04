@@ -2,13 +2,14 @@ import React from "react";
 import { FaUser } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { imgURL } from "../utilities/URL";
 
 export default function Header() {
   return (
     <header className="bg-themeBlue fixed z-20 w-full">
       <nav className="w-11/12 m-auto py-5 flex justify-between items-center">
         <Link to="/">
-          <img src="images/logo.webp" alt="logo" className="w-44 xl:w-52" />
+          <img src={`${imgURL}logo.webp`} alt="logo" className="w-44 xl:w-52" />
         </Link>
         <div className="relative">
           <input

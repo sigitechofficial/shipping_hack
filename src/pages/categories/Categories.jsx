@@ -27,13 +27,10 @@ import { inputStyle, labelStyle } from "../../utilities/Input";
 import Layout from "../../components/Layout";
 
 export default function Categories() {
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const categoriesFeatureId =
-    featureData && featureData.find((ele) => ele.title === "Categories")?.id;
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState(null);
   const [disabled, setDisabled] = useState(false);
-  const { data, reFetch } = GetAPI("getallcategory", categoriesFeatureId);
+  const { data, reFetch } = GetAPI("getallcategory");
   const [loader, setLoader] = useState(false);
   const [addCategory, setAddCategory] = useState({
     title: "",
@@ -68,7 +65,7 @@ export default function Categories() {
       info_toaster("Please enter your Category's Charge");
     } else {
       setLoader(true);
-      let res = await PostAPI("addcategory", categoriesFeatureId, {
+      let res = await PostAPI("addcategory", {
         title: addCategory.title,
         charge: addCategory.charge,
       });
@@ -92,7 +89,7 @@ export default function Categories() {
       info_toaster("Please enter your Category's Charge");
     } else {
       setLoader(true);
-      let res = await PutAPI("updatecategory", categoriesFeatureId, {
+      let res = await PutAPI("updatecategory", {
         title: updateCategory.updateTitle,
         charge: updateCategory.updateCharge,
         categoryId: updateCategory.categoryId,
@@ -115,7 +112,7 @@ export default function Categories() {
   };
   const changeCategoryFunc = async (status, categoryId) => {
     setDisabled(true);
-    let res = await PutAPI("categorystatus", categoriesFeatureId, {
+    let res = await PutAPI("categorystatus", {
       status: status,
       categoryId: categoryId,
     });
@@ -128,21 +125,6 @@ export default function Categories() {
       setDisabled(false);
     }
   };
-  const getCategories = () => {
-    const filteredArray =
-      data?.status === "1"
-        ? data?.data?.categoryData?.filter(
-            (cat) =>
-              search === "" ||
-              select === null ||
-              ((cat?.title).toLowerCase().includes(search.toLowerCase()) &&
-                select.value === "1") ||
-              ((cat?.charge).toString().includes(search.toLowerCase()) &&
-                select.value === "2")
-          )
-        : [];
-    return filteredArray;
-  };
   const columns = [
     {
       name: "#",
@@ -153,7 +135,7 @@ export default function Categories() {
       selector: (row) => row.title,
     },
     {
-      name: `Charge(${data?.data?.currencyUnit})`,
+      name: `Charge`,
       selector: (row) => row.charge,
     },
     {
@@ -162,11 +144,11 @@ export default function Categories() {
     },
   ];
   const datas = [];
-  getCategories()?.map((cat, index) =>
+  data?.data?.map((cat, index) =>
     datas.push({
       id: index + 1,
       title: cat?.title,
-      charge: cat?.charge,
+      charge: cat?.charge ?? "No Data",
       action: (
         <div className="flex gap-x-2">
           <DTEdit

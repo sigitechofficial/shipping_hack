@@ -28,12 +28,9 @@ import { inputStyle, labelStyle } from "../../utilities/Input";
 import Layout from "../../components/Layout";
 
 export default function FAQ() {
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const faqFeatureId =
-    featureData && featureData.find((ele) => ele.title === "FAQ's")?.id;
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState(null);
-  const { data, reFetch } = GetAPI("allfaqs", faqFeatureId);
+  const { data, reFetch } = GetAPI("allfaqs");
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [modalType, setModalType] = useState("");
@@ -71,7 +68,7 @@ export default function FAQ() {
       info_toaster("Please enter your FAQ's answer");
     } else {
       setLoader(true);
-      let res = await PostAPI("addfaq", faqFeatureId, {
+      let res = await PostAPI("addfaq", {
         title: addFAQ.title,
         answer: addFAQ.answer,
       });
@@ -95,7 +92,7 @@ export default function FAQ() {
       info_toaster("Please enter your FAQ's answer");
     } else {
       setLoader(true);
-      let res = await PutAPI("updatefaq", faqFeatureId, {
+      let res = await PutAPI("updatefaq", {
         title: updateFAQ.updateTitle,
         answer: updateFAQ.updateAnswer,
         faqId: updateFAQ.faqId,
@@ -114,7 +111,7 @@ export default function FAQ() {
   };
   const changeFAQfunc = async (status, faqId) => {
     setDisabled(true);
-    let res = await PutAPI("changefaqstatus", faqFeatureId, {
+    let res = await PutAPI("changefaqstatus", {
       status: status,
       faqId: faqId,
     });

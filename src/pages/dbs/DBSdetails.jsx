@@ -27,7 +27,7 @@ export default function DBSdetails() {
             <div className="col-span-9 py-8 px-8 space-y-5 border-r border-r-black border-opacity-10">
               <h1 className="font-medium text-2xl">Postal Code</h1>
               <div className="flex gap-x-3">
-                <div className="w-10 h-10 flex justify-center items-center rounded-fullest bg-themePurple">
+                <div className="w-10 h-10 flex justify-center items-center rounded-fullest bg-themeBlue">
                   <img
                     src={BASE_URL2 + dbsDetails?.structureType?.icon}
                     alt="icon"
@@ -88,14 +88,14 @@ export default function DBSdetails() {
             <div className="col-span-3 py-8 px-6 space-y-5">
               <h1 className="font-medium text-2xl">Sender Details</h1>
               <div className="flex gap-x-3">
-                <div className="w-12 h-12 flex justify-center items-center rounded-fullest bg-themePurple text-white">
+                <div className="w-12 h-12 flex justify-center items-center rounded-fullest bg-themeBlue text-white">
                   <FaUser size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-xl text-themePurple">
+                  <h3 className="font-bold text-xl text-themeBlue">
                     {dbsDetails?.senderDetails?.name}
                   </h3>
-                  <p className="font-normal text-sm text-themePurple text-opacity-60">
+                  <p className="font-normal text-sm text-themeBlue text-opacity-60">
                     Member Since: {dbsDetails?.senderDetails?.memberSince}
                   </p>
                 </div>

@@ -29,18 +29,15 @@ import Layout from "../../components/Layout";
 import ChargesCard from "../../components/ChargesCard";
 
 export default function Charges() {
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const chargesFeatureId =
-    featureData && featureData.find((ele) => ele.title === "Charges")?.id;
   const [tab, setTab] = useState("General");
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState(null);
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const gen = GetAPI("getgencharges", chargesFeatureId);
-  const dist = GetAPI("getdistancecharge", chargesFeatureId);
-  const weight = GetAPI("getweightcharge", chargesFeatureId);
-  const vol = GetAPI("getvolweicharge", chargesFeatureId);
+  const gen = GetAPI("getgencharges");
+  const dist = GetAPI("getdistancecharge");
+  const weight = GetAPI("getweightcharge");
+  const vol = GetAPI("getvolweicharge");
   const [genCharge, setGenCharge] = useState({
     value: "",
     cId: "",
@@ -113,7 +110,6 @@ export default function Charges() {
           : tab === "Vol-Weight"
           ? "addvolweicharge"
           : "",
-        chargesFeatureId,
         {
           title: addCharge.title,
           startValue: addCharge.startValue,
@@ -150,7 +146,7 @@ export default function Charges() {
       info_toaster("Please enter your Charge's Value");
     } else {
       setLoader(true);
-      let res = await PutAPI("updategencharges", chargesFeatureId, {
+      let res = await PutAPI("updategencharges", {
         value: genCharge.value,
         cId: genCharge.cId,
       });
@@ -189,7 +185,6 @@ export default function Charges() {
           : tab === "Vol-Weight"
           ? "updatevolweicharge"
           : "",
-        chargesFeatureId,
         {
           title: updateCharge.updateTitle,
           startValue: updateCharge.updateStartValue,
@@ -224,7 +219,7 @@ export default function Charges() {
   };
   const deleteChargeFunc = async (url, chargeId) => {
     setDisabled(true);
-    let res = await PutAPI(url, chargesFeatureId, {
+    let res = await PutAPI(url, {
       chargeId: chargeId,
     });
     if (res?.data?.status === "1") {
@@ -687,63 +682,21 @@ export default function Charges() {
             </div>
             {tab === "General" ? (
               gen?.data?.status === "1" ? (
-                <section className="grid grid-cols-4 gap-x-8">
-                  <ChargesCard
-                    info={gen?.data?.data?.volmetricConversion?.information}
-                    value={gen?.data?.data?.volmetricConversion?.value}
-                    textColor="text-purple-400"
-                    onClick={() => {
-                      setGenModal(true);
-                      setGenCharge({
-                        value: gen?.data?.data?.volmetricConversion?.value,
-                        cId: gen?.data?.data?.volmetricConversion?.id,
-                      });
-                    }}
-                  />
-                  <ChargesCard
-                    info={gen?.data?.data?.VAT?.information}
-                    value={gen?.data?.data?.VAT?.value}
-                    textColor="text-purple-700"
-                    onClick={() => {
-                      setGenModal(true);
-                      setGenCharge({
-                        value: gen?.data?.data?.VAT?.value,
-                        cId: gen?.data?.data?.VAT?.id,
-                      });
-                    }}
-                  />
-                  <ChargesCard
-                    info={gen?.data?.data?.packing?.information}
-                    value={
-                      gen?.data?.data?.currencyUnit +
-                      "" +
-                      gen?.data?.data?.packing?.value
-                    }
-                    textColor="text-blue-400"
-                    onClick={() => {
-                      setGenModal(true);
-                      setGenCharge({
-                        value: gen?.data?.data?.packing?.value,
-                        cId: gen?.data?.data?.packing?.id,
-                      });
-                    }}
-                  />
-                  <ChargesCard
-                    info={gen?.data?.data?.service?.information}
-                    value={
-                      gen?.data?.data?.currencyUnit +
-                      "" +
-                      gen?.data?.data?.service?.value
-                    }
-                    textColor="text-blue-700"
-                    onClick={() => {
-                      setGenModal(true);
-                      setGenCharge({
-                        value: gen?.data?.data?.service?.value,
-                        cId: gen?.data?.data?.service?.id,
-                      });
-                    }}
-                  />
+                <section className="grid grid-cols-4 gap-8">
+                  {gen?.data?.data?.map((gen, index) => (
+                    <ChargesCard
+                      info={gen?.information}
+                      value={gen?.value}
+                      textColor="text-purple-400"
+                      onClick={() => {
+                        setGenModal(true);
+                        setGenCharge({
+                          value: gen?.value,
+                          cId: gen?.id,
+                        });
+                      }}
+                    />
+                  ))}
                 </section>
               ) : (
                 <h1 className="my-4 text-center">

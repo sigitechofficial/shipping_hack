@@ -330,7 +330,7 @@ export default function ExpiredDrivers() {
           <div className="flex justify-end gap-x-5">
             <Link
               to={"/create-driver/step-one"}
-              className="py-2.5 px-12 rounded bg-themePurple font-medium text-base text-white border border-themePurple hover:bg-transparent hover:text-themePurple"
+              className="py-2.5 px-12 rounded bg-themeBlue font-medium text-base text-white border border-themeBlue hover:bg-transparent hover:text-themeBlue"
             >
               Create Driver
             </Link>

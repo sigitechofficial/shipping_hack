@@ -872,7 +872,7 @@ export default function DBS() {
             <div className="flex justify-end gap-x-2">
               <label
                 htmlFor="bulk"
-                className="py-2.5 px-12 rounded bg-themePurple font-medium text-base text-white border border-themePurple hover:bg-transparent hover:text-themePurple cursor-pointer"
+                className="py-2.5 px-12 rounded bg-themeBlue font-medium text-base text-white border border-themeBlue hover:bg-transparent hover:text-themeBlue cursor-pointer"
               >
                 Import Data
               </label>
@@ -886,7 +886,7 @@ export default function DBS() {
               />
               {importData && (
                 <button
-                  className="py-2.5 px-4 rounded bg-themePurple font-medium text-base text-white border border-themePurple hover:bg-transparent hover:text-themePurple"
+                  className="py-2.5 px-4 rounded bg-themeBlue font-medium text-base text-white border border-themeBlue hover:bg-transparent hover:text-themeBlue"
                   onClick={bulkImportData}
                 >
                   <FaCloudUploadAlt />

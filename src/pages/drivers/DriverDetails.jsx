@@ -442,10 +442,10 @@ export default function DriverDetails() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <h2 className="font-bold text-xl text-themePurple">
+                  <h2 className="font-bold text-xl text-themeBlue">
                     {driDetails?.firstName + " " + driDetails?.lastName}
                   </h2>
-                  <p className="font-normal text-base text-themePurple text-opacity-60">
+                  <p className="font-normal text-base text-themeBlue text-opacity-60">
                     Member Since: {driDetails?.joinedOn}
                   </p>
                 </div>

@@ -282,7 +282,7 @@ export default function Notifications() {
             <div className="flex justify-end">
               <button
                 onClick={() => setSendModal(true)}
-                className="py-2.5 px-12 rounded bg-themePurple font-medium text-base text-white border border-themePurple hover:bg-transparent hover:text-themePurple"
+                className="py-2.5 px-12 rounded bg-themeBlue font-medium text-base text-white border border-themeBlue hover:bg-transparent hover:text-themeBlue"
               >
                 Send Notification
               </button>

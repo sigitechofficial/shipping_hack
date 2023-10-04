@@ -221,7 +221,7 @@ export default function UpdateDriver2() {
                       <button
                         type="submit"
                         onClick={vehicleFunc}
-                        className="bg-themePurple w-40 font-medium text-xl text-white py-2.5 px-5 rounded border border-themePurple hover:text-themePurple hover:bg-transparent"
+                        className="bg-themeBlue w-40 font-medium text-xl text-white py-2.5 px-5 rounded border border-themeBlue hover:text-themeBlue hover:bg-transparent"
                       >
                         Update
                       </button>
@@ -230,7 +230,7 @@ export default function UpdateDriver2() {
                 )}
               </form>
               <div className="col-span-4 bg-white rounded-md space-y-5 p-8">
-                <h2 className="font-bold text-xl text-themePurple">
+                <h2 className="font-bold text-xl text-themeBlue">
                   Your Entries
                 </h2>
                 <hr className="border-none h-0.5 bg-black bg-opacity-10" />
