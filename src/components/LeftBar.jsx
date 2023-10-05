@@ -37,6 +37,7 @@ import {
 } from "react-icons/ri";
 // import { TbBellRinging, TbCapture } from "react-icons/tb";
 // import { VscSymbolStructure } from "react-icons/vsc";
+import { SiLogstash } from "react-icons/si";
 import { useLocation, useNavigate } from "react-router-dom";
 import { info_toaster } from "../utilities/Toaster";
 import { LayoutContext } from "./Layout";
@@ -44,7 +45,7 @@ import ListItem from "./ListItem";
 
 export default function LeftBar() {
   const navigate = useNavigate();
-  const { expand, setLoader } = useContext(LayoutContext);
+  const { setLoader } = useContext(LayoutContext);
   const location = useLocation().pathname;
   const logoutFunc = (e) => {
     e.preventDefault();
@@ -58,9 +59,7 @@ export default function LeftBar() {
   };
   return (
     <div
-      className={`w-64 fixed h-[calc(100%-92px)] top-[92px] py-7 xl:pl-6 pl-3 ${
-        expand ? "hidden" : "flex"
-      } bg-white border-black flex-col justify-between border-r border-opacity-10`}
+      className={`w-64 fixed h-[calc(100%-92px)] top-[92px] py-7 xl:pl-6 pl-3 flex bg-white border-black flex-col justify-between border-r border-opacity-10`}
     >
       <ul className="flex flex-col gap-y-5 h-[88%] overflow-auto sidebar xl:pr-2 pr-1">
         <ListItem to={"/"} Icon={RiDashboardFill} title="Home" />
@@ -91,6 +90,11 @@ export default function LeftBar() {
             location === "/create-warehouse" ||
             (location === "/warehouse-details" && true)
           }
+        />
+        <ListItem
+          to={"/logistics"}
+          Icon={SiLogstash}
+          title="Logistic Companies"
         />
         <ListItem
           to={"/bookings"}

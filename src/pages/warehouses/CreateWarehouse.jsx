@@ -3,7 +3,6 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useNavigate } from "react-router-dom";
-import Select from "react-select";
 import { PostAPI } from "../../utilities/PostAPI";
 import {
   error_toaster,
@@ -16,41 +15,24 @@ import Layout from "../../components/Layout";
 import isValidEmail from "../../utilities/MailCheck";
 
 export default function CreateWarehouse() {
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const warehousesFeatureId =
-    featureData && featureData.find((ele) => ele.title === "Warehouses")?.id;
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
-  const [address, setAddress] = useState([]);
-  const [text, setText] = useState("");
   const [warehouse, setWarehouse] = useState({
     email: "",
-    name: "",
+    password: "",
+    companyName: "",
+    country: "",
+    province: "",
+    district: "",
+    city: "",
+    completeAddress: "",
+    located: "",
     countryCode: "507",
     phoneNum: "",
-    addressDBSId: "",
-    password: "",
   });
   const onChange = (e) => {
     setWarehouse({ ...warehouse, [e.target.name]: e.target.value });
   };
-  const searchAddress = async () => {
-    let res = await PostAPI("getaddresses", warehousesFeatureId, {
-      text: text,
-    });
-    if (res?.data?.status === "1") {
-      setAddress(res?.data?.data?.addresses);
-    } else {
-      error_toaster(res?.data?.message);
-    }
-  };
-  const options = [];
-  address?.map((dbs, index) =>
-    options.push({
-      value: dbs?.id,
-      label: dbs?.postalCode + " " + dbs?.secondPostalCode,
-    })
-  );
   const createWarehouseFunc = async (e) => {
     e.preventDefault();
     if (warehouse.name === "") {
@@ -66,15 +48,33 @@ export default function CreateWarehouse() {
     } else if (warehouse.addressDBSId === "") {
       info_toaster("Please select Warehouse's DBS Code");
     } else {
-      let res = await PostAPI("createwarehouse", warehousesFeatureId, {
+      let res = await PostAPI("createwarehouse", {
         email: warehouse.email,
-        name: warehouse.name,
-        countryCode: "+" + warehouse.countryCode,
-        phoneNum: warehouse.phoneNum,
-        addressDBSId: warehouse.addressDBSId.value,
         password: warehouse.password,
+        companyName: warehouse.companyName,
+        country: warehouse.country,
+        province: warehouse.province,
+        district: warehouse.district,
+        city: warehouse.city,
+        completeAddress: warehouse.completeAddress,
+        located: warehouse.country,
+        countryCode: warehouse.countryCode,
+        phoneNum: warehouse.phoneNum,
       });
       if (res?.data?.status === "1") {
+        setWarehouse({
+          email: "",
+          password: "",
+          companyName: "",
+          country: "",
+          province: "",
+          district: "",
+          city: "",
+          completeAddress: "",
+          located: "",
+          countryCode: "507",
+          phoneNum: "",
+        });
         navigate("/warehouses");
         success_toaster(res?.data?.message);
       } else {
@@ -95,15 +95,15 @@ export default function CreateWarehouse() {
             <section className="grid grid-cols-12 gap-5">
               <form className="col-span-8 grid grid-cols-2 gap-x-20 gap-y-5 bg-white rounded-md p-8">
                 <div className="space-y-1">
-                  <label className={labelStyle} htmlFor="name">
+                  <label className={labelStyle} htmlFor="companyName">
                     Warehouse Name
                   </label>
                   <input
-                    value={warehouse.name}
+                    value={warehouse.companyName}
                     onChange={onChange}
                     type="text"
-                    name="name"
-                    id="name"
+                    name="companyName"
+                    id="companyName"
                     placeholder="Enter your Warehouse's Name"
                     className={inputStyle}
                   />
@@ -160,6 +160,16 @@ export default function CreateWarehouse() {
                     Create Password
                   </label>
                   <div className="relative">
+                    <input
+                      value={warehouse.password}
+                      onChange={onChange}
+                      type={visible ? "text" : "password"}
+                      name="password"
+                      id="password"
+                      placeholder="Create your Password"
+                      className={inputStyle}
+                      autoComplete="off"
+                    />
                     <button
                       onClick={() => setVisible(!visible)}
                       type="button"
@@ -171,35 +181,76 @@ export default function CreateWarehouse() {
                         <AiOutlineEyeInvisible size={20} />
                       )}
                     </button>
-                    <input
-                      value={warehouse.password}
-                      onChange={onChange}
-                      type={visible ? "text" : "password"}
-                      name="password"
-                      id="password"
-                      placeholder="Create your Password"
-                      className={inputStyle}
-                      autoComplete="off"
-                    />
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <label className={labelStyle} htmlFor="dbs">
-                    DBS code of Warehouse
+                  <label className={labelStyle} htmlFor="city">
+                    City
                   </label>
-                  <Select
-                    inputValue={text}
-                    onInputChange={(text) => {
-                      setText(text);
-                      text === "" ? setAddress([]) : searchAddress();
-                    }}
-                    value={warehouse.addressDBSId}
-                    onChange={(e) =>
-                      setWarehouse({ ...warehouse, addressDBSId: e })
-                    }
-                    options={options}
-                    inputId="dbs"
-                    placeholder="Enter something to search DBS"
+                  <input
+                    value={warehouse.city}
+                    onChange={onChange}
+                    type="text"
+                    name="city"
+                    id="city"
+                    placeholder="Enter your City"
+                    className={inputStyle}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className={labelStyle} htmlFor="district">
+                    District
+                  </label>
+                  <input
+                    value={warehouse.district}
+                    onChange={onChange}
+                    type="text"
+                    name="district"
+                    id="district"
+                    placeholder="Enter your District"
+                    className={inputStyle}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className={labelStyle} htmlFor="province">
+                    Province
+                  </label>
+                  <input
+                    value={warehouse.province}
+                    onChange={onChange}
+                    type="text"
+                    name="province"
+                    id="province"
+                    placeholder="Enter your Province"
+                    className={inputStyle}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className={labelStyle} htmlFor="country">
+                    Country
+                  </label>
+                  <input
+                    value={warehouse.country}
+                    onChange={onChange}
+                    type="text"
+                    name="country"
+                    id="country"
+                    placeholder="Enter your Country"
+                    className={inputStyle}
+                  />
+                </div>
+                <div className="col-span-2 space-y-1">
+                  <label className={labelStyle} htmlFor="completeAddress">
+                    Address
+                  </label>
+                  <input
+                    value={warehouse.completeAddress}
+                    onChange={onChange}
+                    type="text"
+                    name="completeAddress"
+                    id="completeAddress"
+                    placeholder="Enter your Address"
+                    className={inputStyle}
                   />
                 </div>
                 <div className="col-span-2 flex justify-end items-center gap-x-5 mt-20">
@@ -208,11 +259,16 @@ export default function CreateWarehouse() {
                     onClick={() =>
                       setWarehouse({
                         email: "",
-                        name: "",
+                        password: "",
+                        companyName: "",
+                        country: "",
+                        province: "",
+                        district: "",
+                        city: "",
+                        completeAddress: "",
+                        located: "",
                         countryCode: "507",
                         phoneNum: "",
-                        addressDBSId: "",
-                        password: "",
                       })
                     }
                     className="bg-transparent w-40 font-medium text-xl text-themeBlue py-2.5 px-5 rounded border border-themeBlue hover:text-white hover:bg-themeBlue"
@@ -261,11 +317,14 @@ export default function CreateWarehouse() {
                 </div>
                 <hr className="border-none h-0.5 bg-black bg-opacity-10" />
                 <div>
-                  <h6 className="font-medium text-sm">DBS Code</h6>
+                  <h6 className="font-medium text-sm">Address</h6>
                   <p className="font-bold text-base text-black text-opacity-60">
-                    {warehouse.addressDBSId === ""
-                      ? "Enter your Warehouse's DBS Code"
-                      : warehouse.addressDBSId.label}
+                    {warehouse.city === "" ||
+                    warehouse.province === "" ||
+                    warehouse.country === "" ||
+                    warehouse.completeAddress === ""
+                      ? "Enter your Warehouse's Address"
+                      : `${warehouse.completeAddress}, ${warehouse.city}, ${warehouse.province}, ${warehouse.country}`}
                   </p>
                 </div>
               </div>

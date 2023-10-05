@@ -15,12 +15,14 @@ import CreateDriver2 from "./pages/drivers/CreateDriver2";
 import CreateDriver3 from "./pages/drivers/CreateDriver3";
 import Warehouses from "./pages/warehouses/Warehouses";
 import CreateWarehouse from "./pages/warehouses/CreateWarehouse";
+import WarehouseDetails from "./pages/warehouses/WarehouseDetails";
 import Bookings from "./pages/bookings/Bookings";
 import Vehicles from "./pages/vehicles/Vehicles";
 import Categories from "./pages/categories/Categories";
 import FAQ from "./pages/faq/FAQ";
 import Charges from "./pages/charges/Charges";
 import Support from "./pages/support/Support";
+import Logistics from "./pages/logistics/Logistics";
 
 export default function App() {
   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
@@ -90,6 +92,16 @@ export default function App() {
                   exact
                   path="/create-warehouse"
                   element={<ProtectedRoute Component={CreateWarehouse} />}
+                />
+                <Route
+                  exact
+                  path="/warehouse-details"
+                  element={<ProtectedRoute Component={WarehouseDetails} />}
+                />
+                <Route
+                  exact
+                  path="/logistics"
+                  element={<ProtectedRoute Component={Logistics} />}
                 />
                 <Route
                   exact

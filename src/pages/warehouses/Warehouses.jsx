@@ -176,23 +176,17 @@ export default function Warehouses() {
       },
     };
     try {
-      axios
-        .get(
-          BASE_URL +
-            `warehousedetails?id=${id}`,
-          config
-        )
-        .then((dat) => {
-          if (dat.data?.status === "1") {
-            navigate("/warehouse-details", {
-              state: { wareDetails: dat?.data?.data },
-            });
-            info_toaster(dat?.data?.message);
-          } else {
-            error_toaster(dat?.data?.message);
-          }
-          setDisabled(false);
-        });
+      axios.get(BASE_URL + `warehousedetails/${id}`, config).then((dat) => {
+        if (dat.data?.status === "1") {
+          navigate("/warehouse-details", {
+            state: { wareDetails: dat?.data?.data },
+          });
+          info_toaster(dat?.data?.message);
+        } else {
+          error_toaster(dat?.data?.message);
+        }
+        setDisabled(false);
+      });
     } catch (err) {
       setDisabled(false);
     }

@@ -8,7 +8,6 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import Select from "react-select";
 import GetAPI from "../../utilities/GetAPI";
 import { PostAPI } from "../../utilities/PostAPI";
 import { PutAPI } from "../../utilities/PutAPI";
@@ -32,7 +31,6 @@ export default function Vehicles() {
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState(null);
   const { data, reFetch } = GetAPI("getallvehicle");
-  const unitType = GetAPI("unittypes");
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [addVehicle, setAddVehicle] = useState({
@@ -51,7 +49,6 @@ export default function Vehicles() {
     updatePerUnitRate: "",
     updateWeightCapacity: "",
     updateVolumeCapacity: "",
-    updateUnitClassId: "",
     vehicleId: "",
     uImage: false,
     currentImage: "",
@@ -79,7 +76,6 @@ export default function Vehicles() {
       updatePerUnitRate: "",
       updateWeightCapacity: "",
       updateVolumeCapacity: "",
-      updateUnitClassId: "",
       vehicleId: "",
       uImage: false,
       currentImage: "",
@@ -103,8 +99,6 @@ export default function Vehicles() {
       info_toaster("Please enter your Vehicle's Weight Capacity");
     } else if (addVehicle.volumeCapacity === "") {
       info_toaster("Please enter your Vehicle's Volume Capacity");
-    } else if (addVehicle.unitClassId === "") {
-      info_toaster("Please select your Vehicle's Unit Type");
     } else if (addVehicle.image === "") {
       info_toaster("Please enter your Vehicle's Image");
     } else {
@@ -115,7 +109,6 @@ export default function Vehicles() {
       formData.append("perUnitRate", addVehicle.perUnitRate);
       formData.append("weightCapacity", addVehicle.weightCapacity);
       formData.append("volumeCapacity", addVehicle.volumeCapacity);
-      formData.append("unitClassId", addVehicle.unitClassId.value);
       formData.append("image", addVehicle.image);
       let res = await PostAPI("addvehicle", formData);
       if (res?.data?.status === "1") {
@@ -150,8 +143,6 @@ export default function Vehicles() {
       info_toaster("Please enter your Vehicle's Weight Capacity");
     } else if (updateVehicle.updateVolumeCapacity === "") {
       info_toaster("Please enter your Vehicle's Volume Capacity");
-    } else if (updateVehicle.updateUnitClassId === "") {
-      info_toaster("Please select your Vehicle's Unit Type");
     } else if (updateVehicle.updateImage === "") {
       info_toaster("Please enter your Vehicle's Image");
     } else {
@@ -162,7 +153,6 @@ export default function Vehicles() {
       formData.append("perUnitRate", updateVehicle.updatePerUnitRate);
       formData.append("weightCapacity", updateVehicle.updateWeightCapacity);
       formData.append("volumeCapacity", updateVehicle.updateVolumeCapacity);
-      formData.append("unitClassId", updateVehicle.updateUnitClassId.value);
       formData.append("image", updateVehicle.updateImage);
       formData.append("updateImage", updateVehicle.uImage);
       formData.append("vehicleId", updateVehicle.vehicleId);
@@ -179,7 +169,6 @@ export default function Vehicles() {
           updatePerUnitRate: "",
           updateWeightCapacity: "",
           updateVolumeCapacity: "",
-          updateUnitClassId: "",
           vehicleId: "",
           uImage: false,
           currentImage: "",
@@ -205,27 +194,6 @@ export default function Vehicles() {
       error_toaster(res?.data?.message);
       setDisabled(false);
     }
-  };
-  const getVehicles = () => {
-    const filteredArray =
-      data?.status === "1"
-        ? data?.data?.vehicleData?.filter(
-            (veh) =>
-              search === "" ||
-              select === null ||
-              ((veh?.title).toLowerCase().includes(search.toLowerCase()) &&
-                select.value === "1") ||
-              ((veh?.baseRate).toString().includes(search.toLowerCase()) &&
-                select.value === "2") ||
-              ((veh?.perUnitRate).toString().includes(search.toLowerCase()) &&
-                select.value === "3") ||
-              ((veh?.weightCapacity).toString().includes(search) &&
-                select.value === "4") ||
-              ((veh?.volumeCapacity).toString().includes(search) &&
-                select.value === "5")
-          )
-        : [];
-    return filteredArray;
   };
   const columns = [
     {
@@ -261,16 +229,8 @@ export default function Vehicles() {
       selector: (row) => row.action,
     },
   ];
-  const options = [];
-  unitType.data?.status === "1" &&
-    unitType.data?.data?.map((unitType, index) =>
-      options.push({
-        value: unitType?.id,
-        label: unitType?.title,
-      })
-    );
   const datas = [];
-  getVehicles()?.map((veh, index) =>
+  data?.data?.vehicleData?.map((veh, index) =>
     datas.push({
       id: index + 1,
       vehicle: veh?.title,
@@ -354,7 +314,7 @@ export default function Vehicles() {
                 </ModalHeader>
                 <ModalCloseButton />
                 {loader ? (
-                  <div className="h-[446px]">
+                  <div className="h-[358px]">
                     <MiniLoader />
                   </div>
                 ) : (
@@ -431,19 +391,6 @@ export default function Vehicles() {
                         />
                       </div>
                       <div className="space-y-1 col-span-2">
-                        <label className={labelStyle} htmlFor="unitClassId">
-                          Unit Type
-                        </label>
-                        <Select
-                          value={addVehicle.unitClassId}
-                          onChange={(e) =>
-                            setAddVehicle({ ...addVehicle, unitClassId: e })
-                          }
-                          options={options}
-                          inputId="unitClassId"
-                        />
-                      </div>
-                      <div className="space-y-1 col-span-2">
                         <label className={labelStyle} htmlFor="image">
                           Vehicle Image
                         </label>
@@ -488,7 +435,7 @@ export default function Vehicles() {
                 <ModalCloseButton />
                 {loader ? (
                   <div
-                    className={updateVehicle.uImage ? "h-[658px]" : "h-[564px]"}
+                    className={updateVehicle.uImage ? "h-[570px]" : "h-[476px]"}
                   >
                     <MiniLoader />
                   </div>
@@ -572,25 +519,6 @@ export default function Vehicles() {
                           id="updateVolumeCapacity"
                           placeholder="Enter your Vehicle's Volume Capacity"
                           className={inputStyle}
-                        />
-                      </div>
-                      <div className="space-y-1 col-span-2">
-                        <label
-                          className={labelStyle}
-                          htmlFor="updateUnitClassId"
-                        >
-                          Unit Type
-                        </label>
-                        <Select
-                          value={updateVehicle.updateUnitClassId}
-                          onChange={(e) =>
-                            setUpdateVehicle({
-                              ...updateVehicle,
-                              updateUnitClassId: e,
-                            })
-                          }
-                          options={options}
-                          inputId="updateUnitClassId"
                         />
                       </div>
                       <div className="flex items-center gap-x-4 col-span-2">

@@ -7,14 +7,13 @@ import Header from "./Header";
 export const LayoutContext = createContext(null);
 export default function Layout(props) {
   const [loader, setLoader] = useState(false);
-  const [expand, setExpand] = useState(false);
   return loader ? (
     <Loader />
   ) : (
     <>
-      <LayoutContext.Provider value={{ expand, setExpand, setLoader }}>
+      <LayoutContext.Provider value={{ setLoader }}>
         <Header />
-        <LeftBar expand={expand ? true : false} />
+        <LeftBar />
         <MainSection title={props.title} content={props.content} />
       </LayoutContext.Provider>
     </>

@@ -28,7 +28,7 @@ export default function Header() {
             <FaUser size={28} color="white" />
           </div>
           <div>
-            <h2 className="text-white text-sm font-semibold">Zeeshan Nawaz</h2>
+            <h2 className="text-white text-sm font-semibold">Arsel T</h2>
             <p className="text-white text-xs font-normal">Administrator</p>
           </div>
         </div>

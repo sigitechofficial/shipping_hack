@@ -8,11 +8,7 @@ export const PutAPI = async (url, putData) => {
     },
   };
   try {
-    const res = await axios.put(
-      BASE_URL + url,
-      putData,
-      config
-    );
+    const res = await axios.put(BASE_URL + url, putData, config);
     return res;
   } catch (err) {}
 };
