@@ -27,8 +27,6 @@ import { inputStyle, labelStyle } from "../../utilities/Input";
 import Layout from "../../components/Layout";
 
 export default function Categories() {
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const { data, reFetch } = GetAPI("getallcategory");
   const [loader, setLoader] = useState(false);
@@ -173,18 +171,6 @@ export default function Categories() {
     <Loader />
   ) : (
     <Layout
-      search={true}
-      value={search}
-      onChange={(e) => setSearch(e.target.value.replace(/\+/g, ""))}
-      options={[
-        { value: "1", label: "Title" },
-        { value: "2", label: "Charge" },
-      ]}
-      selectValue={select}
-      selectOnChange={(e) => {
-        setSelect(e);
-        e === null && setSearch("");
-      }}
       title="Categories"
       content={
         <>

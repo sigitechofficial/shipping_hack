@@ -28,8 +28,6 @@ import { inputStyle, labelStyle } from "../../utilities/Input";
 import Layout from "../../components/Layout";
 
 export default function FAQ() {
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState(null);
   const { data, reFetch } = GetAPI("allfaqs");
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -124,21 +122,6 @@ export default function FAQ() {
       setDisabled(false);
     }
   };
-  const getFAQ = () => {
-    const filteredArray =
-      data?.status === "1"
-        ? data?.data?.filter(
-            (faq) =>
-              search === "" ||
-              select === null ||
-              ((faq?.title).toLowerCase().includes(search.toLowerCase()) &&
-                select.value === "1") ||
-              ((faq?.answer).toLowerCase().includes(search.toLowerCase()) &&
-                select.value === "2")
-          )
-        : [];
-    return filteredArray;
-  };
   const columns = [
     {
       name: "#",
@@ -166,7 +149,7 @@ export default function FAQ() {
     },
   ];
   const datas = [];
-  getFAQ()?.map((faq, index) =>
+  data?.data?.map((faq, index) =>
     datas.push({
       id: index + 1,
       title: faq?.title,
@@ -220,18 +203,6 @@ export default function FAQ() {
     <Loader />
   ) : (
     <Layout
-      search={true}
-      value={search}
-      onChange={(e) => setSearch(e.target.value.replace(/\+/g, ""))}
-      options={[
-        { value: "1", label: "Title" },
-        { value: "2", label: "Answer" },
-      ]}
-      selectValue={select}
-      selectOnChange={(e) => {
-        setSelect(e);
-        e === null && setSearch("");
-      }}
       title="FAQ's"
       content={
         <>

@@ -13,9 +13,6 @@ import { BackButton } from "../../utilities/Buttons";
 import { PutAPI } from "../../utilities/PutAPI";
 
 export default function UpdateDriver3() {
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const driversFeatureId =
-    featureData && featureData.find((ele) => ele.title === "Drivers")?.id;
   const navigate = useNavigate();
   const location = useLocation();
   const driverId = localStorage.getItem("driverId");
@@ -54,7 +51,7 @@ export default function UpdateDriver3() {
         ? formData.append("backImageLic", license.backImageLic)
         : formData.append("backImageLic", "");
       formData.append("userId", license.userId);
-      let res = await PutAPI("updatelicense", driversFeatureId, formData);
+      let res = await PutAPI("updatelicense", formData);
       if (res?.data?.status === "1") {
         navigate("/drivers");
         success_toaster(res?.data?.message);

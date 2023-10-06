@@ -17,8 +17,6 @@ import Layout from "../../components/Layout";
 
 export default function Customers() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [loader, setLoader] = useState(false);
   const { data, reFetch } = GetAPI("allcustomers");
@@ -69,37 +67,6 @@ export default function Customers() {
       setLoader(false);
     }
   };
-  const getCustomers = () => {
-    const filteredArray =
-      data?.status === "1"
-        ? data?.data?.filter(
-            (cust) =>
-              search === "" ||
-              select === null ||
-              ((
-                (cust?.firstName).toLowerCase() +
-                " " +
-                (cust?.lastName).toLowerCase()
-              ).includes(search.toLowerCase()) &&
-                select.value === "1") ||
-              ((cust?.email).toLowerCase().includes(search.toLowerCase()) &&
-                select.value === "2") ||
-              ((cust?.countryCode + " " + cust?.phoneNum)
-                .toString()
-                .includes(search) &&
-                select.value === "3") ||
-              ((cust?.countryCode + cust?.phoneNum)
-                .toString()
-                .includes(search) &&
-                select.value === "3") ||
-              (cust?.status && search === "Active" && select.value === "4") ||
-              (cust?.status === false &&
-                search === "Inactive" &&
-                select.value === "5")
-          )
-        : [];
-    return filteredArray;
-  };
   const columns = [
     {
       name: "#",
@@ -129,7 +96,7 @@ export default function Customers() {
     },
   ];
   const datas = [];
-  getCustomers()?.map((cust, index) => {
+  data?.data?.map((cust, index) => {
     return datas.push({
       id: index + 1,
       name: cust?.firstName + " " + cust?.lastName,
@@ -161,23 +128,6 @@ export default function Customers() {
     <Loader />
   ) : (
     <Layout
-      search={true}
-      value={search}
-      onChange={(e) => setSearch(e.target.value.replace(/\+/g, ""))}
-      options={[
-        { value: "1", label: "Name" },
-        { value: "2", label: "Email" },
-        { value: "3", label: "Phone" },
-        { value: "4", label: "Active" },
-        { value: "5", label: "Inactive" },
-      ]}
-      selectValue={select}
-      selectOnChange={(e) => {
-        setSelect(e);
-        e === null && setSearch("");
-        e && e.value === "4" && setSearch("Active");
-        e && e.value === "5" && setSearch("Inactive");
-      }}
       title="Customers"
       content={
         <>

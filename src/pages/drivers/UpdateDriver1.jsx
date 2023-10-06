@@ -22,9 +22,6 @@ export default function UpdateDriver1() {
     }
     return result;
   };
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const driversFeatureId =
-    featureData && featureData.find((ele) => ele.title === "Drivers")?.id;
   const navigate = useNavigate();
   const location = useLocation();
   const driverId = localStorage.getItem("driverId");
@@ -64,7 +61,7 @@ export default function UpdateDriver1() {
       driver.imageUpdated
         ? formData.append("profileImage", driver.profileImage)
         : formData.append("profileImage", "");
-      let res = await PutAPI("updateprofile", driversFeatureId, formData);
+      let res = await PutAPI("updateprofile", formData);
       if (res?.data?.status === "1") {
         setDriver({
           userId: "",

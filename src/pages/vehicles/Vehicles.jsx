@@ -28,8 +28,6 @@ import { BASE_URL2 } from "../../utilities/URL";
 import Layout from "../../components/Layout";
 
 export default function Vehicles() {
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState(null);
   const { data, reFetch } = GetAPI("getallvehicle");
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -282,21 +280,6 @@ export default function Vehicles() {
     <Loader />
   ) : (
     <Layout
-      search={true}
-      value={search}
-      onChange={(e) => setSearch(e.target.value.replace(/\+/g, ""))}
-      options={[
-        { value: "1", label: "Vehicle" },
-        { value: "2", label: "Base Rate" },
-        { value: "3", label: "Base Rate/mile" },
-        { value: "4", label: "Weight Capacity" },
-        { value: "5", label: "Volume Capacity" },
-      ]}
-      selectValue={select}
-      selectOnChange={(e) => {
-        setSelect(e);
-        e === null && setSearch("");
-      }}
       title="Vehicle Types"
       content={
         <>

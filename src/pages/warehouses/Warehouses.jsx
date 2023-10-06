@@ -38,8 +38,6 @@ export default function Warehouses() {
     return result;
   };
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState(null);
   const { data, reFetch } = GetAPI("allwarehouses");
   const [loader, setLoader] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -258,21 +256,6 @@ export default function Warehouses() {
     <Loader />
   ) : (
     <Layout
-      search={true}
-      value={search}
-      onChange={(e) => setSearch(e.target.value.replace(/\+/g, ""))}
-      options={[
-        { value: "1", label: "Name" },
-        { value: "2", label: "Email" },
-        { value: "3", label: "Phone #" },
-        { value: "4", label: "DBS #" },
-        { value: "5", label: "City" },
-      ]}
-      selectValue={select}
-      selectOnChange={(e) => {
-        setSelect(e);
-        e === null && setSearch("");
-      }}
       title="Warehouses"
       content={
         <>

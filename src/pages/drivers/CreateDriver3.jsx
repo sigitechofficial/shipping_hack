@@ -78,7 +78,7 @@ export default function CreateDriver3() {
   activeWare.data?.data?.map((activeWare, index) =>
     options2.push({
       value: activeWare?.id,
-      label: activeWare?.name,
+      label: activeWare?.companyName,
     })
   );
   return (

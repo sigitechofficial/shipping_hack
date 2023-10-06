@@ -14,12 +14,9 @@ import { BackButton } from "../../utilities/Buttons";
 import { PutAPI } from "../../utilities/PutAPI";
 
 export default function UpdateDriver2() {
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const driversFeatureId =
-    featureData && featureData.find((ele) => ele.title === "Drivers")?.id;
   const navigate = useNavigate();
   const location = useLocation();
-  const activeVeh = GetAPI("getactivevehicles", driversFeatureId);
+  const activeVeh = GetAPI("getactivevehicles");
   const [loader, setLoader] = useState(false);
   const driverId = localStorage.getItem("driverId");
   const driDetails = location?.state?.driDetails;
@@ -68,7 +65,7 @@ export default function UpdateDriver2() {
         vehicle.vehImages.forEach((file) => {
           formData.append("updateVehData", file);
         });
-      let res = await PutAPI("updateVehData", driversFeatureId, formData);
+      let res = await PutAPI("updateVehData", formData);
       if (res?.data?.status === "1") {
         setVehicle({
           userId: "",

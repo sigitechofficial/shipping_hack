@@ -2,10 +2,11 @@ import React from "react";
 import Loader from "../../components/Loader";
 import Layout from "../../components/Layout";
 import HomeCard from "../../components/HomeCard";
+import GetAPI from "../../utilities/GetAPI";
 
 export default function Home() {
-  const data = [];
-  return 1 === 0 ? (
+  const { data } = GetAPI("homepage");
+  return data.length === 0 ? (
     <Loader />
   ) : (
     <Layout
@@ -53,9 +54,7 @@ export default function Home() {
               icon="5"
               title="Total Earnings"
               quantity={
-                data?.data?.earnings ? (
-                  data?.data?.currencyUnit + data?.data?.earnings
-                ) : (
+                data?.data?.earnings ?? (
                   <div className="text-lg">No Data Available</div>
                 )
               }
@@ -64,9 +63,7 @@ export default function Home() {
               icon="6"
               title="Available Balance"
               quantity={
-                data?.data?.balance ? (
-                  data?.data?.currencyUnit + data?.data?.balance
-                ) : (
+                data?.data?.balance ?? (
                   <div className="text-lg">No Data Available</div>
                 )
               }

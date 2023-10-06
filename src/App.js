@@ -13,6 +13,9 @@ import Drivers from "./pages/drivers/Drivers";
 import CreateDriver1 from "./pages/drivers/CreateDriver1";
 import CreateDriver2 from "./pages/drivers/CreateDriver2";
 import CreateDriver3 from "./pages/drivers/CreateDriver3";
+import UpdateDriver1 from "./pages/drivers/UpdateDriver1";
+import UpdateDriver2 from "./pages/drivers/UpdateDriver2";
+import UpdateDriver3 from "./pages/drivers/UpdateDriver3";
 import Warehouses from "./pages/warehouses/Warehouses";
 import CreateWarehouse from "./pages/warehouses/CreateWarehouse";
 import WarehouseDetails from "./pages/warehouses/WarehouseDetails";
@@ -82,6 +85,21 @@ export default function App() {
                   exact
                   path="/create-driver/step-three"
                   element={<ProtectedRoute Component={CreateDriver3} />}
+                />
+                <Route
+                  exact
+                  path="/update-driver/personal-info"
+                  element={<ProtectedRoute Component={UpdateDriver1} />}
+                />
+                <Route
+                  exact
+                  path="/update-driver/vehicle-info"
+                  element={<ProtectedRoute Component={UpdateDriver2} />}
+                />
+                <Route
+                  exact
+                  path="/update-driver/license-info"
+                  element={<ProtectedRoute Component={UpdateDriver3} />}
                 />
                 <Route
                   exact

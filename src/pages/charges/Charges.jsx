@@ -30,8 +30,6 @@ import ChargesCard from "../../components/ChargesCard";
 
 export default function Charges() {
   const [tab, setTab] = useState("General");
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState(null);
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const gen = GetAPI("getgencharges");
@@ -237,69 +235,6 @@ export default function Charges() {
       setDisabled(false);
     }
   };
-  const distCharges = () => {
-    const filteredArray =
-      dist?.data?.status === "1"
-        ? dist?.data?.data?.distCharData?.filter(
-            (dist) =>
-              search === "" ||
-              select === null ||
-              ((dist?.title).toLowerCase().includes(search.toLowerCase()) &&
-                select.value === "1") ||
-              ((dist?.startValue).toString().includes(search.toLowerCase()) &&
-                select.value === "2") ||
-              ((dist?.endValue).toString().includes(search.toLowerCase()) &&
-                select.value === "3") ||
-              ((dist?.price).includes(search.toLowerCase()) &&
-                select.value === "4") ||
-              ((dist?.unit).includes(search.toLowerCase()) &&
-                select.value === "5")
-          )
-        : [];
-    return filteredArray;
-  };
-  const weightCharges = () => {
-    const filteredArray =
-      weight?.data?.status === "1"
-        ? weight?.data?.data?.weightCharData?.filter(
-            (weight) =>
-              search === "" ||
-              select === null ||
-              ((weight?.title).toLowerCase().includes(search.toLowerCase()) &&
-                select.value === "1") ||
-              ((weight?.startValue).toString().includes(search.toLowerCase()) &&
-                select.value === "2") ||
-              ((weight?.endValue).toString().includes(search.toLowerCase()) &&
-                select.value === "3") ||
-              ((weight?.price).includes(search.toLowerCase()) &&
-                select.value === "4") ||
-              ((weight?.unit).includes(search.toLowerCase()) &&
-                select.value === "5")
-          )
-        : [];
-    return filteredArray;
-  };
-  const volCharges = () => {
-    const filteredArray =
-      vol?.data?.status === "1"
-        ? vol?.data?.data?.weightCharData?.filter(
-            (vol) =>
-              search === "" ||
-              select === null ||
-              ((vol?.title).toLowerCase().includes(search.toLowerCase()) &&
-                select.value === "1") ||
-              ((vol?.startValue).toString().includes(search.toLowerCase()) &&
-                select.value === "2") ||
-              ((vol?.endValue).toString().includes(search.toLowerCase()) &&
-                select.value === "3") ||
-              ((vol?.price).includes(search.toLowerCase()) &&
-                select.value === "4") ||
-              ((vol?.unit).includes(search.toLowerCase()) &&
-                select.value === "5")
-          )
-        : [];
-    return filteredArray;
-  };
   const columns = [
     {
       name: "#",
@@ -332,7 +267,7 @@ export default function Charges() {
   ];
   const datas = [];
   if (tab === "Distance") {
-    distCharges()?.map((dist, index) =>
+    dist?.data?.data?.distCharData?.map((dist, index) =>
       datas.push({
         id: index + 1,
         title: dist?.title,
@@ -363,7 +298,7 @@ export default function Charges() {
       })
     );
   } else if (tab === "Weight") {
-    weightCharges()?.map((weight, index) =>
+    weight?.data?.data?.weightCharData?.map((weight, index) =>
       datas.push({
         id: index + 1,
         title: weight?.title,
@@ -394,7 +329,7 @@ export default function Charges() {
       })
     );
   } else if (tab === "Vol-Weight") {
-    volCharges()?.map((vol, index) =>
+    vol?.data?.data?.weightCharData?.map((vol, index) =>
       datas.push({
         id: index + 1,
         title: vol?.title,
@@ -429,21 +364,6 @@ export default function Charges() {
     <Loader />
   ) : (
     <Layout
-      search={true}
-      value={search}
-      onChange={(e) => setSearch(e.target.value.replace(/\+/g, ""))}
-      options={[
-        { value: "1", label: "Title" },
-        { value: "2", label: "Min Value" },
-        { value: "3", label: "Max Value" },
-        { value: "4", label: "Price" },
-        { value: "5", label: "Unit" },
-      ]}
-      selectValue={select}
-      selectOnChange={(e) => {
-        setSelect(e);
-        e === null && setSearch("");
-      }}
       title="Charges Management"
       content={
         <>

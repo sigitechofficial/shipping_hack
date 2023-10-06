@@ -13,8 +13,6 @@ import { BASE_URL } from "../../utilities/URL";
 import Layout from "../../components/Layout";
 
 export default function CustomerDetails() {
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const emailRef = useRef();
   const phoneRef = useRef();
@@ -42,38 +40,6 @@ export default function CustomerDetails() {
     } catch (err) {
       setDisabled(false);
     }
-  };
-  const customerDetails = () => {
-    const filteredArray = location?.state?.cusDetails?.customer?.filter(
-      (det) =>
-        search === "" ||
-        select === null ||
-        ((det?.trackingId).toLowerCase().match(search.toLowerCase()) &&
-          select.value === "1") ||
-        ((
-          (det?.pickupAddress?.postalCode).toLowerCase() +
-          " " +
-          (det?.pickupAddress?.secondPostalCode).toLowerCase()
-        ).match(search.toLowerCase()) &&
-          select.value === "2") ||
-        ((
-          (det?.pickupAddress?.postalCode).toLowerCase() +
-          (det?.pickupAddress?.secondPostalCode).toLowerCase()
-        ).match(search.toLowerCase()) &&
-          select.value === "2") ||
-        ((
-          (det?.dropoffAddress?.postalCode).toLowerCase() +
-          " " +
-          (det?.dropoffAddress?.secondPostalCode).toLowerCase()
-        ).match(search.toLowerCase()) &&
-          select.value === "3") ||
-        ((
-          (det?.dropoffAddress?.postalCode).toLowerCase() +
-          (det?.dropoffAddress?.secondPostalCode).toLowerCase()
-        ).match(search.toLowerCase()) &&
-          select.value === "3")
-    );
-    return filteredArray;
   };
   const columns = [
     {
@@ -107,7 +73,7 @@ export default function CustomerDetails() {
     },
   ];
   const datas = [];
-  customerDetails()?.map((det, index) => {
+  location?.state?.cusDetails?.customer?.map((det, index) => {
     return datas.push({
       id: index + 1,
       orderId: det?.trackingId,
@@ -132,19 +98,6 @@ export default function CustomerDetails() {
   };
   return (
     <Layout
-      search={true}
-      value={search}
-      onChange={(e) => setSearch(e.target.value.replace(/\+/g, ""))}
-      options={[
-        { value: "1", label: "Order #" },
-        { value: "2", label: "Pickup DBS #" },
-        { value: "3", label: "Drop off DBS #" },
-      ]}
-      selectValue={select}
-      selectOnChange={(e) => {
-        setSelect(e);
-        e === null && setSearch("");
-      }}
       title="Customer Details"
       content={
         <section className="space-y-4">

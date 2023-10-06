@@ -17,7 +17,6 @@ import {
   DTPending,
   DTQuestion,
   DTReject,
-  DTRejected,
   DTView,
   ModalButtons,
   TabButton,
@@ -39,9 +38,6 @@ import {
 export default function Drivers() {
   const navigate = useNavigate();
   const [tab, setTab] = useState("FreeLance");
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState(null);
-  const [wareFilter] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [loader, setLoader] = useState(false);
   const [driverId, setDriverId] = useState(false);
@@ -186,124 +182,6 @@ export default function Drivers() {
       label: activeWare?.name,
     })
   );
-  const freeLanceDrivers = () => {
-    const filteredArray =
-      data?.status === "1"
-        ? data?.data?.freeLance?.filter(
-            (dri) =>
-              search === "" ||
-              select === null ||
-              ((
-                (dri?.firstName).toLowerCase() +
-                " " +
-                (dri?.lastName).toLowerCase()
-              ).match(search.toLowerCase()) &&
-                select.value === "1") ||
-              ((dri?.email).toLowerCase().match(search.toLowerCase()) &&
-                select.value === "2") ||
-              ((dri?.countryCode + " " + dri?.phoneNum).match(
-                search.toLowerCase()
-              ) &&
-                select.value === "3") ||
-              ((dri?.countryCode + dri?.phoneNum).match(search.toLowerCase()) &&
-                select.value === "3") ||
-              (dri?.driverDetail?.vehicleType?.title &&
-                (dri?.driverDetail?.vehicleType?.title)
-                  .toLowerCase()
-                  .match(search.toLowerCase()) &&
-                select.value === "4") ||
-              (dri?.driverDetail?.approvedByAdmin === "approved" &&
-                search === "Approved" &&
-                select.value === "5") ||
-              (dri?.driverDetail?.approvedByAdmin === "pending" &&
-                search === "Pending" &&
-                select.value === "6") ||
-              ((dri?.date).match(search) && select.value === "7")
-          )
-        : [];
-    const filteredArray2 = data?.data?.associated?.filter(
-      (dri) =>
-        wareFilter === null ||
-        dri?.driverDetail?.warehouse?.id.toString() ===
-          wareFilter.value.toString()
-    );
-    return wareFilter === null ? filteredArray : filteredArray2;
-  };
-  const associatedDrivers = () => {
-    const filteredArray =
-      data?.status === "1"
-        ? data?.data?.associated?.filter(
-            (dri) =>
-              search === "" ||
-              select === null ||
-              ((
-                (dri?.firstName).toLowerCase() +
-                " " +
-                (dri?.lastName).toLowerCase()
-              ).match(search.toLowerCase()) &&
-                select.value === "1") ||
-              ((dri?.email).toLowerCase().match(search.toLowerCase()) &&
-                select.value === "2") ||
-              ((dri?.countryCode + " " + dri?.phoneNum).match(
-                search.toLowerCase()
-              ) &&
-                select.value === "3") ||
-              ((dri?.countryCode + dri?.phoneNum).match(search.toLowerCase()) &&
-                select.value === "3") ||
-              (dri?.driverDetail?.vehicleType?.title &&
-                (dri?.driverDetail?.vehicleType?.title)
-                  .toLowerCase()
-                  .match(search.toLowerCase()) &&
-                select.value === "4") ||
-              (dri?.driverDetail?.approvedByAdmin === "approved" &&
-                search === "Approved" &&
-                select.value === "5") ||
-              (dri?.driverDetail?.approvedByAdmin === "pending" &&
-                search === "Pending" &&
-                select.value === "6") ||
-              ((dri?.date).match(search) && select.value === "7")
-          )
-        : [];
-    const filteredArray2 = data?.data?.associated?.filter(
-      (dri) =>
-        wareFilter === null ||
-        dri?.driverDetail?.warehouse?.id.toString() ===
-          wareFilter.value.toString()
-    );
-    return wareFilter === null ? filteredArray : filteredArray2;
-  };
-  const incompleteDrivers = () => {
-    const filteredArray =
-      data?.status === "1"
-        ? data?.data?.incompleteDriver?.filter(
-            (dri) =>
-              search === "" ||
-              select === null ||
-              ((
-                (dri?.firstName).toLowerCase() +
-                " " +
-                (dri?.lastName).toLowerCase()
-              ).match(search.toLowerCase()) &&
-                select.value === "1") ||
-              ((dri?.email).toLowerCase().match(search.toLowerCase()) &&
-                select.value === "2") ||
-              ((dri?.countryCode + " " + dri?.phoneNum).match(
-                search.toLowerCase()
-              ) &&
-                select.value === "3") ||
-              ((dri?.countryCode + dri?.phoneNum).match(search.toLowerCase()) &&
-                select.value === "3") ||
-              (dri?.driverDetail?.approvedByAdmin === "approved" &&
-                search === "Approved" &&
-                select.value === "5") ||
-              (dri?.driverDetail?.approvedByAdmin === "pending" &&
-                search === "Pending" &&
-                select.value === "6") ||
-              ((dri?.date).match(search) && select.value === "7")
-          )
-        : [];
-    return filteredArray;
-  };
   const columns = [];
   const datas = [];
   if (tab === "FreeLance") {
@@ -340,7 +218,7 @@ export default function Drivers() {
         minWidth: "160px",
       }
     );
-    freeLanceDrivers()?.map((dri, index) => {
+    data?.data?.freeLance?.map((dri, index) => {
       return datas.push({
         id: index + 1,
         name: dri?.firstName + " " + dri?.lastName,
@@ -351,15 +229,11 @@ export default function Drivers() {
         date: dri?.date,
         completed: dri?.asRec + dri?.asDel,
         cancelled: dri?.bookingCancelled,
-        approval:
-          dri?.driverDetail?.approvedByAdmin === "approved" ? (
-            <DTApproved />
-          ) : dri?.driverDetail?.approvedByAdmin === "pending" ||
-            dri?.driverDetail === null ? (
-            <DTPending />
-          ) : (
-            <DTRejected />
-          ),
+        approval: dri?.driverDetail?.approvedByAdmin ? (
+          <DTApproved />
+        ) : (
+          <DTPending />
+        ),
         status: dri?.status ? (
           <button
             onClick={() => changeDriverStatus(false, dri?.id)}
@@ -390,13 +264,12 @@ export default function Drivers() {
               }}
               disabled={disabled}
             />
-            {dri?.driverDetail === null ||
-            dri?.driverDetail?.approvedByAdmin === "approved" ? (
+            {dri?.driverDetail?.approvedByAdmin ? (
               <DTReject
                 reject={() => rejectDriver(dri?.id)}
                 disabled={disabled}
               />
-            ) : dri?.driverDetail?.approvedByAdmin === "pending" ? (
+            ) : (
               <>
                 <DTApprove
                   approve={() => {
@@ -410,16 +283,6 @@ export default function Drivers() {
                   disabled={disabled}
                 />
               </>
-            ) : dri?.driverDetail?.approvedByAdmin === "rejected" ? (
-              <DTApprove
-                approve={() => {
-                  setDriverId(dri?.id);
-                  setApproveModal(true);
-                }}
-                disabled={disabled}
-              />
-            ) : (
-              ""
             )}
           </div>
         ),
@@ -444,6 +307,10 @@ export default function Drivers() {
         selector: (row) => row.phone,
       },
       {
+        name: "Warehouse",
+        selector: (row) => row.warehouse,
+      },
+      {
         name: "Approval Status",
         selector: (row) => row.approval,
         minWidth: "200px",
@@ -459,7 +326,7 @@ export default function Drivers() {
         minWidth: "220px",
       }
     );
-    associatedDrivers()?.map((dri, index) => {
+    data?.data?.associated?.map((dri, index) => {
       return datas.push({
         id: index + 1,
         name: dri?.firstName + " " + dri?.lastName,
@@ -468,18 +335,16 @@ export default function Drivers() {
         vehicle: dri?.driverDetail?.vehicleType?.title,
         registered: <div className="capitalize">{dri?.registeredBy}</div>,
         date: dri?.date,
-        warehouse: dri?.driverDetail?.warehouse?.name,
+        warehouse:
+          dri?.driverDetail?.warehouse &&
+          dri?.driverDetail?.warehouse?.companyname,
         completed: dri?.asRec + dri?.asDel,
         cancelled: dri?.bookingCancelled,
-        approval:
-          dri?.driverDetail?.approvedByAdmin === "approved" ? (
-            <DTApproved />
-          ) : dri?.driverDetail?.approvedByAdmin === "pending" ||
-            dri?.driverDetail === null ? (
-            <DTPending />
-          ) : (
-            <DTRejected />
-          ),
+        approval: dri?.driverDetail?.approvedByAdmin ? (
+          <DTApproved />
+        ) : (
+          <DTPending />
+        ),
         status: dri?.status ? (
           <button
             onClick={() => changeDriverStatus(false, dri?.id)}
@@ -514,13 +379,12 @@ export default function Drivers() {
               question={() => checkDriverStep(dri?.id)}
               disabled={disabled}
             />
-            {dri?.driverDetail === null ||
-            dri?.driverDetail?.approvedByAdmin === "approved" ? (
+            {dri?.driverDetail?.approvedByAdmin ? (
               <DTReject
                 reject={() => rejectDriver(dri?.id)}
                 disabled={disabled}
               />
-            ) : dri?.driverDetail?.approvedByAdmin === "pending" ? (
+            ) : (
               <>
                 <DTApprove
                   approve={() => {
@@ -534,16 +398,6 @@ export default function Drivers() {
                   disabled={disabled}
                 />
               </>
-            ) : dri?.driverDetail?.approvedByAdmin === "rejected" ? (
-              <DTApprove
-                approve={() => {
-                  setDriverId(dri?.id);
-                  setApproveModal(true);
-                }}
-                disabled={disabled}
-              />
-            ) : (
-              ""
             )}
           </div>
         ),
@@ -572,7 +426,7 @@ export default function Drivers() {
         selector: (row) => row.action,
       }
     );
-    incompleteDrivers()?.map((dri, index) => {
+    data?.data?.incompleteDriver?.map((dri, index) => {
       return datas.push({
         id: index + 1,
         name: dri?.firstName + " " + dri?.lastName,
@@ -593,25 +447,6 @@ export default function Drivers() {
     <Loader />
   ) : (
     <Layout
-      search={true}
-      value={search}
-      onChange={(e) => setSearch(e.target.value.replace(/\+/g, ""))}
-      options={[
-        { value: "1", label: "Name" },
-        { value: "2", label: "Email" },
-        { value: "3", label: "Phone #" },
-        { value: "4", label: "Vehicle" },
-        { value: "5", label: "Approved" },
-        { value: "6", label: "Pending" },
-        { value: "7", label: "Date" },
-      ]}
-      selectValue={select}
-      selectOnChange={(e) => {
-        setSelect(e);
-        e === null && setSearch("");
-        e && e.value === "5" && setSearch("Approved");
-        e && e.value === "6" && setSearch("Pending");
-      }}
       title="Drivers"
       content={
         <>
