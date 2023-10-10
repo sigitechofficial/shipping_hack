@@ -10,6 +10,7 @@ import Home from "./pages/home/Home";
 import Customers from "./pages/customers/Customers";
 import CustomerDetails from "./pages/customers/CustomerDetails";
 import Drivers from "./pages/drivers/Drivers";
+import DriverDetails from "./pages/drivers/DriverDetails";
 import CreateDriver1 from "./pages/drivers/CreateDriver1";
 import CreateDriver2 from "./pages/drivers/CreateDriver2";
 import CreateDriver3 from "./pages/drivers/CreateDriver3";
@@ -70,6 +71,11 @@ export default function App() {
                   exact
                   path="/drivers"
                   element={<ProtectedRoute Component={Drivers} />}
+                />
+                <Route
+                  exact
+                  path="/driver-details"
+                  element={<ProtectedRoute Component={DriverDetails} />}
                 />
                 <Route
                   exact

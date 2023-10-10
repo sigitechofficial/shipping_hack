@@ -292,9 +292,9 @@ export default function CreateWarehouse() {
                 <div>
                   <h6 className="font-medium text-sm">Name</h6>
                   <p className="font-bold text-base text-black text-opacity-60">
-                    {warehouse.name === ""
+                    {warehouse.companyName === ""
                       ? "Enter your Warehouse's Name"
-                      : warehouse.name}
+                      : warehouse.companyName}
                   </p>
                 </div>
                 <hr className="border-none h-0.5 bg-black bg-opacity-10" />

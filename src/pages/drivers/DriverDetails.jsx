@@ -8,14 +8,13 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillCar } from "react-icons/ai";
 import { BsBank, BsFillCreditCard2BackFill } from "react-icons/bs";
 import { FaMoneyCheckAlt } from "react-icons/fa";
 import { RiMoneyDollarBoxLine } from "react-icons/ri";
 import { TbLicense } from "react-icons/tb";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ModeContext } from "../../App";
 import { PostAPI } from "../../utilities/PostAPI";
 import MyDataTable from "../../components/MyDataTable";
 import { MiniLoader } from "../../components/Loader";
@@ -38,7 +37,6 @@ import Layout from "../../components/Layout";
 import DetailsCard from "../../components/DetailsCard";
 
 export default function DriverDetails() {
-  const { dark } = useContext(ModeContext);
   const [tab, setTab] = useState("Pickup");
   const [loader, setLoader] = useState(false);
   const [modal, setModal] = useState(false);
@@ -48,9 +46,8 @@ export default function DriverDetails() {
   const [amount, setAmount] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const driDetails = location?.state?.driDetails;
+  const driDetails = location?.state?.driDetails?.userData1;
   const driId = location?.state?.driverId;
-  const driversFeatureId = location?.state?.featureId;
   const bookingDetails = async (id) => {
     setDisabled(true);
     var config = {
@@ -59,22 +56,17 @@ export default function DriverDetails() {
       },
     };
     try {
-      axios
-        .get(
-          BASE_URL + `bookingdetails?featureId=${driversFeatureId}&id=${id}`,
-          config
-        )
-        .then((dat) => {
-          if (dat.data?.status === "1") {
-            localStorage.setItem("orderId", dat?.data?.data?.id);
-            navigate("/booking-details");
-            info_toaster(dat?.data?.message);
-            setDisabled(false);
-          } else {
-            error_toaster(dat?.data?.message);
-            setDisabled(false);
-          }
-        });
+      axios.get(BASE_URL + `bookingdetails?id=${id}`, config).then((dat) => {
+        if (dat.data?.status === "1") {
+          localStorage.setItem("orderId", dat?.data?.data?.id);
+          navigate("/booking-details");
+          info_toaster(dat?.data?.message);
+          setDisabled(false);
+        } else {
+          error_toaster(dat?.data?.message);
+          setDisabled(false);
+        }
+      });
     } catch (err) {}
   };
   const walletDetails = async () => {
@@ -84,18 +76,13 @@ export default function DriverDetails() {
       },
     };
     try {
-      axios
-        .get(
-          BASE_URL + `driver/wallet?featureId=${driversFeatureId}&id=${driId}`,
-          config
-        )
-        .then((dat) => {
-          if (dat.data?.status === "1") {
-            setWallet(dat?.data?.data);
-          } else {
-            error_toaster(dat?.data?.message);
-          }
-        });
+      axios.get(BASE_URL + `driver/wallet?id=${driId}`, config).then((dat) => {
+        if (dat.data?.status === "1") {
+          setWallet(dat?.data?.data);
+        } else {
+          error_toaster(dat?.data?.message);
+        }
+      });
     } catch (err) {}
   };
   useEffect(() => {
@@ -106,7 +93,7 @@ export default function DriverDetails() {
       info_toaster("Please enter Amount");
     } else {
       setLoader(true);
-      let res = await PostAPI("driver/pay", driversFeatureId, {
+      let res = await PostAPI("driver/pay", {
         driverId: driId,
         amount: amount,
       });
@@ -430,9 +417,7 @@ export default function DriverDetails() {
                 <MyDataTable columns={columns} data={datas} />
               </div>
               <div
-                className={`2xl:col-span-3 2xl:order-2 order-1 ${
-                  dark ? "bg-themeBlack2 text-white" : "bg-white text-black"
-                } rounded-lg space-y-5 py-12 px-12`}
+                className={`2xl:col-span-3 2xl:order-2 order-1 bg-white text-black rounded-lg space-y-5 py-12 px-12`}
               >
                 <div className="pb-5">
                   <img
