@@ -1,8 +1,8 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import "./App.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import "./App.css";
 import Login from "./pages/auth/Login";
 import ProtectedRoute from "./utilities/ProtectedRoute";
 import NoInternet from "./pages/errors/NoInternet";

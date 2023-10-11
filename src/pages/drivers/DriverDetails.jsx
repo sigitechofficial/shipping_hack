@@ -8,7 +8,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AiFillCar } from "react-icons/ai";
 import { BsBank, BsFillCreditCard2BackFill } from "react-icons/bs";
 import { FaMoneyCheckAlt } from "react-icons/fa";
@@ -29,26 +29,24 @@ import {
   DTPending,
   DTView,
   ModalButtons,
-  TabButton,
 } from "../../utilities/Buttons";
 import { inputStyle, labelStyle } from "../../utilities/Input";
 import { BASE_URL, BASE_URL2 } from "../../utilities/URL";
 import Layout from "../../components/Layout";
 import DetailsCard from "../../components/DetailsCard";
+import GetAPI from "../../utilities/GetAPI";
 
 export default function DriverDetails() {
   const [loader, setLoader] = useState(false);
   const [modal, setModal] = useState(false);
-  const [disabled, setDisabled] = useState(false);
   const [modalType, setModalType] = useState("");
-  const [wallet, setWallet] = useState({});
   const [amount, setAmount] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const driDetails = location?.state?.driDetails?.userData1;
   const driId = location?.state?.driverId;
+  const { data } = GetAPI(`driver/wallet?id=${driId}`);
   const bookingDetails = async (id) => {
-    setDisabled(true);
     var config = {
       headers: {
         accessToken: localStorage.getItem("accessToken"),
@@ -60,33 +58,12 @@ export default function DriverDetails() {
           localStorage.setItem("orderId", dat?.data?.data?.id);
           navigate("/booking-details");
           info_toaster(dat?.data?.message);
-          setDisabled(false);
-        } else {
-          error_toaster(dat?.data?.message);
-          setDisabled(false);
-        }
-      });
-    } catch (err) {}
-  };
-  const walletDetails = async () => {
-    var config = {
-      headers: {
-        accessToken: localStorage.getItem("accessToken"),
-      },
-    };
-    try {
-      axios.get(BASE_URL + `driver/wallet?id=${driId}`, config).then((dat) => {
-        if (dat.data?.status === "1") {
-          setWallet(dat?.data?.data);
         } else {
           error_toaster(dat?.data?.message);
         }
       });
     } catch (err) {}
   };
-  useEffect(() => {
-    walletDetails();
-  }, []);
   const payout = async () => {
     if (amount === "") {
       info_toaster("Please enter Amount");
@@ -127,7 +104,7 @@ export default function DriverDetails() {
     },
   ];
   const transData = [];
-  wallet?.transactions?.map((trans, index) => {
+  data?.data?.transactions?.map((trans, index) => {
     return transData.push({
       id: index + 1,
       amount: trans?.amount,
@@ -306,13 +283,14 @@ export default function DriverDetails() {
                       <div>
                         Total Earnings:{" "}
                         <span className="font-bold">
-                          {wallet?.currencyUnit + wallet?.totalEarning}
+                          {data?.data?.currencyUnit + data?.data?.totalEarning}
                         </span>
                       </div>
                       <div>
                         Available Balance:{" "}
                         <span className="font-bold">
-                          {wallet?.currencyUnit + wallet?.availableBalance}
+                          {data?.data?.currencyUnit +
+                            data?.data?.availableBalance}
                         </span>
                       </div>
                     </div>
@@ -321,19 +299,19 @@ export default function DriverDetails() {
                       <div>
                         Bank:{" "}
                         <span className="font-bold">
-                          {wallet?.bank?.bankName}
+                          {data?.data?.bank?.bankName}
                         </span>
                       </div>
                       <div>
                         Account Title:{" "}
                         <span className="font-bold">
-                          {wallet?.bank?.accountName}
+                          {data?.data?.bank?.accountName}
                         </span>
                       </div>
                       <div>
                         Account No.:{" "}
                         <span className="font-bold">
-                          {wallet?.bank?.accountNumber}
+                          {data?.data?.bank?.accountNumber}
                         </span>
                       </div>
                     </div>
