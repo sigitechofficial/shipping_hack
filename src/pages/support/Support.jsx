@@ -74,7 +74,7 @@ export default function Support() {
     <Layout
       title="Support"
       content={
-        <section className="bg-white p-12 rounded-xl space-y-5">
+        <section className="bg-white p-12 rounded-xl space-y-5 min-h-[calc(100vh-240px)]">
           <form className="space-y-1">
             <label htmlFor="email" className={labelStyle}>
               Email

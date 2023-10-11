@@ -27,6 +27,8 @@ import FAQ from "./pages/faq/FAQ";
 import Charges from "./pages/charges/Charges";
 import Support from "./pages/support/Support";
 import Logistics from "./pages/logistics/Logistics";
+import PrivacyPolicy from "./pages/privacy/PrivacyPolicy";
+import Terms from "./pages/terms/Terms";
 
 export default function App() {
   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
@@ -156,6 +158,16 @@ export default function App() {
                   exact
                   path="/support"
                   element={<ProtectedRoute Component={Support} />}
+                />
+                <Route
+                  exact
+                  path="/privacy-policy"
+                  element={<ProtectedRoute Component={PrivacyPolicy} />}
+                />
+                <Route
+                  exact
+                  path="/terms-and-conditions"
+                  element={<ProtectedRoute Component={Terms} />}
                 />
               </Routes>
             </Router>

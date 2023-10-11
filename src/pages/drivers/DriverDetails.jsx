@@ -37,7 +37,6 @@ import Layout from "../../components/Layout";
 import DetailsCard from "../../components/DetailsCard";
 
 export default function DriverDetails() {
-  const [tab, setTab] = useState("Pickup");
   const [loader, setLoader] = useState(false);
   const [modal, setModal] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -168,39 +167,19 @@ export default function DriverDetails() {
     },
   ];
   const datas = [];
-  if (tab === "Pickup") {
-    driDetails?.deliveryDriver?.map((det, index) =>
-      datas.push({
-        id: index + 1,
-        orderId: det?.trackingId,
-        pickUp:
-          det?.pickupAddress?.postalCode + det?.pickupAddress?.secondPostalCode,
-        dropOff:
-          det?.dropoffAddress?.postalCode +
-          det?.dropoffAddress?.secondPostalCode,
-        date: det?.pickupDate,
-        status: det?.bookingStatus?.title,
-        action: (
-          <DTView view={() => bookingDetails(det?.id)} disabled={disabled} />
-        ),
-      })
-    );
-  } else if (tab === "Drop Off") {
-    driDetails?.receivingDriver?.map((det, index) =>
-      datas.push({
-        id: index + 1,
-        orderId: det?.trackingId,
-        pickUp:
-          det?.pickupAddress?.postalCode + det?.pickupAddress?.secondPostalCode,
-        dropOff:
-          det?.dropoffAddress?.postalCode +
-          det?.dropoffAddress?.secondPostalCode,
-        date: det?.pickupDate,
-        status: det?.bookingStatus?.title,
-        action: <DTView view={() => bookingDetails(det?.id)} />,
-      })
-    );
-  }
+  driDetails?.receivingDriver?.map((det, index) =>
+    datas.push({
+      id: index + 1,
+      orderId: det?.trackingId,
+      pickUp:
+        det?.pickupAddress?.postalCode + det?.pickupAddress?.secondPostalCode,
+      dropOff:
+        det?.dropoffAddress?.postalCode + det?.dropoffAddress?.secondPostalCode,
+      date: det?.pickupDate,
+      status: det?.bookingStatus?.title,
+      action: <DTView view={() => bookingDetails(det?.id)} />,
+    })
+  );
   return (
     <Layout
       title="Driver Details"
@@ -398,19 +377,8 @@ export default function DriverDetails() {
             </ModalContent>
           </Modal>
           <section className="2xl:space-y-4 space-y-8">
-            <div className="flex justify-between">
-              <div className="flex">
-                <BackButton />
-              </div>
-              <div className="flex">
-                <TabButton text="Pickup" set={setTab} tab={tab} width="w-40" />
-                <TabButton
-                  text="Drop Off"
-                  set={setTab}
-                  tab={tab}
-                  width="w-40"
-                />
-              </div>
+            <div>
+              <BackButton />
             </div>
             <section className="2xl:grid 2xl:grid-cols-12 gap-x-5 flex flex-col gap-y-5">
               <div className="2xl:col-span-9 2xl:order-1 order-2">
@@ -491,7 +459,6 @@ export default function DriverDetails() {
                   />
                   <DetailsCard
                     onClick={() => {
-                      // walletDetails();
                       setModal(true);
                       setModalType("Earnings");
                     }}
@@ -500,7 +467,6 @@ export default function DriverDetails() {
                   />
                   <DetailsCard
                     onClick={() => {
-                      // walletDetails();
                       setModal(true);
                       setModalType("Bank");
                     }}
@@ -509,7 +475,6 @@ export default function DriverDetails() {
                   />
                   <DetailsCard
                     onClick={() => {
-                      // walletDetails();
                       setModal(true);
                       setModalType("Transactions");
                     }}
