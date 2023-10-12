@@ -7,101 +7,103 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import Select from "react-select";
+import React, { useLayoutEffect } from "react";
 import GetAPI from "../../utilities/GetAPI";
-import { PostAPI } from "../../utilities/PostAPI";
-import { PutAPI } from "../../utilities/PutAPI";
 import MyDataTable from "../../components/MyDataTable";
 import Loader, { MiniLoader } from "../../components/Loader";
+import AddButton, { DTEdit, ModalButtons } from "../../utilities/Buttons";
+import Layout from "../../components/Layout";
+import { useState } from "react";
 import {
   error_toaster,
   info_toaster,
   success_toaster,
 } from "../../utilities/Toaster";
-import AddButton, {
-  DTDel,
-  DTEdit,
-  ModalButtons,
-  TabButton,
-} from "../../utilities/Buttons";
+import { PutAPI } from "../../utilities/PutAPI";
+import { PostAPI } from "../../utilities/PostAPI";
 import { inputStyle, labelStyle } from "../../utilities/Input";
-import Layout from "../../components/Layout";
+import Select from "react-select";
 
 export default function Units() {
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const unitsFeatureId =
-    featureData && featureData.find((ele) => ele.title === "Unit System")?.id;
-  const [tab, setTab] = useState("Reference");
-  const { data, reFetch } = GetAPI("allunits", unitsFeatureId);
-  const unitType = GetAPI("unittypes", unitsFeatureId);
+  const { data, reFetch } = GetAPI("getallunits");
+  const unitTypes = GetAPI("getunitstypes");
   const [loader, setLoader] = useState(false);
-  const [disabled, setDisabled] = useState(false);
+  const [tab, setTab] = useState("");
   const [addUnit, setAddUnit] = useState({
+    type: "",
     name: "",
     symbol: "",
-    type: "",
     conversionRate: "",
-    unitClassId: "",
   });
   const [updateUnit, setUpdateUnit] = useState({
+    updateUnitId: "",
+    updateType: "",
+    updateName: "",
+    updateSymbol: "",
     updateConversionRate: "",
-    unitId: "",
   });
   const [addModal, setAddModal] = useState(false);
   const closeAddModal = () => {
     setAddModal(false);
     setAddUnit({
+      type: "",
       name: "",
       symbol: "",
-      type: "",
       conversionRate: "",
-      unitClassId: "",
     });
   };
   const [updateModal, setUpdateModal] = useState(false);
   const closeUpdateModal = () => {
     setUpdateModal(false);
     setUpdateUnit({
+      updateUnitId: "",
+      updateType: "",
+      updateName: "",
+      updateSymbol: "",
       updateConversionRate: "",
-      unitId: "",
     });
   };
   const onChange = (e) => {
     setAddUnit({ ...addUnit, [e.target.name]: e.target.value });
   };
+  const onChange2 = (e) => {
+    setUpdateUnit({ ...updateUnit, [e.target.name]: e.target.value });
+  };
+  const options = [];
+  unitTypes?.data?.data?.map((type, index) => {
+    return options.push({
+      value: index + 1,
+      label: type,
+    });
+  });
   const addUnitFunc = async (e) => {
     e.preventDefault();
     if (addUnit.name === "") {
-      info_toaster("Please enter your Unit's Name");
-    } else if (addUnit.symbol === "") {
-      info_toaster("Please enter your Unit's Symbol");
+      info_toaster("Please enter Unit Title");
     } else if (addUnit.type === "") {
-      info_toaster("Please enter your Unit's Type");
+      info_toaster("Please enter Unit Type");
+    } else if (addUnit.symbol === "") {
+      info_toaster("Please enter Unit Symbol");
     } else if (addUnit.conversionRate === "") {
-      info_toaster("Please enter your Unit's Conversion Rate");
-    } else if (addUnit.unitClassId === "") {
-      info_toaster("Please select your Unit's Class");
+      info_toaster("Please enter Unit Conversion Rate");
     } else {
       setLoader(true);
-      let res = await PostAPI("addunit", unitsFeatureId, {
+      let res = await PostAPI("addunit", {
+        type: addUnit.type?.label,
         name: addUnit.name,
         symbol: addUnit.symbol,
-        type: addUnit.type,
         conversionRate: addUnit.conversionRate,
-        unitClassId: addUnit.unitClassId.value,
       });
       if (res?.data?.status === "1") {
-        reFetch();
-        setLoader(false);
-        success_toaster(res?.data?.message);
         setAddModal(false);
+        setLoader(false);
+        reFetch();
+        success_toaster(res?.data?.message);
         setAddUnit({
+          type: "",
           name: "",
           symbol: "",
-          type: "",
           conversionRate: "",
-          unitClassId: "",
         });
       } else {
         setLoader(false);
@@ -111,22 +113,34 @@ export default function Units() {
   };
   const updateUnitFunc = async (e) => {
     e.preventDefault();
-    if (updateUnit.updateConversionRate === "") {
-      info_toaster("Please enter your Unit's Conversion Rate");
+    if (updateUnit.updateName === "") {
+      info_toaster("Please enter Unit Title");
+    } else if (updateUnit.updateType === "") {
+      info_toaster("Please enter Unit Type");
+    } else if (updateUnit.updateSymbol === "") {
+      info_toaster("Please enter Unit Symbol");
+    } else if (updateUnit.updateConversionRate === "") {
+      info_toaster("Please enter Unit Conversion Rate");
     } else {
       setLoader(true);
-      let res = await PutAPI("updateunit", unitsFeatureId, {
+      let res = await PutAPI("updateunit", {
+        unitId: updateUnit.updateUnitId,
+        type: updateUnit.updateType?.label,
+        name: updateUnit.updateName,
+        symbol: updateUnit.updateSymbol,
         conversionRate: updateUnit.updateConversionRate,
-        unitId: updateUnit.unitId,
       });
       if (res?.data?.status === "1") {
-        reFetch();
-        setLoader(false);
-        success_toaster(res?.data?.message);
         setUpdateModal(false);
+        setLoader(false);
+        reFetch();
+        success_toaster(res?.data?.message);
         setUpdateUnit({
+          updateUnitId: "",
+          updateType: "",
+          updateName: "",
+          updateSymbol: "",
           updateConversionRate: "",
-          unitId: "",
         });
       } else {
         setLoader(false);
@@ -134,21 +148,10 @@ export default function Units() {
       }
     }
   };
-  const changeUnitFunc = async (status, unitId) => {
-    setDisabled(true);
-    let res = await PutAPI("changeunitstatus", unitsFeatureId, {
-      status: status,
-      unitId: unitId,
-    });
-    if (res?.data?.status === "1") {
-      reFetch();
-      success_toaster(res?.data?.message);
-      setDisabled(false);
-    } else {
-      info_toaster(res?.data?.message);
-      setDisabled(false);
-    }
-  };
+  useLayoutEffect(() => {
+    const activeTab = unitTypes?.data?.data && unitTypes?.data?.data[0];
+    setTab(activeTab);
+  }, [unitTypes?.data]);
   const columns = [
     {
       name: "#",
@@ -159,90 +162,57 @@ export default function Units() {
       selector: (row) => row.name,
     },
     {
-      name: "Unit Symbol",
-      selector: (row) => row.symbol,
-    },
-    {
-      name: "Unit Type",
+      name: "Type",
       selector: (row) => row.type,
     },
     {
-      name: "Conversion Rate",
-      selector: (row) => row.conversion,
+      name: "Symbol",
+      selector: (row) => row.symbol,
     },
-    tab === "Custom" && {
+    {
+      name: "Conversion Rate",
+      selector: (row) => row.conversionRate,
+    },
+    {
       name: "Action",
       selector: (row) => row.action,
     },
   ];
-  const refUnits = () => {
-    const filteredArray =
-      data?.status === "1"
-        ? data?.data?.refernceUnits?.filter((unit) => unit)
-        : [];
-    return filteredArray;
-  };
-  const cusUnits = () => {
-    const filteredArray =
-      data?.status === "1" ? data?.data?.unitData?.filter((unit) => unit) : [];
-    return filteredArray;
-  };
-  const options = [];
-  unitType.data?.status === "1" &&
-    unitType.data?.data?.map((unitType, index) =>
-      options.push({
-        value: unitType?.id,
-        label: unitType?.title,
-      })
-    );
   const datas = [];
-  if (tab === "Reference") {
-    refUnits()?.map((unit, key) =>
-      unit?.units?.map((unit, index) =>
-        datas.push({
-          id: key + index + 1,
-          name: unit?.name,
-          symbol: unit?.symbol,
-          type: unit?.type,
-          conversion: unit?.conversionRate,
-        })
-      )
-    );
-  } else if (tab === "Custom") {
-    cusUnits()?.map((units, key) =>
-      units?.units?.map((unit, index) =>
-        datas.push({
-          id: key + index + 1,
-          name: unit?.name,
-          symbol: unit?.symbol,
-          type: unit?.type,
-          conversion: unit?.conversionRate,
-          action: (
-            <div className="flex gap-x-2">
-              <DTEdit
-                edit={() => {
-                  setUpdateModal(true);
-                  setUpdateUnit({
-                    updateConversionRate: unit?.conversionRate,
-                    unitId: unit?.id,
-                  });
-                }}
-              />
-              <DTDel
-                del={() => changeUnitFunc(false, unit?.id)}
-                disabled={disabled}
-              />
-            </div>
-          ),
-        })
-      )
-    );
+  if (data && tab && data?.data && data?.data[tab]) {
+    const matchedArray = data?.data[tab];
+    matchedArray?.map((unit, key) => {
+      return datas.push({
+        id: key + 1,
+        name: unit?.name,
+        type: unit?.type,
+        symbol: unit?.symbol,
+        conversionRate: unit?.conversionRate,
+        action: (
+          <div>
+            <DTEdit
+              edit={() => {
+                setUpdateUnit({
+                  updateUnitId: unit?.id,
+                  updateType: { value: "", label: unit?.type },
+                  updateName: unit?.name,
+                  updateSymbol: unit?.symbol,
+                  updateConversionRate: unit?.conversionRate,
+                });
+                setUpdateModal(true);
+              }}
+              disabled={loader}
+            />
+          </div>
+        ),
+      });
+    });
   }
   return data.length === 0 ? (
     <Loader />
   ) : (
     <Layout
-      title="Unit System"
+      title="Units"
       content={
         <>
           <Modal onClose={closeAddModal} isOpen={addModal} size="xl" isCentered>
@@ -254,15 +224,15 @@ export default function Units() {
                 </ModalHeader>
                 <ModalCloseButton />
                 {loader ? (
-                  <div className="h-[440px]">
+                  <div className="h-[340px]">
                     <MiniLoader />
                   </div>
                 ) : (
                   <ModalBody>
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div className="space-y-1">
                         <label className={labelStyle} htmlFor="name">
-                          Unit Name
+                          Unit Title
                         </label>
                         <input
                           value={addUnit.name}
@@ -270,13 +240,24 @@ export default function Units() {
                           type="text"
                           name="name"
                           id="name"
-                          placeholder="Enter your Unit's Name"
+                          placeholder="Enter Unit's title"
                           className={inputStyle}
                         />
                       </div>
                       <div className="space-y-1">
+                        <label className={labelStyle} htmlFor="type">
+                          Type
+                        </label>
+                        <Select
+                          value={addUnit.type}
+                          onChange={(e) => setAddUnit({ ...addUnit, type: e })}
+                          options={options}
+                          inputId="type"
+                        />
+                      </div>
+                      <div className="space-y-1">
                         <label className={labelStyle} htmlFor="symbol">
-                          Unit Symbol
+                          Symbol
                         </label>
                         <input
                           value={addUnit.symbol}
@@ -284,21 +265,7 @@ export default function Units() {
                           type="text"
                           name="symbol"
                           id="symbol"
-                          placeholder="Enter your Unit's Symbol"
-                          className={inputStyle}
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className={labelStyle} htmlFor="type">
-                          Unit Type
-                        </label>
-                        <input
-                          value={addUnit.type}
-                          onChange={onChange}
-                          type="text"
-                          name="type"
-                          id="type"
-                          placeholder="Enter your Unit's Type"
+                          placeholder="Enter Unit's Symbol"
                           className={inputStyle}
                         />
                       </div>
@@ -309,24 +276,11 @@ export default function Units() {
                         <input
                           value={addUnit.conversionRate}
                           onChange={onChange}
-                          type="number"
+                          type="text"
                           name="conversionRate"
                           id="conversionRate"
-                          placeholder="Enter your Unit's Conversion Rate"
+                          placeholder="Enter Unit's Conversion Rate"
                           className={inputStyle}
-                        />
-                      </div>
-                      <div className="space-y-1 col-span-2">
-                        <label className={labelStyle} htmlFor="unitClassId">
-                          Unit Class
-                        </label>
-                        <Select
-                          value={addUnit.unitClassId}
-                          onChange={(e) =>
-                            setAddUnit({ ...addUnit, unitClassId: e })
-                          }
-                          options={options}
-                          inputId="unitClassId"
                         />
                       </div>
                     </div>
@@ -356,32 +310,70 @@ export default function Units() {
                 </ModalHeader>
                 <ModalCloseButton />
                 {loader ? (
-                  <div className="h-[176px]">
+                  <div className="h-[340px]">
                     <MiniLoader />
                   </div>
                 ) : (
                   <ModalBody>
-                    <div className="h-40 pt-5">
-                      <label
-                        className={labelStyle}
-                        htmlFor="updateConversionRate"
-                      >
-                        Conversion Rate
-                      </label>
-                      <input
-                        value={updateUnit.updateConversionRate}
-                        onChange={(e) =>
-                          setUpdateUnit({
-                            ...updateUnit,
-                            [e.target.name]: e.target.value,
-                          })
-                        }
-                        type="number"
-                        name="updateConversionRate"
-                        id="updateConversionRate"
-                        placeholder="Enter your Unit's Conversion Rate"
-                        className={inputStyle}
-                      />
+                    <div className="space-y-3">
+                      <div className="space-y-1">
+                        <label className={labelStyle} htmlFor="updateName">
+                          Unit Title
+                        </label>
+                        <input
+                          value={updateUnit.updateName}
+                          onChange={onChange2}
+                          type="text"
+                          name="updateName"
+                          id="updateName"
+                          placeholder="Enter Unit's title"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className={labelStyle} htmlFor="updateType">
+                          Type
+                        </label>
+                        <Select
+                          value={updateUnit.updateType}
+                          onChange={(e) =>
+                            setUpdateUnit({ ...updateUnit, type: e })
+                          }
+                          options={options}
+                          inputId="updateType"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className={labelStyle} htmlFor="updateSymbol">
+                          Symbol
+                        </label>
+                        <input
+                          value={updateUnit.updateSymbol}
+                          onChange={onChange2}
+                          type="text"
+                          name="updateSymbol"
+                          id="updateSymbol"
+                          placeholder="Enter Unit's Symbol"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label
+                          className={labelStyle}
+                          htmlFor="updateConversionRate"
+                        >
+                          Conversion Rate
+                        </label>
+                        <input
+                          value={updateUnit.updateConversionRate}
+                          onChange={onChange2}
+                          type="text"
+                          name="updateConversionRate"
+                          id="updateConversionRate"
+                          placeholder="Enter Unit's Conversion Rate"
+                          className={inputStyle}
+                        />
+                      </div>
                     </div>
                   </ModalBody>
                 )}
@@ -395,15 +387,30 @@ export default function Units() {
               </form>
             </ModalContent>
           </Modal>
-          <section className="space-y-8">
-            <div className="flex">
-              <TabButton text="Reference" set={setTab} tab={tab} width="w-40" />
-              <TabButton text="Custom" set={setTab} tab={tab} width="w-40" />
-            </div>
+          <section className="space-y-3">
             <div className="flex justify-end">
               <AddButton text="Unit" modal={setAddModal} />
             </div>
-            <MyDataTable columns={columns} data={datas} dependancy={data} />
+            <div className="grid grid-cols-6 gap-5">
+              {unitTypes?.data?.data?.map((type, index) => (
+                <button
+                  onClick={() => setTab(type)}
+                  className={`rounded-md py-12 flex justify-center items-center ${
+                    tab === type ? "bg-themeBlue" : "bg-white"
+                  }`}
+                >
+                  <h6
+                    className="font-semibold text-xl text-[#8D99AE] text-center capitalize"
+                    key={index}
+                  >
+                    {type} <br /> Unit
+                  </h6>
+                </button>
+              ))}
+            </div>
+            <div className="pt-5">
+              <MyDataTable columns={columns} data={datas} dependancy={data} />
+            </div>
           </section>
         </>
       }

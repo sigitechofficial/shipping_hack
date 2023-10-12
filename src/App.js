@@ -29,6 +29,7 @@ import Support from "./pages/support/Support";
 import Logistics from "./pages/logistics/Logistics";
 import PrivacyPolicy from "./pages/privacy/PrivacyPolicy";
 import Terms from "./pages/terms/Terms";
+import Units from "./pages/units/Units";
 
 export default function App() {
   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
@@ -143,6 +144,11 @@ export default function App() {
                   exact
                   path="/categories"
                   element={<ProtectedRoute Component={Categories} />}
+                />
+                <Route
+                  exact
+                  path="/units"
+                  element={<ProtectedRoute Component={Units} />}
                 />
                 <Route
                   exact

@@ -2,7 +2,13 @@ import React, { useContext } from "react";
 import { AiOutlinePoweroff } from "react-icons/ai";
 import { BiPlusMedical } from "react-icons/bi";
 import { BsBookHalf, BsFillFileEarmarkRuledFill } from "react-icons/bs";
-import { FaCar, FaQuestion, FaUserNurse, FaWarehouse } from "react-icons/fa";
+import {
+  FaCar,
+  FaQuestion,
+  FaUnity,
+  FaUserNurse,
+  FaWarehouse,
+} from "react-icons/fa";
 import { GiPriceTag } from "react-icons/gi";
 import { HiUsers } from "react-icons/hi";
 import { MdCategory } from "react-icons/md";
@@ -74,6 +80,7 @@ export default function LeftBar() {
         />
         <ListItem to={"/vehicles"} Icon={FaCar} title="Vehicle Types" />
         <ListItem to={"/categories"} Icon={MdCategory} title="Categories" />
+        <ListItem to={"/units"} Icon={FaUnity} title="Unit Management" />
         <ListItem to={"/charges"} Icon={GiPriceTag} title="Charges" />
         <ListItem to={"/faqs"} Icon={FaQuestion} title="FAQ's" />
         <ListItem to={"/support"} Icon={BiPlusMedical} title="Support" />
