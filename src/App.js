@@ -24,6 +24,7 @@ import Bookings from "./pages/bookings/Bookings";
 import Vehicles from "./pages/vehicles/Vehicles";
 import Categories from "./pages/categories/Categories";
 import FAQ from "./pages/faq/FAQ";
+import Banners from "./pages/banners/Banners";
 import Charges from "./pages/charges/Charges";
 import Support from "./pages/support/Support";
 import Logistics from "./pages/logistics/Logistics";
@@ -146,6 +147,11 @@ export default function App() {
                   exact
                   path="/vehicles"
                   element={<ProtectedRoute Component={Vehicles} />}
+                />
+                <Route
+                  exact
+                  path="/banners"
+                  element={<ProtectedRoute Component={Banners} />}
                 />
                 <Route
                   exact

@@ -13,7 +13,7 @@ import {
 import { GiPriceTag } from "react-icons/gi";
 import { HiUsers } from "react-icons/hi";
 import { MdCategory } from "react-icons/md";
-import { RiCheckboxMultipleFill, RiDashboardFill } from "react-icons/ri";
+import { RiCheckboxMultipleFill, RiDashboardFill, RiFlag2Fill } from "react-icons/ri";
 import { SiGnuprivacyguard } from "react-icons/si";
 import { SiLogstash } from "react-icons/si";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -81,6 +81,7 @@ export default function LeftBar() {
           active={location === "/booking-details" && true}
         />
         <ListItem to={"/vehicles"} Icon={FaCar} title="Vehicle Types" />
+        <ListItem to={"/banners"} Icon={RiFlag2Fill} title="Banners" />
         <ListItem to={"/categories"} Icon={MdCategory} title="Categories" />
         <ListItem to={"/units"} Icon={FaUnity} title="Unit Management" />
         <ListItem to={"/charges"} Icon={GiPriceTag} title="Charges" />

@@ -36,6 +36,7 @@ export default function Charges() {
   const dist = GetAPI("getdistancecharge");
   const weight = GetAPI("getweightcharge");
   const vol = GetAPI("getvolweicharge");
+  const log = GetAPI("getLogCharges");
   const [genCharge, setGenCharge] = useState({
     value: "",
     cId: "",
@@ -227,6 +228,8 @@ export default function Charges() {
         weight.reFetch();
       } else if (url === "deletevolweicharge") {
         vol.reFetch();
+      } else if (url === "deleteChargesForLog") {
+        log.reFetch();
       }
       success_toaster(res?.data?.message);
       setDisabled(false);
@@ -235,36 +238,70 @@ export default function Charges() {
       setDisabled(false);
     }
   };
-  const columns = [
-    {
-      name: "#",
-      selector: (row) => row.id,
-    },
-    {
-      name: "Title",
-      selector: (row) => row.title,
-    },
-    {
-      name: "Min Value",
-      selector: (row) => row.min,
-    },
-    {
-      name: "Max Value",
-      selector: (row) => row.max,
-    },
-    {
-      name: `Price(${dist?.data?.data?.currencyUnit})`,
-      selector: (row) => row.price,
-    },
-    {
-      name: "Unit",
-      selector: (row) => row.unit,
-    },
-    {
-      name: "Action",
-      selector: (row) => row.action,
-    },
-  ];
+  const columns = [];
+  if (tab === "Shipping Company") {
+    columns.push(
+      {
+        name: "#",
+        selector: (row) => row.id,
+      },
+      {
+        name: "Min Value",
+        selector: (row) => row.min,
+      },
+      {
+        name: "Max Value",
+        selector: (row) => row.max,
+      },
+      {
+        name: `Price`,
+        selector: (row) => row.price,
+      },
+      {
+        name: "Flash",
+        selector: (row) => row.flash,
+      },
+      {
+        name: "Logistic Company",
+        selector: (row) => row.company,
+      },
+      {
+        name: "Action",
+        selector: (row) => row.action,
+      }
+    );
+  } else {
+    columns.push(
+      {
+        name: "#",
+        selector: (row) => row.id,
+      },
+      {
+        name: "Title",
+        selector: (row) => row.title,
+      },
+      {
+        name: "Min Value",
+        selector: (row) => row.min,
+      },
+      {
+        name: "Max Value",
+        selector: (row) => row.max,
+      },
+      {
+        name: `Price`,
+        selector: (row) => row.price,
+      },
+      {
+        name: "Unit",
+        selector: (row) => row.unit,
+      },
+      {
+        name: "Action",
+        selector: (row) => row.action,
+      }
+    );
+  }
   const datas = [];
   if (tab === "Distance") {
     dist?.data?.data?.distCharData?.map((dist, index) =>
@@ -353,6 +390,37 @@ export default function Charges() {
             />
             <DTDel
               del={() => deleteChargeFunc("deletevolweicharge", vol?.id)}
+              disabled={disabled}
+            />
+          </div>
+        ),
+      })
+    );
+  } else if (tab === "Shipping Company") {
+    log?.data?.data?.charges?.map((log, index) =>
+      datas.push({
+        id: index + 1,
+        min: log?.startValue,
+        max: log?.endValue,
+        price: log?.charges,
+        flash: log?.flash ? "Yes" : "No",
+        company: log?.logisticCompany && log?.logisticCompany?.title,
+        action: (
+          <div className="flex gap-x-2">
+            <DTEdit
+              edit={() => {
+                setUpdateModal(true);
+                setUpdateCharge({
+                  updateTitle: log?.title,
+                  updateStartValue: log?.startValue,
+                  updateEndValue: log?.endValue,
+                  updatePrice: log?.price,
+                  chargeId: log?.id,
+                });
+              }}
+            />
+            <DTDel
+              del={() => deleteChargeFunc("deleteChargesForLog", log?.id)}
               disabled={disabled}
             />
           </div>
@@ -598,6 +666,12 @@ export default function Charges() {
                 set={setTab}
                 tab={tab}
                 width="w-40"
+              />
+              <TabButton
+                text="Shipping Company"
+                set={setTab}
+                tab={tab}
+                width="w-60"
               />
             </div>
             {tab === "General" ? (
