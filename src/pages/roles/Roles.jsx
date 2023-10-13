@@ -27,8 +27,6 @@ import { BASE_URL } from "../../utilities/URL";
 import Layout from "../../components/Layout";
 
 export default function Roles() {
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState(null);
   const { data, reFetch } = GetAPI("allroles");
   const activeFeatures = GetAPI("activefeatures");
   const [loader, setLoader] = useState(false);
@@ -253,19 +251,6 @@ export default function Roles() {
       setDisabled(false);
     }
   };
-  const getRoles = () => {
-    const filteredArray =
-      data?.status === "1"
-        ? data?.data?.filter(
-            (role) =>
-              search === "" ||
-              select === null ||
-              ((role?.name).toLowerCase().includes(search.toLowerCase()) &&
-                select.value === "1")
-          )
-        : [];
-    return filteredArray;
-  };
   const columns = [
     {
       name: "#",
@@ -287,7 +272,7 @@ export default function Roles() {
     },
   ];
   const datas = [];
-  getRoles()?.map((role, index) => {
+  data?.data?.map((role, index) => {
     return datas.push({
       id: index + 1,
       name: role?.name,
@@ -329,15 +314,6 @@ export default function Roles() {
     <Loader />
   ) : (
     <Layout
-      search={true}
-      value={search}
-      onChange={(e) => setSearch(e.target.value.replace(/\+/g, ""))}
-      options={[{ value: "1", label: "Name" }]}
-      selectValue={select}
-      selectOnChange={(e) => {
-        setSelect(e);
-        e === null && setSearch("");
-      }}
       title="Roles & Permissions"
       content={
         <>

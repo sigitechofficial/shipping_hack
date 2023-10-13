@@ -37,8 +37,6 @@ export default function Employees() {
     }
     return result;
   };
-  const [search, setSearch] = useState("");
-  const [select, setSelect] = useState(null);
   const [visible, setVisible] = useState(false);
   const { data, reFetch } = GetAPI("getallemployees");
   const activeRoles = GetAPI("activeroles");
@@ -291,24 +289,6 @@ export default function Employees() {
     <Loader />
   ) : (
     <Layout
-      search={true}
-      value={search}
-      onChange={(e) => setSearch(e.target.value.replace(/\+/g, ""))}
-      options={[
-        { value: "1", label: "Name" },
-        { value: "2", label: "Email" },
-        { value: "3", label: "Phone" },
-        { value: "4", label: "Role" },
-        { value: "5", label: "Active" },
-        { value: "6", label: "Inactive" },
-      ]}
-      selectValue={select}
-      selectOnChange={(e) => {
-        setSelect(e);
-        e === null && setSearch("");
-        e && e.value === "5" && setSearch("Active");
-        e && e.value === "6" && setSearch("Inactive");
-      }}
       title="Employees"
       content={
         <>
