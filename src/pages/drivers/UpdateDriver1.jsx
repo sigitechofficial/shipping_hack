@@ -25,7 +25,7 @@ export default function UpdateDriver1() {
   const navigate = useNavigate();
   const location = useLocation();
   const driverId = localStorage.getItem("driverId");
-  const driDetails = location?.state?.driDetails;
+  const driDetails = location?.state?.driDetails?.userData1;
   const [loader, setLoader] = useState(false);
   const [driver, setDriver] = useState({
     userId: driverId,
@@ -61,7 +61,7 @@ export default function UpdateDriver1() {
       driver.imageUpdated
         ? formData.append("profileImage", driver.profileImage)
         : formData.append("profileImage", "");
-      let res = await PutAPI("updateprofile", formData);
+      let res = await PutAPI("updateDriverProfile", formData);
       if (res?.data?.status === "1") {
         setDriver({
           userId: "",

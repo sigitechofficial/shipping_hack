@@ -19,7 +19,7 @@ export default function UpdateDriver2() {
   const activeVeh = GetAPI("getactivevehicles");
   const [loader, setLoader] = useState(false);
   const driverId = localStorage.getItem("driverId");
-  const driDetails = location?.state?.driDetails;
+  const driDetails = location?.state?.driDetails?.userData1;
   const [vehicle, setVehicle] = useState({
     userId: driverId,
     vehicleMake: driDetails?.driverDetail?.vehicleMake,
@@ -63,9 +63,9 @@ export default function UpdateDriver2() {
       formData.append("imageUpdated", vehicle.imageUpdated);
       vehicle.imageUpdated &&
         vehicle.vehImages.forEach((file) => {
-          formData.append("updateVehData", file);
+          formData.append("vehImages", file);
         });
-      let res = await PutAPI("updateVehData", formData);
+      let res = await PutAPI("updateDriverVehicle", formData);
       if (res?.data?.status === "1") {
         setVehicle({
           userId: "",

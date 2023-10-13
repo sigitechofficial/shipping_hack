@@ -7,12 +7,13 @@ import {
   FaQuestion,
   FaUnity,
   FaUserNurse,
+  FaUserTie,
   FaWarehouse,
 } from "react-icons/fa";
 import { GiPriceTag } from "react-icons/gi";
 import { HiUsers } from "react-icons/hi";
 import { MdCategory } from "react-icons/md";
-import { RiDashboardFill } from "react-icons/ri";
+import { RiCheckboxMultipleFill, RiDashboardFill } from "react-icons/ri";
 import { SiGnuprivacyguard } from "react-icons/si";
 import { SiLogstash } from "react-icons/si";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -58,6 +59,7 @@ export default function LeftBar() {
             (location === "/create-driver/step-three" && true)
           }
         />
+        <ListItem to={"/employees"} Icon={FaUserTie} title="Employees" />
         <ListItem
           to={"/warehouses"}
           Icon={FaWarehouse}
@@ -83,6 +85,11 @@ export default function LeftBar() {
         <ListItem to={"/units"} Icon={FaUnity} title="Unit Management" />
         <ListItem to={"/charges"} Icon={GiPriceTag} title="Charges" />
         <ListItem to={"/faqs"} Icon={FaQuestion} title="FAQ's" />
+        <ListItem
+          to={"/roles"}
+          Icon={RiCheckboxMultipleFill}
+          title="Roles & Permission"
+        />
         <ListItem to={"/support"} Icon={BiPlusMedical} title="Support" />
         <ListItem
           to={"/privacy-policy"}

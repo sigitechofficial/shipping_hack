@@ -27,14 +27,10 @@ import { BASE_URL } from "../../utilities/URL";
 import Layout from "../../components/Layout";
 
 export default function Roles() {
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const rolesFeatureId =
-    featureData &&
-    featureData.find((ele) => ele.title === "Roles & Permission")?.id;
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState(null);
-  const { data, reFetch } = GetAPI("allroles", rolesFeatureId);
-  const activeFeatures = GetAPI("activefeatures", rolesFeatureId);
+  const { data, reFetch } = GetAPI("allroles");
+  const activeFeatures = GetAPI("activefeatures");
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [detData, setDetData] = useState([]);
@@ -165,7 +161,7 @@ export default function Roles() {
       info_toaster("Please enter Role's Title");
     } else {
       setLoader(true);
-      let res = await PostAPI("addrole", rolesFeatureId, {
+      let res = await PostAPI("addrole", {
         name: addName,
         permissionRole: addRole,
       });
@@ -188,7 +184,7 @@ export default function Roles() {
       info_toaster("Please enter Role's Title");
     } else {
       setLoader(true);
-      let res = await PutAPI("updaterole", rolesFeatureId, {
+      let res = await PutAPI("updaterole", {
         name: updateObj.name,
         roleId: updateObj.roleId,
         permissionRole: updateRole,
@@ -210,7 +206,7 @@ export default function Roles() {
     }
   };
   const changeRoleStatus = async (status, roleId) => {
-    let change = await PutAPI("updatestatusrole", rolesFeatureId, {
+    let change = await PutAPI("updatestatusrole", {
       status: status,
       roleId: roleId,
     });
@@ -234,11 +230,7 @@ export default function Roles() {
     };
     try {
       axios
-        .get(
-          BASE_URL +
-            `rolepermissions?featureId=${rolesFeatureId}&roleId=${roleId}`,
-          config
-        )
+        .get(BASE_URL + `rolepermissions?roleId=${roleId}`, config)
         .then((dat) => {
           if (role === "details") {
             setDetData(dat.data);

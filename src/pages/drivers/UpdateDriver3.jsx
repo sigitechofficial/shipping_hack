@@ -16,7 +16,7 @@ export default function UpdateDriver3() {
   const navigate = useNavigate();
   const location = useLocation();
   const driverId = localStorage.getItem("driverId");
-  const driDetails = location?.state?.driDetails;
+  const driDetails = location?.state?.driDetails?.userData1;
   const [loader, setLoader] = useState(false);
   const [license, setLicense] = useState({
     licIssueDate: driDetails?.driverDetail?.licIssueDate,
@@ -51,7 +51,7 @@ export default function UpdateDriver3() {
         ? formData.append("backImageLic", license.backImageLic)
         : formData.append("backImageLic", "");
       formData.append("userId", license.userId);
-      let res = await PutAPI("updatelicense", formData);
+      let res = await PutAPI("updateDriverLicense", formData);
       if (res?.data?.status === "1") {
         navigate("/drivers");
         success_toaster(res?.data?.message);

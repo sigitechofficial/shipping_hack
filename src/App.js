@@ -27,9 +27,11 @@ import FAQ from "./pages/faq/FAQ";
 import Charges from "./pages/charges/Charges";
 import Support from "./pages/support/Support";
 import Logistics from "./pages/logistics/Logistics";
+import Roles from "./pages/roles/Roles";
 import PrivacyPolicy from "./pages/privacy/PrivacyPolicy";
 import Terms from "./pages/terms/Terms";
 import Units from "./pages/units/Units";
+import Employees from "./pages/employees/Employees";
 
 export default function App() {
   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
@@ -112,6 +114,11 @@ export default function App() {
                 />
                 <Route
                   exact
+                  path="/employees"
+                  element={<ProtectedRoute Component={Employees} />}
+                />
+                <Route
+                  exact
                   path="/warehouses"
                   element={<ProtectedRoute Component={Warehouses} />}
                 />
@@ -159,6 +166,11 @@ export default function App() {
                   exact
                   path="/faqs"
                   element={<ProtectedRoute Component={FAQ} />}
+                />
+                <Route
+                  exact
+                  path="/roles"
+                  element={<ProtectedRoute Component={Roles} />}
                 />
                 <Route
                   exact
