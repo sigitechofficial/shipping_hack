@@ -27,6 +27,7 @@ import AddButton, {
 import { inputStyle, labelStyle } from "../../utilities/Input";
 import Layout from "../../components/Layout";
 import ChargesCard from "../../components/ChargesCard";
+import Select from "react-select";
 
 export default function Charges() {
   const [tab, setTab] = useState("General");
@@ -37,6 +38,7 @@ export default function Charges() {
   const weight = GetAPI("getweightcharge");
   const vol = GetAPI("getvolweicharge");
   const log = GetAPI("getLogCharges");
+  const activeLog = GetAPI("activeLog");
   const [genCharge, setGenCharge] = useState({
     value: "",
     cId: "",
@@ -53,6 +55,20 @@ export default function Charges() {
     updateEndValue: "",
     updatePrice: "",
     chargeId: "",
+  });
+  const [addLogCharge, setAddLogCharge] = useState({
+    startValue: "",
+    endValue: "",
+    charges: "",
+    flash: false,
+    logisticCompanyId: "",
+  });
+  const [updateLogCharge, setUpdateLogCharge] = useState({
+    id: "",
+    updateStartValue: "",
+    updateEndValue: "",
+    updateCharges: "",
+    updateFlash: false,
   });
   const [genModal, setGenModal] = useState(false);
   const closeGenModal = () => {
@@ -83,11 +99,39 @@ export default function Charges() {
       chargeId: "",
     });
   };
+  const [addLogModal, setAddLogModal] = useState(false);
+  const closeAddLogModal = () => {
+    setAddLogModal(false);
+    setAddLogCharge({
+      startValue: "",
+      endValue: "",
+      charges: "",
+      flash: false,
+      logisticCompanyId: "",
+    });
+  };
+  const [updateLogModal, setUpdateLogModal] = useState(false);
+  const closeUpdateLogModal = () => {
+    setUpdateLogModal(false);
+    setUpdateLogCharge({
+      id: "",
+      updateStartValue: "",
+      updateEndValue: "",
+      updateCharges: "",
+      updateFlash: false,
+    });
+  };
   const onChange = (e) => {
     setAddCharge({ ...addCharge, [e.target.name]: e.target.value });
   };
   const onChange2 = (e) => {
     setUpdateCharge({ ...updateCharge, [e.target.name]: e.target.value });
+  };
+  const onChange3 = (e) => {
+    setAddLogCharge({ ...addLogCharge, [e.target.name]: e.target.value });
+  };
+  const onChange4 = (e) => {
+    setUpdateLogCharge({ ...updateLogCharge, [e.target.name]: e.target.value });
   };
   const addChargeFunc = async (e) => {
     e.preventDefault();
@@ -132,6 +176,45 @@ export default function Charges() {
           startValue: "",
           endValue: "",
           price: "",
+        });
+      } else {
+        setLoader(false);
+        error_toaster(res?.data?.message);
+      }
+    }
+  };
+  const addLogChargeFunc = async (e) => {
+    e.preventDefault();
+    if (addLogCharge.startValue === "") {
+      info_toaster("Please enter your Charge's Min Range");
+    } else if (addLogCharge.endValue === "") {
+      info_toaster("Please enter your Charge's Max Range");
+    } else if (addLogCharge.charges === "") {
+      info_toaster("Please enter your Charge's Price");
+    } else if (addLogCharge.logisticCompanyId === "") {
+      info_toaster("Please select your Logistic Company");
+    } else {
+      setLoader(true);
+      let res = await PostAPI("addChargesForLog", {
+        startValue: addLogCharge.startValue,
+        endValue: addLogCharge.endValue,
+        charges: addLogCharge.charges,
+        flash: addLogCharge.flash,
+        logisticCompanyId:
+          addLogCharge.logisticCompanyId &&
+          addLogCharge.logisticCompanyId.value,
+      });
+      if (res?.data?.status === "1") {
+        log.reFetch();
+        setLoader(false);
+        success_toaster(res?.data?.message);
+        setAddLogModal(false);
+        setAddLogCharge({
+          startValue: "",
+          endValue: "",
+          charges: "",
+          flash: false,
+          logisticCompanyId: "",
         });
       } else {
         setLoader(false);
@@ -216,6 +299,41 @@ export default function Charges() {
       }
     }
   };
+  const updateLogChargeFunc = async (e) => {
+    e.preventDefault();
+    if (updateLogCharge.updateStartValue === "") {
+      info_toaster("Please enter your Charge's Min Range");
+    } else if (updateLogCharge.updateEndValue === "") {
+      info_toaster("Please enter your Charge's Max Range");
+    } else if (updateLogCharge.updateCharges === "") {
+      info_toaster("Please enter your Charge's Price");
+    } else {
+      setLoader(true);
+      let res = await PutAPI("updateLogCharges", {
+        id: updateLogCharge.id,
+        startValue: updateLogCharge.updateStartValue,
+        endValue: updateLogCharge.updateEndValue,
+        charges: updateLogCharge.updateCharges,
+        flash: updateLogCharge.updateFlash,
+      });
+      if (res?.data?.status === "1") {
+        log.reFetch();
+        setLoader(false);
+        success_toaster(res?.data?.message);
+        setUpdateLogModal(false);
+        setUpdateLogCharge({
+          id: "",
+          updateStartValue: "",
+          updateEndValue: "",
+          updateCharges: "",
+          updateFlash: false,
+        });
+      } else {
+        setLoader(false);
+        error_toaster(res?.data?.message);
+      }
+    }
+  };
   const deleteChargeFunc = async (url, chargeId) => {
     setDisabled(true);
     let res = await PutAPI(url, {
@@ -238,6 +356,13 @@ export default function Charges() {
       setDisabled(false);
     }
   };
+  const options = [];
+  activeLog?.data?.data?.data?.map((ele, index) => {
+    return options.push({
+      value: ele?.id,
+      label: ele?.title,
+    });
+  });
   const columns = [];
   if (tab === "Shipping Company") {
     columns.push(
@@ -409,13 +534,13 @@ export default function Charges() {
           <div className="flex gap-x-2">
             <DTEdit
               edit={() => {
-                setUpdateModal(true);
-                setUpdateCharge({
-                  updateTitle: log?.title,
+                setUpdateLogModal(true);
+                setUpdateLogCharge({
+                  id: log?.id,
                   updateStartValue: log?.startValue,
                   updateEndValue: log?.endValue,
-                  updatePrice: log?.price,
-                  chargeId: log?.id,
+                  updateCharges: log?.charges,
+                  updateFlash: log?.flash ? true : false,
                 });
               }}
             />
@@ -656,6 +781,215 @@ export default function Charges() {
               </form>
             </ModalContent>
           </Modal>
+          <Modal
+            onClose={closeAddLogModal}
+            isOpen={addLogModal}
+            size="xl"
+            isCentered
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <form>
+                <ModalHeader>
+                  <h1 className="text-center">Add Charge</h1>
+                </ModalHeader>
+                <ModalCloseButton />
+                {loader ? (
+                  <div className="h-[390px]">
+                    <MiniLoader />
+                  </div>
+                ) : (
+                  <ModalBody>
+                    <div className="space-y-4">
+                      <div className="space-y-1">
+                        <label className={labelStyle} htmlFor="startValue">
+                          Min Range
+                        </label>
+                        <input
+                          value={addLogCharge.startValue}
+                          onChange={onChange3}
+                          type="number"
+                          name="startValue"
+                          id="startValue"
+                          placeholder="Enter your Charge's Min Range"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className={labelStyle} htmlFor="endValue">
+                          Max Range
+                        </label>
+                        <input
+                          value={addLogCharge.endValue}
+                          onChange={onChange3}
+                          type="number"
+                          name="endValue"
+                          id="endValue"
+                          placeholder="Enter your Charge's Max Range"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className={labelStyle} htmlFor="charges">
+                          Price
+                        </label>
+                        <input
+                          value={addLogCharge.charges}
+                          onChange={onChange3}
+                          type="number"
+                          name="charges"
+                          id="charges"
+                          placeholder="Enter your Charge's Price"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="flex items-center gap-x-2">
+                        <label className={labelStyle} htmlFor="flash">
+                          Flash Delivery
+                        </label>
+                        <input
+                          value={addLogCharge.flash}
+                          onChange={(e) =>
+                            setAddLogCharge({
+                              ...addLogCharge,
+                              [e.target.name]: !addLogCharge.flash,
+                            })
+                          }
+                          type="checkbox"
+                          name="flash"
+                          id="flash"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label
+                          className={labelStyle}
+                          htmlFor="logisticCompanyId"
+                        >
+                          Logistic Company
+                        </label>
+                        <Select
+                          value={addLogCharge.logisticCompanyId}
+                          onChange={(e) =>
+                            setAddLogCharge({
+                              ...addLogCharge,
+                              logisticCompanyId: e,
+                            })
+                          }
+                          options={options}
+                          inputId="logisticCompanyId"
+                        />
+                      </div>
+                    </div>
+                  </ModalBody>
+                )}
+                <ModalFooter>
+                  <ModalButtons
+                    text="Add"
+                    close={closeAddLogModal}
+                    action={addLogChargeFunc}
+                  />
+                </ModalFooter>
+              </form>
+            </ModalContent>
+          </Modal>
+          <Modal
+            onClose={closeUpdateLogModal}
+            isOpen={updateLogModal}
+            size="xl"
+            isCentered
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <form>
+                <ModalHeader>
+                  <h1 className="text-center">Update Charge</h1>
+                </ModalHeader>
+                <ModalCloseButton />
+                {loader ? (
+                  <div className="h-[300px]">
+                    <MiniLoader />
+                  </div>
+                ) : (
+                  <ModalBody>
+                    <div className="space-y-4">
+                      <div className="space-y-1">
+                        <label
+                          className={labelStyle}
+                          htmlFor="updateStartValue"
+                        >
+                          Min Range
+                        </label>
+                        <input
+                          value={updateLogCharge.updateStartValue}
+                          onChange={onChange4}
+                          type="number"
+                          name="updateStartValue"
+                          id="updateStartValue"
+                          placeholder="Enter your Charge's Min Range"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className={labelStyle} htmlFor="updateEndValue">
+                          Max Range
+                        </label>
+                        <input
+                          value={updateLogCharge.updateEndValue}
+                          onChange={onChange4}
+                          type="number"
+                          name="updateEndValue"
+                          id="updateEndValue"
+                          placeholder="Enter your Charge's Max Range"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className={labelStyle} htmlFor="updateCharges">
+                          Price
+                        </label>
+                        <input
+                          value={updateLogCharge.updateCharges}
+                          onChange={onChange4}
+                          type="number"
+                          name="updateCharges"
+                          id="updateCharges"
+                          placeholder="Enter your Charge's Price"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="flex items-center gap-x-2">
+                        <label className={labelStyle} htmlFor="updateFlash">
+                          Flash Delivery
+                        </label>
+                        <input
+                          value={updateLogCharge.updateFlash}
+                          onChange={(e) =>
+                            setUpdateLogCharge({
+                              ...updateLogCharge,
+                              [e.target.name]: !updateLogCharge.updateFlash,
+                            })
+                          }
+                          defaultChecked={
+                            updateLogCharge.updateFlash ? true : false
+                          }
+                          type="checkbox"
+                          name="updateFlash"
+                          id="updateFlash"
+                        />
+                      </div>
+                    </div>
+                  </ModalBody>
+                )}
+                <ModalFooter>
+                  <ModalButtons
+                    text="Update"
+                    close={closeUpdateLogModal}
+                    action={updateLogChargeFunc}
+                  />
+                </ModalFooter>
+              </form>
+            </ModalContent>
+          </Modal>
           <section className="space-y-12">
             <div className="flex">
               <TabButton text="General" set={setTab} tab={tab} width="w-40" />
@@ -700,7 +1034,12 @@ export default function Charges() {
             ) : (
               <section className="space-y-3">
                 <div className="flex justify-end">
-                  <AddButton text="Charge" modal={setAddModal} />
+                  <AddButton
+                    text="Charge"
+                    modal={
+                      tab === "Shipping Company" ? setAddLogModal : setAddModal
+                    }
+                  />
                 </div>
                 <MyDataTable
                   columns={columns}

@@ -17,10 +17,6 @@ export default function WarehouseDetails() {
       selector: (row) => row.tracking,
     },
     {
-      name: "DBS #",
-      selector: (row) => row.dbs,
-    },
-    {
       name: tab === "Incoming" ? "Pickup Date" : "ETA",
       selector: (row) => (tab === "Incoming" ? row.date : row.eta),
     },
@@ -32,10 +28,6 @@ export default function WarehouseDetails() {
       name: "Status",
       selector: (row) => row.status,
     },
-    // {
-    //   name: "Action",
-    //   selector: (row) => row.action,
-    // },
   ];
   const datas = [];
   if (tab === "Incoming") {
@@ -43,14 +35,9 @@ export default function WarehouseDetails() {
       datas.push({
         id: index + 1,
         tracking: ware?.trackingId,
-        dbs:
-          ware?.pickupAddress?.postalCode +
-          " " +
-          ware?.pickupAddress?.secondPostalCode,
-        date: ware?.pickupDate,
+        date: ware?.pickupDate ?? "No Data",
         amount: ware?.total,
         status: ware?.bookingStatus?.title,
-        // action: <DTView />,
       })
     );
   } else if (tab === "Outgoing") {
@@ -58,14 +45,9 @@ export default function WarehouseDetails() {
       datas.push({
         id: index + 1,
         tracking: ware?.trackingId,
-        dbs:
-          ware?.dropoffAddress?.postalCode +
-          " " +
-          ware?.dropoffAddress?.secondPostalCode,
-        eta: ware?.ETA,
+        eta: ware?.ETA ?? "No Data",
         amount: ware?.total,
         status: ware?.bookingStatus?.title,
-        // action: <DTView />,
       })
     );
   }

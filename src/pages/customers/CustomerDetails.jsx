@@ -1,15 +1,9 @@
-import axios from "axios";
 import React, { useRef, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import MyDataTable from "../../components/MyDataTable";
-import {
-  error_toaster,
-  info_toaster,
-  mini_toaster,
-} from "../../utilities/Toaster";
+import { mini_toaster } from "../../utilities/Toaster";
 import { BackButton, DTView } from "../../utilities/Buttons";
-import { BASE_URL } from "../../utilities/URL";
 import Layout from "../../components/Layout";
 
 export default function CustomerDetails() {
@@ -21,25 +15,8 @@ export default function CustomerDetails() {
   const cusDetails = location?.state?.cusDetails;
   const bookingDetails = async (id) => {
     setDisabled(true);
-    var config = {
-      headers: {
-        accessToken: localStorage.getItem("accessToken"),
-      },
-    };
-    try {
-      axios.get(BASE_URL + `bookingdetails?id=${id}`, config).then((dat) => {
-        if (dat.data?.status === "1") {
-          localStorage.setItem("orderId", dat?.data?.data?.id);
-          navigate("/booking-details");
-          info_toaster(dat?.data?.message);
-        } else {
-          error_toaster(dat?.data?.message);
-        }
-        setDisabled(false);
-      });
-    } catch (err) {
-      setDisabled(false);
-    }
+    localStorage.setItem("orderId", id);
+    navigate("/booking-details");
   };
   const columns = [
     {
@@ -51,15 +28,7 @@ export default function CustomerDetails() {
       selector: (row) => row.orderId,
     },
     {
-      name: "Pickup DBS #",
-      selector: (row) => row.pickUp,
-    },
-    {
-      name: "Drop off DBS #",
-      selector: (row) => row.dropOff,
-    },
-    {
-      name: "Date",
+      name: "Pickup Date",
       selector: (row) => row.date,
     },
     {
@@ -76,17 +45,9 @@ export default function CustomerDetails() {
   location?.state?.cusDetails?.customer?.map((det, index) => {
     return datas.push({
       id: index + 1,
-      orderId: det?.trackingId,
-      pickUp:
-        det?.pickupAddress?.postalCode +
-        " " +
-        det?.pickupAddress?.secondPostalCode,
-      dropOff:
-        det?.dropoffAddress?.postalCode +
-        " " +
-        det?.dropoffAddress?.secondPostalCode,
-      date: det?.pickupDate,
-      status: det?.bookingStatus?.title,
+      orderId: det?.trackingId ?? "No Data",
+      date: det?.pickupDate ?? "No Data",
+      status: det?.bookingStatus?.title ?? "No Data",
       action: (
         <DTView view={() => bookingDetails(det?.id)} disabled={disabled} />
       ),

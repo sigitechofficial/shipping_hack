@@ -13,9 +13,14 @@ import {
 import { GiPriceTag } from "react-icons/gi";
 import { HiUsers } from "react-icons/hi";
 import { MdCategory } from "react-icons/md";
-import { RiCheckboxMultipleFill, RiDashboardFill, RiFlag2Fill } from "react-icons/ri";
+import {
+  RiCheckboxMultipleFill,
+  RiDashboardFill,
+  RiFlag2Fill,
+} from "react-icons/ri";
 import { SiGnuprivacyguard } from "react-icons/si";
 import { SiLogstash } from "react-icons/si";
+import { TbBellRinging } from "react-icons/tb";
 import { useLocation, useNavigate } from "react-router-dom";
 import { info_toaster } from "../utilities/Toaster";
 import { LayoutContext } from "./Layout";
@@ -90,6 +95,11 @@ export default function LeftBar() {
           to={"/roles"}
           Icon={RiCheckboxMultipleFill}
           title="Roles & Permission"
+        />{" "}
+        <ListItem
+          to={"/notifications"}
+          Icon={TbBellRinging}
+          title="Notifications"
         />
         <ListItem to={"/support"} Icon={BiPlusMedical} title="Support" />
         <ListItem

@@ -21,6 +21,7 @@ import Warehouses from "./pages/warehouses/Warehouses";
 import CreateWarehouse from "./pages/warehouses/CreateWarehouse";
 import WarehouseDetails from "./pages/warehouses/WarehouseDetails";
 import Bookings from "./pages/bookings/Bookings";
+import BookingDetails from "./pages/bookings/BookingDetails";
 import Vehicles from "./pages/vehicles/Vehicles";
 import Categories from "./pages/categories/Categories";
 import FAQ from "./pages/faq/FAQ";
@@ -33,6 +34,7 @@ import PrivacyPolicy from "./pages/privacy/PrivacyPolicy";
 import Terms from "./pages/terms/Terms";
 import Units from "./pages/units/Units";
 import Employees from "./pages/employees/Employees";
+import Notifications from "./pages/notifications/Notifications";
 
 export default function App() {
   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
@@ -145,6 +147,11 @@ export default function App() {
                 />
                 <Route
                   exact
+                  path="/booking-details"
+                  element={<ProtectedRoute Component={BookingDetails} />}
+                />
+                <Route
+                  exact
                   path="/vehicles"
                   element={<ProtectedRoute Component={Vehicles} />}
                 />
@@ -192,6 +199,11 @@ export default function App() {
                   exact
                   path="/terms-and-conditions"
                   element={<ProtectedRoute Component={Terms} />}
+                />
+                <Route
+                  exact
+                  path="/notifications"
+                  element={<ProtectedRoute Component={Notifications} />}
                 />
               </Routes>
             </Router>

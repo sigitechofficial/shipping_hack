@@ -24,15 +24,12 @@ export default function Support() {
     }
     return result;
   };
-  const featureData = JSON.parse(localStorage.getItem("featureData"));
-  const supportFeatureId =
-    featureData && featureData.find((ele) => ele.title === "Support")?.id;
-  const { data, reFetch } = GetAPI("getsupport", supportFeatureId);
+  const { data, reFetch } = GetAPI("getsupport");
   const [disabled, setDisabled] = useState(false);
   const [editEmail, setEditEmail] = useState(false);
   const [editPhone, setEditPhone] = useState(false);
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("507");
   const updateSupport = async (value, supportId, fill) => {
     setDisabled(true);
     if (value === "") {
@@ -40,7 +37,7 @@ export default function Support() {
     } else if (fill === "email" && !isValidEmail(value)) {
       info_toaster("Please enter a valid email");
     } else {
-      let res = await PutAPI("updatesupport", supportFeatureId, {
+      let res = await PutAPI("updatesupport", {
         value: fill === "phone" ? "+" + remover(value) : value,
         supportId: supportId,
       });
