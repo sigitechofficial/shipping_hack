@@ -12,7 +12,7 @@ import GetAPI from "../../utilities/GetAPI";
 import { PostAPI } from "../../utilities/PostAPI";
 import { PutAPI } from "../../utilities/PutAPI";
 import MyDataTable from "../../components/MyDataTable";
-import Loader, { MiniLoader } from "../..//components/Loader";
+import Loader, { MiniLoader } from "../../components/Loader";
 import {
   error_toaster,
   info_toaster,
