@@ -9,12 +9,9 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import PhoneInput from "react-phone-input-2";
 import { Link, useNavigate } from "react-router-dom";
-import Select from "react-select";
 import GetAPI from "../../utilities/GetAPI";
-import { PostAPI } from "../../utilities/PostAPI";
 import { PutAPI } from "../../utilities/PutAPI";
 import MyDataTable from "../../components/MyDataTable";
 import Loader, { MiniLoader } from "../../components/Loader";
@@ -40,35 +37,24 @@ export default function Warehouses() {
   const navigate = useNavigate();
   const { data, reFetch } = GetAPI("allwarehouses");
   const [loader, setLoader] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [address, setAddress] = useState([]);
-  const [text, setText] = useState("");
   const [warehouseId, setWarehouseId] = useState("");
   const [updateWarehouse, setupdateWarehouse] = useState({
-    email: "",
-    name: "",
-    countryCode: "507",
-    phoneNum: "",
-    addressDBSId: "",
-    password: "",
     warehouseId: "",
-    changePassword: false,
-    newDBS: false,
+    email: "",
+    countryCode: "",
+    phoneNum: "",
+    companyName: "",
   });
   const [updateModal, setUpdateModal] = useState(false);
   const closeUpdateModal = () => {
     setUpdateModal(false);
     setupdateWarehouse({
-      email: "",
-      name: "",
-      countryCode: "92",
-      phoneNum: "",
-      addressDBSId: "",
-      password: "",
       warehouseId: "",
-      changePassword: false,
-      newDBS: false,
+      email: "",
+      countryCode: "",
+      phoneNum: "",
+      companyName: "",
     });
   };
   const [deleteModal, setDeleteModal] = useState(false);
@@ -79,70 +65,34 @@ export default function Warehouses() {
   const onChange = (e) => {
     setupdateWarehouse({ ...updateWarehouse, [e.target.name]: e.target.value });
   };
-  const searchAddress = async () => {
-    let res = await PostAPI("getaddresses", {
-      text: text,
-    });
-    if (res?.data?.status === "1") {
-      setAddress(res?.data?.data?.addresses);
-    } else {
-      error_toaster(res?.data?.message);
-    }
-  };
-  const options = [];
-  address?.map((dbs, index) =>
-    options.push({
-      value: dbs?.id,
-      label: dbs?.postalCode + " " + dbs?.secondPostalCode,
-    })
-  );
   const updateWarehouseFunc = async (e) => {
     e.preventDefault();
-    if (updateWarehouse.name === "") {
+    if (updateWarehouse.companyName === "") {
       info_toaster("Please enter Warehouse's Name");
-    } else if (updateWarehouse.phoneNum === "") {
-      info_toaster("Please enter Warehouse's Phone");
     } else if (updateWarehouse.email === "") {
       info_toaster("Please enter Warehouse's Email");
-    } else if (updateWarehouse.password === "") {
-      info_toaster("Please create Warehouse's Password");
+    } else if (updateWarehouse.phoneNum === "") {
+      info_toaster("Please enter Warehouse's Phone");
     } else {
       setLoader(true);
-      let res = updateWarehouse.newDBS
-        ? await PutAPI("updatewarehouse", {
-            email: updateWarehouse.email,
-            name: updateWarehouse.name,
-            countryCode: "+" + remover(updateWarehouse.countryCode),
-            phoneNum: updateWarehouse.phoneNum,
-            addressDBSId: updateWarehouse.addressDBSId.value,
-            changePassword: updateWarehouse.changePassword,
-            password: updateWarehouse.password,
-            warehouseId: updateWarehouse.warehouseId,
-          })
-        : await PutAPI("updatewarehouse", {
-            email: updateWarehouse.email,
-            name: updateWarehouse.name,
-            countryCode: "+" + remover(updateWarehouse.countryCode),
-            phoneNum: updateWarehouse.phoneNum,
-            changePassword: updateWarehouse.changePassword,
-            password: updateWarehouse.password,
-            warehouseId: updateWarehouse.warehouseId,
-          });
+      let res = await PutAPI("updatewarehouse", {
+        warehouseId: updateWarehouse.warehouseId,
+        email: updateWarehouse.email,
+        countryCode: "+" + remover(updateWarehouse.countryCode),
+        phoneNum: updateWarehouse.phoneNum,
+        companyName: updateWarehouse.companyName,
+      });
       if (res?.data?.status === "1") {
         reFetch();
         setLoader(false);
         success_toaster(res?.data?.message);
         setUpdateModal(false);
         setupdateWarehouse({
-          email: "",
-          name: "",
-          countryCode: "92",
-          phoneNum: "",
-          addressDBSId: "",
-          password: "",
           warehouseId: "",
-          changePassword: false,
-          newDBS: false,
+          email: "",
+          countryCode: "",
+          phoneNum: "",
+          companyName: "",
         });
       } else {
         setLoader(false);
@@ -233,11 +183,11 @@ export default function Warehouses() {
             edit={() => {
               setUpdateModal(true);
               setupdateWarehouse({
-                name: ware?.name,
+                warehouseId: ware?.id,
+                email: ware?.email,
                 countryCode: ware?.countryCode,
                 phoneNum: ware?.phoneNum,
-                email: ware?.email,
-                warehouseId: ware?.id,
+                companyName: ware?.companyName,
               });
             }}
           />
@@ -274,31 +224,22 @@ export default function Warehouses() {
                 </ModalHeader>
                 <ModalCloseButton />
                 {loader ? (
-                  <div
-                    className={
-                      updateWarehouse.changePassword && updateWarehouse.newDBS
-                        ? "h-[504px]"
-                        : updateWarehouse.changePassword ||
-                          updateWarehouse.newDBS
-                        ? "h-[416px]"
-                        : "h-[328px]"
-                    }
-                  >
+                  <div className="h-[264px]">
                     <MiniLoader />
                   </div>
                 ) : (
                   <ModalBody>
                     <div className="space-y-4">
                       <div className="space-y-1">
-                        <label className={labelStyle} htmlFor="name">
+                        <label className={labelStyle} htmlFor="companyName">
                           Warehouse Name
                         </label>
                         <input
-                          value={updateWarehouse.name}
+                          value={updateWarehouse.companyName}
                           onChange={onChange}
                           type="text"
-                          name="name"
-                          id="name"
+                          name="companyName"
+                          id="companyName"
                           placeholder="Enter your Warehouse's Name"
                           className={inputStyle}
                         />
@@ -352,97 +293,6 @@ export default function Warehouses() {
                           />
                         </div>
                       </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-x-4">
-                          <label
-                            className={labelStyle}
-                            htmlFor="changePassword"
-                          >
-                            Do you want change Password,?
-                          </label>
-                          <input
-                            value={updateWarehouse.changePassword}
-                            onChange={() =>
-                              setupdateWarehouse({
-                                ...updateWarehouse,
-                                changePassword: !updateWarehouse.changePassword,
-                              })
-                            }
-                            type="checkbox"
-                            name="changePassword"
-                            id="changePassword"
-                          />
-                        </div>
-                        <div className="flex items-center gap-x-4">
-                          <label className={labelStyle} htmlFor="newDBS">
-                            Do you want change Address,?
-                          </label>
-                          <input
-                            value={updateWarehouse.newDBS}
-                            onChange={() =>
-                              setupdateWarehouse({
-                                ...updateWarehouse,
-                                newDBS: !updateWarehouse.newDBS,
-                              })
-                            }
-                            type="checkbox"
-                            name="newDBS"
-                            id="newDBS"
-                          />
-                        </div>
-                      </div>
-                      {updateWarehouse.changePassword && (
-                        <div className="space-y-1">
-                          <label className={labelStyle} htmlFor="password">
-                            Change Password
-                          </label>
-                          <div className="relative">
-                            <button
-                              onClick={() => setVisible(!visible)}
-                              type="button"
-                              className="text-black text-opacity-40 absolute right-4 top-1/2 -translate-y-1/2"
-                            >
-                              {visible ? (
-                                <AiOutlineEye size={20} />
-                              ) : (
-                                <AiOutlineEyeInvisible size={20} />
-                              )}
-                            </button>
-                            <input
-                              value={updateWarehouse.password}
-                              onChange={onChange}
-                              type={visible ? "text" : "password"}
-                              name="password"
-                              id="password"
-                              placeholder="Change your Password"
-                              className={inputStyle}
-                              autoComplete="off"
-                            />
-                          </div>
-                        </div>
-                      )}
-                      {updateWarehouse.newDBS && (
-                        <div className="space-y-1">
-                          <label className={labelStyle} htmlFor="dbs">
-                            DBS code of Warehouse
-                          </label>
-                          <Select
-                            inputValue={text}
-                            onInputChange={(text) => {
-                              setText(text);
-                              text === "" ? setAddress([]) : searchAddress();
-                            }}
-                            value={updateWarehouse.addressDBSId}
-                            onChange={(e) =>
-                              setupdateWarehouse({
-                                ...updateWarehouse,
-                                addressDBSId: e,
-                              })
-                            }
-                            options={options}
-                          />
-                        </div>
-                      )}
                     </div>
                   </ModalBody>
                 )}

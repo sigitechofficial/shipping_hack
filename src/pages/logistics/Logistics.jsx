@@ -298,107 +298,6 @@ export default function Logistics() {
                       </div>
                       <div className="space-y-1">
                         <label className={labelStyle} htmlFor="image">
-                          Vehicle Image
-                        </label>
-                        <input
-                          onChange={(e) =>
-                            setAddLogistic({
-                              ...addLogistic,
-                              [e.target.name]: e.target.files[0],
-                            })
-                          }
-                          type="file"
-                          name="image"
-                          id="image"
-                          className={inputStyle}
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className={labelStyle} htmlFor="standardCharges">
-                          Standard Charges
-                        </label>
-                        <input
-                          value={addLogistic.standardCharges}
-                          onChange={onChange}
-                          type="text"
-                          name="standardCharges"
-                          id="standardCharges"
-                          placeholder="Enter Standard Charges"
-                          className={inputStyle}
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className={labelStyle} htmlFor="flashCharges">
-                          Flash Charges
-                        </label>
-                        <input
-                          value={addLogistic.flashCharges}
-                          onChange={onChange}
-                          type="text"
-                          name="flashCharges"
-                          id="flashCharges"
-                          placeholder="Enter Flash Charges"
-                          className={inputStyle}
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className={labelStyle} htmlFor="description">
-                          Description
-                        </label>
-                        <textarea
-                          value={addLogistic.description}
-                          onChange={onChange}
-                          name="description"
-                          id="description"
-                          placeholder="Enter description"
-                          rows={5}
-                          className={inputStyle}
-                        ></textarea>
-                      </div>
-                    </div>
-                  </ModalBody>
-                )}
-                <ModalFooter>
-                  <ModalButtons
-                    text="Add"
-                    close={closeAddModal}
-                    action={addLogisticFunc}
-                  />
-                </ModalFooter>
-              </form>
-            </ModalContent>
-          </Modal>
-          <Modal onClose={closeAddModal} isOpen={addModal} size="xl" isCentered>
-            <ModalOverlay />
-            <ModalContent>
-              <form>
-                <ModalHeader>
-                  <h1 className="text-center">Add Logistic</h1>
-                </ModalHeader>
-                <ModalCloseButton />
-                {loader ? (
-                  <div className="h-[516px]">
-                    <MiniLoader />
-                  </div>
-                ) : (
-                  <ModalBody>
-                    <div className="space-y-2">
-                      <div className="space-y-1">
-                        <label className={labelStyle} htmlFor="title">
-                          Company Title
-                        </label>
-                        <input
-                          value={addLogistic.title}
-                          onChange={onChange}
-                          type="text"
-                          name="title"
-                          id="title"
-                          placeholder="Enter your Company's Title"
-                          className={inputStyle}
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className={labelStyle} htmlFor="image">
                           Company Logo
                         </label>
                         <input
@@ -421,7 +320,7 @@ export default function Logistics() {
                         <input
                           value={addLogistic.standardCharges}
                           onChange={onChange}
-                          type="text"
+                          type="number"
                           name="standardCharges"
                           id="standardCharges"
                           placeholder="Enter Standard Charges"
@@ -435,7 +334,7 @@ export default function Logistics() {
                         <input
                           value={addLogistic.flashCharges}
                           onChange={onChange}
-                          type="text"
+                          type="number"
                           name="flashCharges"
                           id="flashCharges"
                           placeholder="Enter Flash Charges"
@@ -517,7 +416,7 @@ export default function Logistics() {
                         <input
                           value={updateLogistic.updateStandardCharges}
                           onChange={onChange2}
-                          type="text"
+                          type="number"
                           name="updateStandardCharges"
                           id="updateStandardCharges"
                           placeholder="Enter Standard Charges"
@@ -534,7 +433,7 @@ export default function Logistics() {
                         <input
                           value={updateLogistic.updateFlashCharges}
                           onChange={onChange2}
-                          type="text"
+                          type="number"
                           name="updateFlashCharges"
                           id="updateFlashCharges"
                           placeholder="Enter Flash Charges"

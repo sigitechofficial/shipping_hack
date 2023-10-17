@@ -116,7 +116,7 @@ export default function Categories() {
     });
     if (res?.data?.status === "1") {
       reFetch();
-      success_toaster(res?.data?.message);
+      success_toaster("Category deleted successfully!");
       setDisabled(false);
     } else {
       error_toaster(res?.data?.message);

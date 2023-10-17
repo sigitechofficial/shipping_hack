@@ -254,7 +254,7 @@ export default function BookingDetails({ datas }) {
                   </span>
                 </h1>
                 {data?.data?.deliveryDriver === null ? (
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex justify-center">
+                  <div className="w-full flex justify-center mt-4">
                     <h3 className="bg-themeYellow bg-opacity-50 w-fit text-lg rounded-lg px-10 py-2">
                       Not Assigned Yet
                     </h3>

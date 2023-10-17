@@ -418,10 +418,6 @@ export default function Charges() {
         selector: (row) => row.price,
       },
       {
-        name: "Unit",
-        selector: (row) => row.unit,
-      },
-      {
         name: "Action",
         selector: (row) => row.action,
       }
@@ -436,7 +432,6 @@ export default function Charges() {
         min: dist?.startValue,
         max: dist?.endValue,
         price: dist?.price,
-        unit: dist?.unit,
         action: (
           <div className="flex gap-x-2">
             <DTEdit
@@ -467,7 +462,6 @@ export default function Charges() {
         min: weight?.startValue,
         max: weight?.endValue,
         price: weight?.price,
-        unit: weight?.unit,
         action: (
           <div className="flex gap-x-2">
             <DTEdit
@@ -498,7 +492,6 @@ export default function Charges() {
         min: vol?.startValue,
         max: vol?.endValue,
         price: vol?.price,
-        unit: vol?.unit,
         action: (
           <div className="flex gap-x-2">
             <DTEdit

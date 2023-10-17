@@ -35,7 +35,7 @@ export default function CreateWarehouse() {
   };
   const createWarehouseFunc = async (e) => {
     e.preventDefault();
-    if (warehouse.name === "") {
+    if (warehouse.companyName === "") {
       info_toaster("Please enter Warehouse's Name");
     } else if (warehouse.email === "") {
       info_toaster("Please enter Warehouse's Email");
@@ -45,8 +45,16 @@ export default function CreateWarehouse() {
       info_toaster("Please enter Warehouse's Phone");
     } else if (warehouse.password === "") {
       info_toaster("Please create Warehouse's Password");
-    } else if (warehouse.addressDBSId === "") {
-      info_toaster("Please select Warehouse's DBS Code");
+    } else if (warehouse.city === "") {
+      info_toaster("Please enter your City");
+    } else if (warehouse.district === "") {
+      info_toaster("Please enter your District");
+    } else if (warehouse.province === "") {
+      info_toaster("Please enter your Province");
+    } else if (warehouse.country === "") {
+      info_toaster("Please enter your Country");
+    } else if (warehouse.completeAddress === "") {
+      info_toaster("Please enter your Address");
     } else {
       let res = await PostAPI("createwarehouse", {
         email: warehouse.email,
