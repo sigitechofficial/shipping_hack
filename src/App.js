@@ -35,6 +35,7 @@ import Terms from "./pages/terms/Terms";
 import Units from "./pages/units/Units";
 import Employees from "./pages/employees/Employees";
 import Notifications from "./pages/notifications/Notifications";
+import Tracking from "./pages/live-tracking/Tracking";
 
 export default function App() {
   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
@@ -64,6 +65,11 @@ export default function App() {
                   exact
                   path="/"
                   element={<ProtectedRoute Component={Home} />}
+                />
+                <Route
+                  exact
+                  path="/track-order"
+                  element={<ProtectedRoute Component={Tracking} />}
                 />
                 <Route
                   exact

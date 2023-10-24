@@ -371,15 +371,15 @@ export default function Charges() {
         selector: (row) => row.id,
       },
       {
-        name: "Min Value",
+        name: "Min Value (lbs)",
         selector: (row) => row.min,
       },
       {
-        name: "Max Value",
+        name: "Max Value (lbs)",
         selector: (row) => row.max,
       },
       {
-        name: `Price`,
+        name: `Price ($)`,
         selector: (row) => row.price,
       },
       {
@@ -406,15 +406,15 @@ export default function Charges() {
         selector: (row) => row.title,
       },
       {
-        name: "Min Value",
+        name: "Min Value (lbs)",
         selector: (row) => row.min,
       },
       {
-        name: "Max Value",
+        name: "Max Value (lbs)",
         selector: (row) => row.max,
       },
       {
-        name: `Price`,
+        name: `Price ($)`,
         selector: (row) => row.price,
       },
       {

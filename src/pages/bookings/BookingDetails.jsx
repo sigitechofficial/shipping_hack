@@ -5,12 +5,27 @@ import { BackButton } from "../../utilities/Buttons";
 import Layout from "../../components/Layout";
 import StatusPill from "../../components/StatusPill";
 import GetAPI from "../../utilities/GetAPI";
+import { PutAPI } from "../../utilities/PutAPI";
 import Loader from "../../components/Loader";
 import { BASE_URL2 } from "../../utilities/URL";
+import { error_toaster, success_toaster } from "../../utilities/Toaster";
+import Select from "react-select";
 
 export default function BookingDetails({ datas }) {
   const bookingId = localStorage.getItem("orderId");
-  const { data } = GetAPI(`orderDetails?id=${parseInt(bookingId)}`);
+  const trackingId = localStorage.getItem("trackId");
+  const { data, reFetch } =
+    bookingId !== null
+      ? GetAPI(`orderDetails?id=${parseInt(bookingId)}`)
+      : GetAPI(`trackorder?s=${trackingId}`);
+  const statuses = GetAPI("all-booking-statuses");
+  const allStatus = [];
+  statuses?.data?.data?.map((sta, index) => {
+    return allStatus.push({
+      value: sta?.id,
+      label: sta?.title,
+    });
+  });
   const [parcelOpenStates, setParcelOpenStates] = useState(
     Array(datas?.packages.length).fill(false)
   );
@@ -26,6 +41,18 @@ export default function BookingDetails({ datas }) {
       let ampm = hours >= 12 ? "PM" : "AM";
       hours = hours % 12 || 12;
       return `${hours}:${minutes} ${ampm}`;
+    }
+  };
+  const changeStatusFunc = async (bookingStatusId) => {
+    let res = await PutAPI("update-booking-status", {
+      bookingId: bookingId,
+      bookingStatusId: bookingStatusId,
+    });
+    if (res?.data?.status === "1") {
+      success_toaster(res?.data?.message);
+      reFetch();
+    } else {
+      error_toaster(res?.data?.message);
     }
   };
   return data.length === 0 ? (
@@ -46,6 +73,14 @@ export default function BookingDetails({ datas }) {
                   {data?.data?.bookingStatus &&
                     data?.data?.bookingStatus?.title}
                 </div>
+              </div>
+              <div className="w-80 inner">
+                <Select
+                  onChange={(e) => changeStatusFunc(e.value)}
+                  options={allStatus}
+                  inputId="dbs"
+                  placeholder="Change Status"
+                />
               </div>
             </div>
           </div>

@@ -215,7 +215,7 @@ export default function Vehicles() {
       selector: (row) => row.baseRateMile,
     },
     {
-      name: "Weight Capacity",
+      name: "Weight Capacity (lbs)",
       selector: (row) => row.weight,
     },
     {

@@ -20,7 +20,7 @@ import {
 } from "react-icons/ri";
 import { SiGnuprivacyguard } from "react-icons/si";
 import { SiLogstash } from "react-icons/si";
-import { TbBellRinging } from "react-icons/tb";
+import { TbBellRinging, TbCapture } from "react-icons/tb";
 import { useLocation, useNavigate } from "react-router-dom";
 import { info_toaster } from "../utilities/Toaster";
 import { LayoutContext } from "./Layout";
@@ -46,6 +46,7 @@ export default function LeftBar() {
     >
       <ul className="flex flex-col gap-y-5 h-[88%] overflow-auto sidebar xl:pr-2 pr-1">
         <ListItem to={"/"} Icon={RiDashboardFill} title="Home" />
+        <ListItem to={"/track-order"} Icon={TbCapture} title="Track Order" />
         <ListItem
           to={"/customers"}
           Icon={HiUsers}
