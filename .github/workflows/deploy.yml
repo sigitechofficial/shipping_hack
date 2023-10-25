@@ -3,7 +3,7 @@ name: Deploy to Shared Hosting
 on:
   push:
     branches:
-      - main # Change this to your main branch
+      - master # Change this to your main branch
 
 jobs:
   deploy:
@@ -27,7 +27,7 @@ jobs:
         working-directory: /home/bilawale/shippinghack.zeeshannawaz.com
 
       - name: Deploy to Shared Hosting
-        uses: appleboy/scp-action@v0.3.0
+        uses: appleboy/scp-action@v2
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
