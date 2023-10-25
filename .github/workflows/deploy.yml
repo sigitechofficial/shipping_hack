@@ -1,3 +1,44 @@
+# name: Deploy to Shared Hosting
+
+# on:
+#   push:
+#     branches:
+#       - master # Change this to your main branch
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Install Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 14 # Use the version of Node.js your project requires
+
+#       - name: Install project dependencies
+#         run: npm install
+#         working-directory: ./
+
+#       - name: Build React project
+#         run: npm run build
+#         working-directory: /home/bilawale/shippinghack.zeeshannawaz.com
+
+#       - name: Deploy to Shared Hosting
+#         uses: appleboy/scp-action@v2
+#         with:
+#           host: ${{ secrets.SERVER_IP }}
+#           username: ${{ secrets.SERVER_USERNAME }}
+#           key: ${{ secrets.SSH_PRIVATE_KEY }}
+#           source: "build"
+#           target: "/home/bilawale/shippinghack.zeeshannawaz.com"
+
+#       - name: Clean up
+#         run: |
+#           # Clean up any temporary files or do post-deployment cleanup
+
 name: Deploy to Shared Hosting
 
 on:
@@ -24,16 +65,15 @@ jobs:
 
       - name: Build React project
         run: npm run build
-        working-directory: /home/bilawale/shippinghack.zeeshannawaz.com
+        working-directory: ./
 
       - name: Deploy to Shared Hosting
-        uses: appleboy/scp-action@v2
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build"
-          target: "/home/bilawale/shippinghack.zeeshannawaz.com"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          ssh-keyscan -t rsa,ecdsa,ed25519 212.1.210.146 >> ~/.ssh/known_hosts
+          ssh -i $SSH_PRIVATE_KEY user@212.1.210.146 "mkdir -p /home/bilawale/shippinghack.zeeshannawaz.com"
+          scp -i $SSH_PRIVATE_KEY -r build/* user@212.1.210.146:/home/bilawale/shippinghack.zeeshannawaz.com
 
       - name: Clean up
         run: |
