@@ -36,7 +36,7 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
         run: |
           cd build
-          lftp -c "set ssl:verify-certificate no; open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST; mirror -R -e -x .git/ ./"
+          lftp -c "open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST; mirror -R -e -x .git/ ./"
 
       - name: Clean up
         run: |
