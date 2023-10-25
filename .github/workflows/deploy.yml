@@ -30,6 +30,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
+          mkdir -p /home/myace/shippingadmin.myace.app
           ssh-keyscan -t rsa,ecdsa,ed25519 52.35.57.210 >> known_hosts
           rsync -e "ssh -i $SSH_PRIVATE_KEY" -avz --delete build/ myace@52.35.57.210:/home/myace/shippingadmin.myace.app
 
