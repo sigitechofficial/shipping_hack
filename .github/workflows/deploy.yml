@@ -1,0 +1,40 @@
+name: Deploy to Shared Hosting
+
+on:
+  push:
+    branches:
+      - main # Change this to your main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14 # Use the version of Node.js your project requires
+
+      - name: Install project dependencies
+        run: npm install
+        working-directory: ./your-react-app-folder
+
+      - name: Build React project
+        run: npm run build
+        working-directory: /home/bilawale/shippinghack.zeeshannawaz.com
+
+      - name: Deploy to Shared Hosting
+        uses: appleboy/scp-action@v0.3.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "/home/bilawale/shippinghack.zeeshannawaz.com"
+          target: "/home/bilawale/shippinghack.zeeshannawaz.com"
+
+      - name: Clean up
+        run: |
+          # Clean up any temporary files or do post-deployment cleanup
