@@ -1,38 +1,78 @@
+# name: Deploy to Shared Hosting
+
+# on:
+#   push:
+#     branches:
+#       - master # Change this to your main branch
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       # - name: Checkout code
+#       #   uses: actions/checkout@v2
+
+#       # - name: Install Node.js
+#       #   uses: actions/setup-node@v2
+#       #   with:
+#       #     node-version: 14 # Use the version of Node.js your project requires
+
+#       # - name: Install project dependencies
+#       #   run: npm install
+#       #   working-directory: ./
+
+#       # - name: Build React project
+#       #   run: npm run build
+#       #   working-directory: ./
+
+#       - name: Deploy to Shared Hosting
+#         env:
+#           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+#         run: |
+#           ssh -i $SSH_PRIVATE_KEY bilawale@212.1.210.146 "mkdir -p /home/bilawale/shippinghack.zeeshannawaz.com"
+#           scp -i $SSH_PRIVATE_KEY -r build/* bilawale@212.1.210.146:/home/bilawale/shippinghack.zeeshannawaz.com
+
+#       - name: Clean up
+#         run: |
+#           # Clean up any temporary files or do post-deployment cleanup
+
 name: Deploy to Shared Hosting
 
 on:
   push:
     branches:
-      - master # Change this to your main branch
+      - main # Change this to your main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Checkout code
-      #   uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      # - name: Install Node.js
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: 14 # Use the version of Node.js your project requires
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14 # Use the version of Node.js your project requires
 
-      # - name: Install project dependencies
-      #   run: npm install
-      #   working-directory: ./
+      - name: Install project dependencies
+        run: npm install
+        working-directory: ./
 
-      # - name: Build React project
-      #   run: npm run build
-      #   working-directory: ./
-      
+      - name: Build React project
+        run: npm run build
+        working-directory: ./
 
       - name: Deploy to Shared Hosting
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          ssh -i $SSH_PRIVATE_KEY bilawale@212.1.210.146 "mkdir -p /home/bilawale/shippinghack.zeeshannawaz.com"
-          scp -i $SSH_PRIVATE_KEY -r build/* bilawale@212.1.210.146:/home/bilawale/shippinghack.zeeshannawaz.com
+        uses: appleboy/scp-action@v0.3.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "/"
+          target: "/"
 
       - name: Clean up
         run: |
