@@ -34,6 +34,7 @@ export default function Charges() {
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const gen = GetAPI("getgencharges");
+  console.log("🚀 ~ file: Charges.jsx:37 ~ Charges ~ gen:", gen)
   const dist = GetAPI("getdistancecharge");
   const weight = GetAPI("getweightcharge");
   const vol = GetAPI("getvolweicharge");
@@ -1004,7 +1005,7 @@ export default function Charges() {
             {tab === "General" ? (
               gen?.data?.status === "1" ? (
                 <section className="grid grid-cols-4 gap-8">
-                  {gen?.data?.data?.map((gen, index) => (
+                  {gen?.data?.data?.charges?.map((gen, index) => (
                     <ChargesCard
                       info={gen?.information}
                       value={gen?.value}

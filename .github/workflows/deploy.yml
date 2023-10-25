@@ -30,8 +30,8 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          mkdir -p /home/bilawale/shippinghack.zeeshannawaz.com
-          scp -i $SSH_PRIVATE_KEY -r build/* bilawale@212.1.210.146:/home/bilawale/shippinghack.zeeshannawaz.com
+          mkdir -p /home/myace/shippingadmin.myace.app
+          scp -i $SSH_PRIVATE_KEY -r build/* bilawale@52.35.57.210:/home/myace/shippingadmin.myace.app
 
       - name: Clean up
         run: |
