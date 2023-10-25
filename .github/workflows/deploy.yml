@@ -29,10 +29,9 @@ jobs:
       - name: Deploy to Shared Hosting
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run:
-          echo "${{ secrets.SSH_PRIVATE_KEY }}"
-          # ssh -i $SSH_PRIVATE_KEY bilawale@212.1.210.146 "mkdir -p /home/bilawale/shippinghack.zeeshannawaz.com"
-          # scp -i $SSH_PRIVATE_KEY -r build/* bilawale@212.1.210.146:/home/bilawale/shippinghack.zeeshannawaz.com
+        run: |
+          ssh -i $SSH_PRIVATE_KEY bilawale@212.1.210.146 "mkdir -p /home/bilawale/shippinghack.zeeshannawaz.com"
+          scp -i $SSH_PRIVATE_KEY -r build/* bilawale@212.1.210.146:/home/bilawale/shippinghack.zeeshannawaz.com
 
       - name: Clean up
         run: |
