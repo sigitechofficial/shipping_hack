@@ -26,6 +26,11 @@ jobs:
       #   run: npm run build
       #   working-directory: ./
 
+      - name: Create SSH known_hosts file
+        run: |
+          mkdir -p $HOME/.ssh
+          ssh-keyscan -t rsa,ecdsa,ed25519 212.1.210.146 >> $HOME/.ssh/known_hosts
+
       - name: Create SSH known_hosts file on the remote server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
