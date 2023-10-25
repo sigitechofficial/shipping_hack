@@ -27,7 +27,7 @@ jobs:
       #   working-directory: ./
 
       - name: Create SSH known_hosts file
-        run: touch ./.ssh/known_hosts
+        run: touch /home/bilawale/.ssh/known_hosts
 
       - name: Deploy to Shared Hosting
         env:
