@@ -26,13 +26,17 @@ jobs:
         run: npm run build
         working-directory: ./
 
-      - name: Deploy to Shared Hosting
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install lftp
+
+      - name: Deploy to Shared Hosting using FTP
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_HOST: 52.35.57.210
+          REMOTE_PATH: /home/myace/shippingadmin.myace.app
         run: |
-          mkdir -p /home/myace/shippingadmin.myace.app
-          ssh-keyscan -t rsa,ecdsa,ed25519 52.35.57.210 >> known_hosts
-          rsync -e "ssh -i $SSH_PRIVATE_KEY" -avz --delete build/ myace@52.35.57.210:/home/myace/shippingadmin.myace.app
+          lftp -c "open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST; mirror -R -e -x .git/ ./ $REMOTE_PATH"
 
       - name: Clean up
         run: |
