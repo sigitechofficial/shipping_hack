@@ -66,13 +66,13 @@ jobs:
       #   working-directory: ./
 
       - name: Deploy to Shared Hosting
-        uses: appleboy/scp-action@v0.3.0
+        uses: appleboy/scp-action@v2
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "/"
-          target: "/"
+          source: "build/"
+          target: "/home/bilawale/shippinghack.zeeshannawaz.com"
 
       - name: Clean up
         run: |
