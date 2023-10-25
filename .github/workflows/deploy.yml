@@ -20,7 +20,7 @@ jobs:
 
       - name: Install project dependencies
         run: npm install
-        working-directory: ./your-react-app-folder
+        working-directory: ./
 
       - name: Build React project
         run: npm run build
@@ -32,7 +32,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "/home/bilawale/shippinghack.zeeshannawaz.com"
+          source: "build"
           target: "/home/bilawale/shippinghack.zeeshannawaz.com"
 
       - name: Clean up
