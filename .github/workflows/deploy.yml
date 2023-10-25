@@ -71,7 +71,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          ssh-keyscan -t rsa,ecdsa,ed25519 212.1.210.146 >> ~/.ssh/key
+          ssh-keyscan -t rsa,ecdsa,ed25519 212.1.210.146 >> /home/bilawale/ssh/known_hosts
           ssh -i $SSH_PRIVATE_KEY bilawale@212.1.210.146 "mkdir -p /home/bilawale/shippinghack.zeeshannawaz.com"
           scp -i $SSH_PRIVATE_KEY -r build/* bilawale@212.1.210.146:/home/bilawale/shippinghack.zeeshannawaz.com
 
