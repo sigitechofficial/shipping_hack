@@ -36,7 +36,7 @@ jobs:
           FTP_HOST: 52.35.57.210
           REMOTE_PATH: /home/myace/shippingadmin.myace.app
         run: |
-          lftp -c "open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST; mirror -R -e -x .git/ ./ $REMOTE_PATH"
+          lftp -c "set ssl:verify-certificate no; open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST; mirror -R -e -x .git/ ./ $REMOTE_PATH"
 
       - name: Clean up
         run: |
