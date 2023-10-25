@@ -27,7 +27,7 @@ jobs:
       #   working-directory: ./
 
       - name: Deploy to Shared Hosting
-        uses: appleboy/scp-action@v0.3.0
+        uses: appleboy/scp-action@v2
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
