@@ -64,13 +64,12 @@ jobs:
       # - name: Build React project
       #   run: npm run build
       #   working-directory: ./
-      
+
 
       - name: Deploy to Shared Hosting
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          ssh -i <(echo "$SSH_PRIVATE_KEY") -o StrictHostKeyChecking=no bilawale@212.1.210.146 echo "SSH connection successful"
           ssh-keyscan -t rsa,ecdsa,ed25519 212.1.210.146 >> $HOME/.ssh/known_hosts
           scp -i <(echo "$SSH_PRIVATE_KEY") -r your-react-app-folder/build/* bilawale@212.1.210.146:/home/bilawale/shippinghack.zeeshannawaz.com
 
