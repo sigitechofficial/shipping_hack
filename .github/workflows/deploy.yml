@@ -30,7 +30,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          ssh-keyscan -t rsa,ecdsa,ed25519 52.35.57.210 >> $HOME/.ssh/authorized_keys
+          ssh-keyscan -t rsa,ecdsa,ed25519 52.35.57.210 >> $HOME/.ssh/known_hosts
           rsync -e "ssh -i $SSH_PRIVATE_KEY" -avz --delete build/ myace@52.35.57.210:/home/myace/shippingadmin.myace.app
 
       - name: Clean up
