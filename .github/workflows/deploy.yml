@@ -31,9 +31,8 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p /home/myace/shippingadmin.myace.app
-          scp -i $SSH_PRIVATE_KEY -r build/* bilawale@212.1.210.146:/home/myace/shippingadmin.myace.app
+          scp -i $SSH_PRIVATE_KEY -r build/* myace@52.35.57.210:/home/myace/shippingadmin.myace.app
 
       - name: Clean up
         run: |
           # Clean up any temporary files or do post-deployment cleanup
- 
