@@ -26,6 +26,9 @@ jobs:
         run: npm run build
         working-directory: ./
 
+      - name: Create SSH known_hosts file
+        run: touch $HOME/.ssh/known_hosts
+
       - name: Deploy to Shared Hosting
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
