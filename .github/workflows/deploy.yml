@@ -63,7 +63,7 @@ jobs:
 
       - name: Build React project
         run: npm run build
-        working-directory: ./build
+        working-directory: ./
 
       - name: Deploy to Shared Hosting
         env:
