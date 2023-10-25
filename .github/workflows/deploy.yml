@@ -23,11 +23,15 @@ jobs:
       #   working-directory: ./
 
       # - name: Build React project
-      #   run: npm run build 
+      #   run: npm run build
       #   working-directory: ./
 
-      - name: Create SSH known_hosts file
-        run: touch bilawale@212.1.210.146:/home/bilawale/.ssh/known_hosts
+      - name: Create SSH known_hosts file on the remote server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          ssh-keyscan -t rsa,ecdsa,ed25519 212.1.210.146 >> $HOME/.ssh/known_hosts
+          ssh -i $SSH_PRIVATE_KEY bilawale@212.1.210.146 "mkdir -p /home/bilawale/.ssh"
 
       - name: Deploy to Shared Hosting
         env:
