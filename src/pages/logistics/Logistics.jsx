@@ -193,11 +193,11 @@ export default function Logistics() {
       selector: (row) => row.desc,
     },
     {
-      name: "Flash Charge",
+      name: "Flash Charge (lbs)",
       selector: (row) => row.flash,
     },
     {
-      name: "Standard Charge",
+      name: "Standard Charge (lbs)",
       selector: (row) => row.standard,
     },
     {

@@ -106,7 +106,7 @@ export default function BookingDetails({ datas }) {
                   {data?.data?.trackingId}
                 </span>
               </h1>
-              <h1 className="font-medium text-2xl">
+              {/* <h1 className="font-medium text-2xl">
                 Scheduled By
                 <span className={`text-black text-opacity-60 ml-2`}>
                   {data?.data?.scheduleSetBy
@@ -114,7 +114,7 @@ export default function BookingDetails({ datas }) {
                       (data?.data?.scheduleSetBy).slice(1)
                     : "No Data"}
                 </span>
-              </h1>
+              </h1> */}
               <div className={`space-y-4`}>
                 <h1 className="font-medium text-2xl">Sender Details</h1>
                 <div className="space-y-2">
@@ -271,7 +271,7 @@ export default function BookingDetails({ datas }) {
                     <div>
                       <h4 className="font-medium text-base">Tracking Number</h4>
                       <div className="font-normal text-sm text-black text-opacity-60">
-                        {data?.data?.trackingId}
+                        N/A
                       </div>
                     </div>
                   </div>
