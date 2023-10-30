@@ -165,6 +165,7 @@ export default function Banners() {
             edit={() => {
               setUpdateModal(true);
               setUpdateBanner({
+                ...updateBanner,
                 updateDescription: ban?.description,
                 bannerId: ban?.id,
                 currentImage: BASE_URL2 + ban?.image,

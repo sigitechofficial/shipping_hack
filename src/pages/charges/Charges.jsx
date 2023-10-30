@@ -34,7 +34,6 @@ export default function Charges() {
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const gen = GetAPI("getgencharges");
-  console.log("🚀 ~ file: Charges.jsx:37 ~ Charges ~ gen:", gen)
   const dist = GetAPI("getdistancecharge");
   const weight = GetAPI("getweightcharge");
   const vol = GetAPI("getvolweicharge");
