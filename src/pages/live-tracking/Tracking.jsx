@@ -13,6 +13,7 @@ export default function Tracking() {
     if (trackId === "") {
       info_toaster("Please enter Tracking Id");
     } else {
+      localStorage.removeItem("orderId");
       localStorage.setItem("trackId", trackId);
       navigate("/booking-details");
     }

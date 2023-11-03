@@ -36,6 +36,9 @@ export default function LeftBar() {
     setTimeout(() => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("loginStatus");
+      localStorage.removeItem("orderId");
+      localStorage.removeItem("trackId");
+      localStorage.removeItem("driverId");
       navigate("/sign-in");
       info_toaster("Successfully Logged out!");
     }, 400);
