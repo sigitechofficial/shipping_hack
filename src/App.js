@@ -29,6 +29,7 @@ import Banners from "./pages/banners/Banners";
 import Charges from "./pages/charges/Charges";
 import Support from "./pages/support/Support";
 import Logistics from "./pages/logistics/Logistics";
+import Restricted from "./pages/restricted/Restricted";
 import Roles from "./pages/roles/Roles";
 import PrivacyPolicy from "./pages/privacy/PrivacyPolicy";
 import Terms from "./pages/terms/Terms";
@@ -185,6 +186,11 @@ export default function App() {
                   exact
                   path="/faqs"
                   element={<ProtectedRoute Component={FAQ} />}
+                />
+                <Route
+                  exact
+                  path="/restricted-items"
+                  element={<ProtectedRoute Component={Restricted} />}
                 />
                 <Route
                   exact

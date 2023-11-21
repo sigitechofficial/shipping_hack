@@ -15,6 +15,7 @@ export default function Home() {
         <section>
           <div className="grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 gap-5">
             <HomeCard
+              to="/customers"
               icon="1"
               title="All Users"
               quantity={
@@ -24,6 +25,7 @@ export default function Home() {
               }
             />
             <HomeCard
+              to="/warehouses"
               icon="2"
               title="All Warehouses"
               quantity={
@@ -33,6 +35,7 @@ export default function Home() {
               }
             />
             <HomeCard
+              to="/drivers"
               icon="3"
               title="All Drivers"
               quantity={
@@ -42,6 +45,7 @@ export default function Home() {
               }
             />
             <HomeCard
+              to="/bookings"
               icon="4"
               title="All Orders"
               quantity={

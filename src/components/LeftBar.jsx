@@ -3,6 +3,7 @@ import { AiOutlinePoweroff } from "react-icons/ai";
 import { BiPlusMedical } from "react-icons/bi";
 import { BsBookHalf, BsFillFileEarmarkRuledFill } from "react-icons/bs";
 import {
+  FaBan,
   FaCar,
   FaQuestion,
   FaUnity,
@@ -99,7 +100,12 @@ export default function LeftBar() {
           to={"/roles"}
           Icon={RiCheckboxMultipleFill}
           title="Roles & Permission"
-        />{" "}
+        />
+        <ListItem
+          to={"/restricted-items"}
+          Icon={FaBan}
+          title="Restricted Items"
+        />
         <ListItem
           to={"/notifications"}
           Icon={TbBellRinging}
