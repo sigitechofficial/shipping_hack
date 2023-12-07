@@ -34,6 +34,7 @@ export default function Logistics() {
     flashCharges: "",
     standardCharges: "",
     image: "",
+    divisor: "",
   });
   const [updateLogistic, setUpdateLogistic] = useState({
     cId: "",
@@ -43,6 +44,7 @@ export default function Logistics() {
     updateStandardCharges: "",
     updateImage: "",
     newImage: false,
+    updateDivisor: "",
   });
   const [addModal, setAddModal] = useState(false);
   const closeAddModal = () => {
@@ -53,6 +55,7 @@ export default function Logistics() {
       flashCharges: "",
       standardCharges: "",
       image: "",
+      divisor: "",
     });
   };
   const [updateModal, setUpdateModal] = useState(false);
@@ -66,6 +69,7 @@ export default function Logistics() {
       updateStandardCharges: "",
       updateImage: "",
       newImage: false,
+      updateDivisor: "",
     });
   };
   const onChange = (e) => {
@@ -78,12 +82,14 @@ export default function Logistics() {
     e.preventDefault();
     if (addLogistic.title === "") {
       info_toaster("Please enter your Company's Title");
-    } else if (addLogistic.image === "") {
-      info_toaster("Please upload your Company's Logo");
     } else if (addLogistic.standardCharges === "") {
       info_toaster("Please enter Standard Charges");
     } else if (addLogistic.flashCharges === "") {
       info_toaster("Please enter Flash Charges");
+    } else if (addLogistic.divisor === "") {
+      info_toaster("Please enter Divisor");
+    } else if (addLogistic.image === "") {
+      info_toaster("Please upload your Company's Logo");
     } else if (addLogistic.description === "") {
       info_toaster("Please enter your Company's Description");
     } else {
@@ -94,6 +100,7 @@ export default function Logistics() {
       formData.append("standardCharges", addLogistic.standardCharges);
       formData.append("flashCharges", addLogistic.flashCharges);
       formData.append("image", addLogistic.image);
+      formData.append("divisor", addLogistic.divisor);
       let res = await PostAPI("addLogCompany", formData);
       if (res?.data?.status === "1") {
         reFetch();
@@ -106,6 +113,7 @@ export default function Logistics() {
           flashCharges: "",
           standardCharges: "",
           image: "",
+          divisor: "",
         });
       } else {
         setLoader(false);
@@ -121,6 +129,8 @@ export default function Logistics() {
       info_toaster("Please enter Standard Charges");
     } else if (updateLogistic.updateFlashCharges === "") {
       info_toaster("Please enter Flash Charges");
+    } else if (updateLogistic.updateDivisor === "") {
+      info_toaster("Please enter Divisor");
     } else if (updateLogistic.updateDescription === "") {
       info_toaster("Please enter your Company's Description");
     } else if (updateLogistic.newImage && updateLogistic.updateImage === "") {
@@ -135,6 +145,7 @@ export default function Logistics() {
       formData.append("flashCharges", updateLogistic.updateFlashCharges);
       formData.append("updateImage", updateLogistic.newImage);
       formData.append("image", updateLogistic.updateImage);
+      formData.append("divisor", updateLogistic.updateDivisor);
       let res = await PutAPI("updateLogCompany", formData);
       if (res?.data?.status === "1") {
         reFetch();
@@ -149,6 +160,7 @@ export default function Logistics() {
           updateStandardCharges: "",
           updateImage: "",
           newImage: false,
+          updateDivisor: "",
         });
       } else {
         setLoader(false);
@@ -201,6 +213,10 @@ export default function Logistics() {
       selector: (row) => row.standard,
     },
     {
+      name: "Divisor",
+      selector: (row) => row.divisor,
+    },
+    {
       name: "Status",
       selector: (row) => row.status,
     },
@@ -224,6 +240,7 @@ export default function Logistics() {
       desc: log?.description,
       flash: log?.flashCharges,
       standard: log?.standardCharges,
+      divisor: log?.divisor,
       status: log?.status ? (
         <button
           onClick={() => changeLogisticStatus(false, log?.id)}
@@ -252,6 +269,7 @@ export default function Logistics() {
                 updateDescription: log?.description,
                 updateFlashCharges: log?.flashCharges,
                 updateStandardCharges: log?.standardCharges,
+                updateDivisor: log?.divisor,
               });
               setUpdateModal(true);
             }}
@@ -267,7 +285,12 @@ export default function Logistics() {
       title="Logistic Companies"
       content={
         <>
-          <Modal onClose={closeAddModal} isOpen={addModal} size="xl" isCentered>
+          <Modal
+            onClose={closeAddModal}
+            isOpen={addModal}
+            size="2xl"
+            isCentered
+          >
             <ModalOverlay />
             <ModalContent>
               <form>
@@ -276,12 +299,12 @@ export default function Logistics() {
                 </ModalHeader>
                 <ModalCloseButton />
                 {loader ? (
-                  <div className="h-[516px]">
+                  <div className="h-[436px]">
                     <MiniLoader />
                   </div>
                 ) : (
                   <ModalBody>
-                    <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                       <div className="space-y-1">
                         <label className={labelStyle} htmlFor="title">
                           Company Title
@@ -293,23 +316,6 @@ export default function Logistics() {
                           name="title"
                           id="title"
                           placeholder="Enter your Company's Title"
-                          className={inputStyle}
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className={labelStyle} htmlFor="image">
-                          Company Logo
-                        </label>
-                        <input
-                          onChange={(e) =>
-                            setAddLogistic({
-                              ...addLogistic,
-                              [e.target.name]: e.target.files[0],
-                            })
-                          }
-                          type="file"
-                          name="image"
-                          id="image"
                           className={inputStyle}
                         />
                       </div>
@@ -342,6 +348,37 @@ export default function Logistics() {
                         />
                       </div>
                       <div className="space-y-1">
+                        <label className={labelStyle} htmlFor="divisor">
+                          Divisor
+                        </label>
+                        <input
+                          value={addLogistic.divisor}
+                          onChange={onChange}
+                          type="number"
+                          name="divisor"
+                          id="divisor"
+                          placeholder="Enter Divisor"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="space-y-1 col-span-2">
+                        <label className={labelStyle} htmlFor="image">
+                          Company Logo
+                        </label>
+                        <input
+                          onChange={(e) =>
+                            setAddLogistic({
+                              ...addLogistic,
+                              [e.target.name]: e.target.files[0],
+                            })
+                          }
+                          type="file"
+                          name="image"
+                          id="image"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="space-y-1 col-span-2">
                         <label className={labelStyle} htmlFor="description">
                           Description
                         </label>
@@ -371,7 +408,7 @@ export default function Logistics() {
           <Modal
             onClose={closeUpdateModal}
             isOpen={updateModal}
-            size="xl"
+            size="2xl"
             isCentered
           >
             <ModalOverlay />
@@ -384,14 +421,14 @@ export default function Logistics() {
                 {loader ? (
                   <div
                     className={
-                      updateLogistic.newImage ? "h-[544px]" : "h-[458px]"
+                      updateLogistic.newImage ? "h-[464px]" : "h-[374px]"
                     }
                   >
                     <MiniLoader />
                   </div>
                 ) : (
                   <ModalBody>
-                    <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                       <div className="space-y-1">
                         <label className={labelStyle} htmlFor="updateTitle">
                           Company Title
@@ -443,6 +480,23 @@ export default function Logistics() {
                       <div className="space-y-1">
                         <label
                           className={labelStyle}
+                          htmlFor="updateDivisor"
+                        >
+                          Divisor
+                        </label>
+                        <input
+                          value={updateLogistic.updateDivisor}
+                          onChange={onChange2}
+                          type="number"
+                          name="updateDivisor"
+                          id="updateDivisor"
+                          placeholder="Enter Divisor"
+                          className={inputStyle}
+                        />
+                      </div>
+                      <div className="space-y-1 col-span-2">
+                        <label
+                          className={labelStyle}
                           htmlFor="updateDescription"
                         >
                           Description
@@ -457,7 +511,7 @@ export default function Logistics() {
                           className={inputStyle}
                         ></textarea>
                       </div>
-                      <div className="flex items-center gap-x-2">
+                      <div className="flex items-center gap-x-2 col-span-2">
                         <label className={labelStyle} htmlFor="newImage">
                           Do you want to upload new Logo,?
                         </label>
@@ -475,7 +529,7 @@ export default function Logistics() {
                         />
                       </div>
                       {updateLogistic.newImage && (
-                        <div className="space-y-1">
+                        <div className="space-y-1 col-span-2">
                           <label className={labelStyle} htmlFor="updateImage">
                             Company Logo
                           </label>
