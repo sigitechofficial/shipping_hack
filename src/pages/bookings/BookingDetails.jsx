@@ -218,7 +218,7 @@ export default function BookingDetails({ datas }) {
                           <span
                             className={`font-normal text-base text-black text-opacity-60`}
                           >
-                            {parcel?.width}
+                            {parcel?.actualWidth} inch
                           </span>
                         </li>
                         <li className="flex justify-between">
@@ -226,7 +226,7 @@ export default function BookingDetails({ datas }) {
                           <span
                             className={`font-normal text-base text-black text-opacity-60`}
                           >
-                            {parcel?.height}
+                            {parcel?.actualHeight} inch
                           </span>
                         </li>
                         <li className="flex justify-between">
@@ -234,7 +234,7 @@ export default function BookingDetails({ datas }) {
                           <span
                             className={`font-normal text-base text-black text-opacity-60`}
                           >
-                            {parcel?.length}
+                            {parcel?.actualLength} inch
                           </span>
                         </li>
                         <li className="flex justify-between">
@@ -242,7 +242,7 @@ export default function BookingDetails({ datas }) {
                           <span
                             className={`font-normal text-base text-black text-opacity-60`}
                           >
-                            {parcel?.weight}
+                            {parcel?.actualWeight} lbs
                           </span>
                         </li>
                         <li className="flex justify-between">
