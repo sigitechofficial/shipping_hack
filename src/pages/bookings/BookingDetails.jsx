@@ -89,6 +89,7 @@ export default function BookingDetails({ datas }) {
               <div className="flex gap-5 [&>div]:min-w-[12.5%] overflow-auto pb-5">
                 {data?.data?.bookingHistories?.map((booking, index) => (
                   <StatusPill
+                    key={index}
                     title={booking?.statusText}
                     pillStatus={booking?.status ? "completed" : "inProcess"}
                     date={booking?.date}

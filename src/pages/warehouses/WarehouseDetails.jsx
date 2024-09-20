@@ -16,10 +16,10 @@ export default function WarehouseDetails() {
       name: "Tracking Id",
       selector: (row) => row.tracking,
     },
-    {
-      name: tab === "Incoming" ? "Pickup Date" : "ETA",
-      selector: (row) => (tab === "Incoming" ? row.date : row.eta),
-    },
+    // {
+    //   name: tab === "Incoming" ? "Pickup Date" : "ETA",
+    //   selector: (row) => (tab === "Incoming" ? row.date : row.eta),
+    // },
     {
       name: "Amount",
       selector: (row) => row.amount,
@@ -35,7 +35,7 @@ export default function WarehouseDetails() {
       datas.push({
         id: index + 1,
         tracking: ware?.trackingId,
-        date: ware?.pickupDate ?? "No Data",
+        // date: ware?.pickupDate ?? "No Data",
         amount: ware?.total,
         status: ware?.bookingStatus?.title,
       })
@@ -45,7 +45,7 @@ export default function WarehouseDetails() {
       datas.push({
         id: index + 1,
         tracking: ware?.trackingId,
-        eta: ware?.ETA ?? "No Data",
+        // eta: ware?.ETA ?? "No Data",
         amount: ware?.total,
         status: ware?.bookingStatus?.title,
       })

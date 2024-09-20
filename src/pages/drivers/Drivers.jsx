@@ -89,8 +89,9 @@ export default function Drivers() {
   };
   const rejectDriver = async (userId) => {
     setDisabled(true);
-    let res = await PutAPI("rejectdriver", {
+    let res = await PutAPI("updateDriverStatus", {
       userId: userId,
+      status: 0,
     });
     if (res?.data?.status === "1") {
       success_toaster(res?.data?.message);

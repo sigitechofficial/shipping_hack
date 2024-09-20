@@ -73,7 +73,7 @@ export default function Bookings() {
         <>
           <MyDataTable columns={columns} data={datas} dependancy={data} />
         </>
-      }
+      } 
     />
   );
 }

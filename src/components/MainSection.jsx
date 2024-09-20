@@ -11,6 +11,6 @@ export default function MainSection(props) {
     >
       <h1 className={`font-bold text-2xl mb-5 `}>{props.title}</h1>
       {props.content}
-    </section>
+    </section> 
   );
 }

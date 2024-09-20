@@ -15,6 +15,7 @@ export default function Tracking() {
     } else {
       localStorage.removeItem("orderId");
       localStorage.setItem("trackId", trackId);
+      localStorage.removeItem("orderId");
       navigate("/booking-details");
     }
   };

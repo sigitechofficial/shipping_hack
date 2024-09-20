@@ -118,7 +118,7 @@ export function DTApprove(props) {
 
 export function DTReject(props) {
   return (
-    <Tooltip label="Reject Driver" aria-label="A tooltip">
+    <Tooltip label="Not Approve" aria-label="A tooltip">
       <button
         onClick={props.reject}
         disabled={props.disabled}
