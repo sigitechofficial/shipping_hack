@@ -13,9 +13,10 @@ export default function Bookings() {
   const bookingDetails = async (id) => {
     setDisabled(true);
     localStorage.setItem("orderId", id);
+    localStorage.removeItem("trackId")
     navigate("/booking-details");
   };
-  const columns = [
+  const columns = [ 
     {
       name: "#",
       selector: (row) => row.id,

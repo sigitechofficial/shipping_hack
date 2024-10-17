@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsBoxSeam, BsChevronDown, BsChevronUp } from "react-icons/bs";
 import { IoMdPaper } from "react-icons/io";
 import { BackButton } from "../../utilities/Buttons";
@@ -11,13 +11,16 @@ import { BASE_URL2 } from "../../utilities/URL";
 import { error_toaster, success_toaster } from "../../utilities/Toaster";
 import Select from "react-select";
 
-export default function BookingDetails({ datas }) {
+export default function BookingDetails() {
   const bookingId = localStorage.getItem("orderId");
   const trackingId = localStorage.getItem("trackId");
   const { data, reFetch } =
     bookingId !== null
-      ? GetAPI(`orderDetails?id=${parseInt(bookingId)}`)
+      ? GetAPI(`trackorder?id=${parseInt(bookingId)}`)
       : GetAPI(`trackorder?s=${trackingId}`);
+
+  // console.log("🚀 ~ BookingDetails ~ data:", data?.data);
+
   const statuses = GetAPI("all-booking-statuses");
   const allStatus = [];
   statuses?.data?.data?.map((sta, index) => {
@@ -27,13 +30,16 @@ export default function BookingDetails({ datas }) {
     });
   });
   const [parcelOpenStates, setParcelOpenStates] = useState(
-    Array(datas?.packages.length).fill(false)
+    Array(data?.data?.packages.length).fill(false)
   );
+  // console.log("parcelOpenStates", parcelOpenStates);
+
   const toggleParcelOpen = (index) => {
     const newParcelOpenStates = [...parcelOpenStates];
-    newParcelOpenStates[index] = !newParcelOpenStates[index];
+    newParcelOpenStates[index] = !parcelOpenStates[index];
     setParcelOpenStates(newParcelOpenStates);
   };
+
   const convertTo12Hour = (time) => {
     if (time && time !== "") {
       let hours = parseInt(time.substr(0, 2));
@@ -55,6 +61,13 @@ export default function BookingDetails({ datas }) {
       error_toaster(res?.data?.message);
     }
   };
+
+  useEffect(() => {
+    if (data?.data?.packages) {
+      setParcelOpenStates(Array(data?.data?.packages.length).fill(false));
+    }
+  }, [data]);
+
   return data.length === 0 ? (
     <Loader />
   ) : (
@@ -87,7 +100,7 @@ export default function BookingDetails({ datas }) {
           <section className="grid grid-cols-12 gap-5">
             <div className={`col-span-12 bg-white py-8 px-10 rounded-lg`}>
               <div className="flex gap-5 [&>div]:min-w-[12.5%] overflow-auto pb-5">
-                {data?.data?.bookingHistories?.map((booking, index) => (
+                {data?.data?.history?.map((booking, index) => (
                   <StatusPill
                     key={index}
                     title={booking?.statusText}
@@ -120,7 +133,7 @@ export default function BookingDetails({ datas }) {
                 <h1 className="font-medium text-2xl">Sender Details</h1>
                 <div className="space-y-2">
                   <h5 className={`font-bold text-xl text-themeBlue`}>
-                    {data?.data?.senderName}
+                    {data?.data?.senderDetails?.name}
                   </h5>
                   <div>
                     <span
@@ -129,7 +142,7 @@ export default function BookingDetails({ datas }) {
                       Email
                     </span>
                     <p className="font-normal text-base">
-                      {data?.data?.senderEmail}
+                      {data?.data?.senderDetails?.email}
                     </p>
                   </div>
                   <div>
@@ -139,7 +152,7 @@ export default function BookingDetails({ datas }) {
                       Phone no
                     </span>
                     <p className="font-normal text-base">
-                      {data?.data?.senderPhone}
+                      {data?.data?.senderDetails?.number}
                     </p>
                   </div>
                 </div>
@@ -148,7 +161,7 @@ export default function BookingDetails({ datas }) {
                 <h1 className="font-medium text-2xl">Recipient Details</h1>
                 <div className="space-y-2">
                   <h5 className={`font-bold text-xl text-themeBlue`}>
-                    {data?.data?.receiverName}
+                    {data?.data?.receiverDetails?.name}
                   </h5>
                   <div>
                     <span
@@ -157,7 +170,7 @@ export default function BookingDetails({ datas }) {
                       Email
                     </span>
                     <p className="font-normal text-base">
-                      {data?.data?.receiverEmail}
+                      {data?.data?.receiverDetails?.email}
                     </p>
                   </div>
                   <div>
@@ -167,7 +180,7 @@ export default function BookingDetails({ datas }) {
                       Phone
                     </span>
                     <p className="font-normal text-base">
-                      {data?.data?.receiverPhone}
+                      {data?.data?.receiverDetails?.number}
                     </p>
                   </div>
                 </div>
@@ -210,7 +223,7 @@ export default function BookingDetails({ datas }) {
                           <span
                             className={`font-normal text-base text-black text-opacity-60`}
                           >
-                            {parcel?.category}
+                            {parcel?.category?.title}
                           </span>
                         </li>
                         <li className="flex justify-between">
@@ -250,7 +263,7 @@ export default function BookingDetails({ datas }) {
                           <span
                             className={`font-normal text-base text-black text-opacity-60`}
                           >
-                            {parcel?.ecommerceCompany}
+                            {parcel?.ecommerceCompany?.title}
                           </span>
                         </li>
                       </>
@@ -272,7 +285,7 @@ export default function BookingDetails({ datas }) {
                     <div>
                       <h4 className="font-medium text-base">Tracking Number</h4>
                       <div className="font-normal text-sm text-black text-opacity-60">
-                        N/A
+                        {data?.data?.logisticCompanyTrackingNum}
                       </div>
                     </div>
                   </div>
@@ -289,13 +302,7 @@ export default function BookingDetails({ datas }) {
                     (Dropoff Driver)
                   </span>
                 </h1>
-                {data?.data?.deliveryDriver === null ? (
-                  <div className="w-full flex justify-center mt-4">
-                    <h3 className="bg-themeYellow bg-opacity-50 w-fit text-lg rounded-lg px-10 py-2">
-                      Not Assigned Yet
-                    </h3>
-                  </div>
-                ) : (
+                {data?.data?.deliveryDriver ? (
                   <div>
                     <div className="flex gap-x-4 mb-3">
                       <div>
@@ -307,7 +314,10 @@ export default function BookingDetails({ datas }) {
                       </div>
                       <div className="pt-2">
                         <h5 className={`font-bold text-xl text-themeBlue`}>
-                          {`${data?.data?.deliveryDriver?.firstName}${data?.data?.deliveryDriver?.lastName}`}
+                          {data?.data?.deliveryDriver?.firstName &&
+                          data?.data?.deliveryDriver?.lastName
+                            ? `${data?.data?.deliveryDriver?.firstName}${data?.data?.deliveryDriver?.lastName}`
+                            : "N/A"}
                         </h5>
                       </div>
                     </div>
@@ -317,7 +327,9 @@ export default function BookingDetails({ datas }) {
                           Email
                         </span>
                         <p className="font-normal text-base">
-                          {data?.data?.deliveryDriver?.email}
+                          {data?.data?.deliveryDriver?.email
+                            ? data?.data?.deliveryDriver?.email
+                            : "N/A"}
                         </p>
                       </div>
                       <div>
@@ -326,10 +338,18 @@ export default function BookingDetails({ datas }) {
                         </span>
                         <p className="font-normal text-base">
                           {data?.data?.deliveryDriver?.countryCode &&
-                            data?.data?.deliveryDriver?.phoneNum}
+                          data?.data?.deliveryDriver?.phoneNum
+                            ? `${data?.data?.deliveryDriver?.countryCode}${data?.data?.deliveryDriver?.phoneNum}`
+                            : "N/A"}
                         </p>
                       </div>
                     </div>
+                  </div>
+                ) : (
+                  <div className="w-full flex justify-center mt-4">
+                    <h3 className="bg-themeYellow bg-opacity-50 w-fit text-lg rounded-lg px-10 py-2">
+                      Not Assigned Yet
+                    </h3>
                   </div>
                 )}
               </div>
