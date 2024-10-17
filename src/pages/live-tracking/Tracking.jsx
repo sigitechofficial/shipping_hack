@@ -21,6 +21,8 @@ export default function Tracking() {
     setLoader(true);
     if (trackId === "") {
       info_toaster("Please enter Tracking Id");
+      setDisabled(false);
+      setLoader(false);
     } else {
       const res = await PostAPI(`checktrackingNumber/${trackId}`);
       if (res?.data?.status === "1") {
