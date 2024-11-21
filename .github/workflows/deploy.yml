@@ -30,7 +30,7 @@ jobs:
           FTP_PASSWORD: ${{ secrets.STAGE_FTP_PASSWORD }}
           FTP_HOST: ${{ secrets.STAGE_FTP_HOST }}
         run: |
-          cd dist # Adjust this if your build output directory is different
+          cd build # Adjust this if your build output directory is different
           lftp -c "set ssl:verify-certificate no; open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST; mirror -R -e -x .git/ ./"
       - name: Clean up
         run: echo "Clean up step"
@@ -67,7 +67,7 @@ jobs:
           FTP_PASSWORD: ${{ secrets.ADMIN_FTP_PASSWORD }}
           FTP_HOST: ${{ secrets.ADMIN_FTP_HOST }}
         run: |
-          cd dist # Adjust this if your build output directory is different
+          cd build # Adjust this if your build output directory is different
           lftp -c "set ssl:verify-certificate no; open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST; mirror -R -e -x .git/ ./"
       - name: Clean up
         run: echo "Clean up step"
