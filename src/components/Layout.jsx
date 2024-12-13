@@ -5,9 +5,9 @@ import MainSection from "./MainSection";
 import Header from "./Header";
 
 export const LayoutContext = createContext(null);
+
 export default function Layout(props) {
   const [loader, setLoader] = useState(false);
-  const [searchData, setSearchData] = useState("");
 
   return loader ? (
     <Loader />
@@ -16,7 +16,13 @@ export default function Layout(props) {
       <LayoutContext.Provider value={{ setLoader }}>
         <Header />
         <LeftBar />
-        <MainSection title={props.title} content={props.content} />
+        <MainSection
+          setSearchData={props?.setSearchData}
+          searchData={props?.searchData}
+          title={props.title}
+          content={props.content}
+          showSearchBar={props?.showSearchBar}
+        />
       </LayoutContext.Provider>
     </>
   );

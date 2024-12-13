@@ -5,12 +5,13 @@ import HomeCard from "../../components/HomeCard";
 import GetAPI from "../../utilities/GetAPI";
 
 export default function Home() {
-  const { data } = GetAPI("homepage");
+  const { data } = GetAPI("homepage"); 
   return data.length === 0 ? (
     <Loader />
   ) : (
     <Layout
       title="Dashboard"
+      showSearchBar={false}
       content={
         <section>
           <div className="grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 gap-5">

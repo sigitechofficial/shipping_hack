@@ -34,6 +34,7 @@ export default function Login() {
           setLoader(false);
           localStorage.setItem("accessToken", res?.data?.data?.accessToken);
           localStorage.setItem("userType", res?.data?.data?.adminType);
+          localStorage.setItem("userName", res?.data?.data?.userName);
           setLoginStatus(true);
           if (res?.data?.data?.adminType === "Admin") {
             navigate("/");

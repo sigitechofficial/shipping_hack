@@ -20,10 +20,13 @@ export default function Customers() {
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [searchData, setSearchData] = useState("");
+  console.log("🚀 ~ Customers ~ searchData:", searchData);
 
   const { data, reFetch } = GetAPI(
     userType === "Admin" ? "allcustomers" : "allcustomers/?featureId=4"
   );
+
   const changeCustomerStatus = async (status, userId) => {
     setDisabled(true);
     let change = await PutAPI("userstatus", {
@@ -72,7 +75,19 @@ export default function Customers() {
     }
   };
 
-  // const filterData = data?.data?.map((cust, index) => {});
+  const filterData = data?.data?.filter((cust, index) => {
+    return (
+      searchData === "" ||
+      (cust?.virtualBox &&
+        cust?.virtualBox.toLowerCase().includes(searchData.toLowerCase())) ||
+      (cust?.firstName &&
+        cust?.firstName.toLowerCase().includes(searchData.toLowerCase())) ||
+      (cust?.lastName &&
+        cust?.lastName.toLowerCase().includes(searchData.toLowerCase())) ||
+      (cust?.email &&
+        cust?.email.toLowerCase().includes(searchData.toLowerCase()))
+    );
+  });
 
   const columns = [
     {
@@ -107,7 +122,7 @@ export default function Customers() {
     },
   ];
   const datas = [];
-  data?.data?.map((cust, index) => {
+  filterData?.map((cust, index) => {
     return datas.push({
       id: index + 1,
       vbn: cust?.virtualBox,
@@ -142,6 +157,9 @@ export default function Customers() {
   ) : (
     <Layout
       title="Customers"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <MyDataTable columns={columns} data={datas} dependancy={data} />

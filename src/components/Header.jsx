@@ -1,11 +1,11 @@
 import React from "react";
 import { FaUser } from "react-icons/fa";
-import { FiSearch } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { imgURL } from "../utilities/URL";
 
 export default function Header() {
   const userType = localStorage.getItem("userType");
+  const userName = localStorage.getItem("userName");
 
   return (
     <header className="bg-themeBlue fixed z-20 w-full">
@@ -30,7 +30,7 @@ export default function Header() {
             <FaUser size={28} color="white" />
           </div>
           <div>
-            <h2 className="text-white text-sm font-semibold">Arsel T</h2>
+            <h2 className="text-white text-sm font-semibold">{userName}</h2>
             <p className="text-white text-xs font-normal">{userType}</p>
           </div>
         </div>
