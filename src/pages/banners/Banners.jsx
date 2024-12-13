@@ -30,6 +30,7 @@ import Layout from "../../components/Layout";
 export default function Banners() {
   const { data, reFetch } = GetAPI("getallbanners");
   const [loader, setLoader] = useState(false);
+  const [searchData, setSearchData] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [addBanner, setAddBanner] = useState({
     description: "",
@@ -129,6 +130,15 @@ export default function Banners() {
       setDisabled(false);
     }
   };
+
+  const filterData = data?.data?.filter((ban) => {
+    return (
+      searchData === "" ||
+      (ban?.description &&
+        ban?.description.toLowerCase().includes(searchData.toLowerCase()))
+    );
+  });
+
   const columns = [
     {
       name: "#",
@@ -147,8 +157,9 @@ export default function Banners() {
       selector: (row) => row.action,
     },
   ];
+  
   const datas = [];
-  data?.data?.map((ban, index) =>
+  filterData?.map((ban, index) =>
     datas.push({
       id: index + 1,
       desc: ban?.description,
@@ -186,6 +197,9 @@ export default function Banners() {
   ) : (
     <Layout
       title="Banners"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <Modal onClose={closeAddModal} isOpen={addModal} size="xl" isCentered>
@@ -355,7 +369,7 @@ export default function Banners() {
             </ModalContent>
           </Modal>
           <section className="space-y-3">
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-5">
               <AddButton text="Banner" modal={setAddModal} />
             </div>
             <MyDataTable columns={columns} data={datas} dependancy={data} />

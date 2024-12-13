@@ -21,7 +21,6 @@ export default function Customers() {
   const [disabled, setDisabled] = useState(false);
   const [loader, setLoader] = useState(false);
   const [searchData, setSearchData] = useState("");
-  console.log("🚀 ~ Customers ~ searchData:", searchData);
 
   const { data, reFetch } = GetAPI(
     userType === "Admin" ? "allcustomers" : "allcustomers/?featureId=4"
@@ -75,7 +74,7 @@ export default function Customers() {
     }
   };
 
-  const filterData = data?.data?.filter((cust, index) => {
+  const filterData = data?.data?.filter((cust) => {
     return (
       searchData === "" ||
       (cust?.virtualBox &&

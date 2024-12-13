@@ -38,6 +38,7 @@ export default function Employees() {
     return result;
   };
   const [visible, setVisible] = useState(false);
+  const [searchData, setSearchData] = useState("");
   const { data, reFetch } = GetAPI("getallemployees");
   const activeRoles = GetAPI("activeroles");
   const [loader, setLoader] = useState(false);
@@ -209,6 +210,19 @@ export default function Employees() {
       label: role?.name,
     })
   );
+
+  const filterData = data?.data?.filter((emp) => {
+    return (
+      searchData === "" ||
+      (emp?.companyName &&
+        emp?.companyName.toLowerCase().includes(searchData.toLowerCase())) ||
+      (emp?.email &&
+        emp?.email.toLowerCase().includes(searchData.toLowerCase())) ||
+      (emp?.role?.name &&
+        emp?.role?.name?.toLowerCase().includes(searchData.toLowerCase()))
+    );
+  });
+
   const columns = [
     {
       name: "#",
@@ -242,7 +256,7 @@ export default function Employees() {
     },
   ];
   const datas = [];
-  data?.data?.map((emp, index) => {
+  filterData?.map((emp, index) => {
     return datas.push({
       id: index + 1,
       name: emp?.companyName,
@@ -290,6 +304,9 @@ export default function Employees() {
   ) : (
     <Layout
       title="Employees"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <style>{style}</style>
@@ -604,7 +621,7 @@ export default function Employees() {
             </ModalContent>
           </Modal>
           <section className="space-y-3">
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-5">
               <AddButton text="Employee" modal={setAddModal} />
             </div>
             <MyDataTable columns={columns} data={datas} dependancy={data} />

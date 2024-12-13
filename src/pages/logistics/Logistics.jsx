@@ -30,6 +30,7 @@ export default function Logistics() {
     userType === "Admin" ? "getLogCompanies" : "getLogCompanies/?featureId=3"
   );
   const [loader, setLoader] = useState(false);
+  const [searchData, setSearchData] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [addLogistic, setAddLogistic] = useState({
     title: "",
@@ -190,6 +191,22 @@ export default function Logistics() {
       setDisabled(false);
     }
   };
+
+  const filterData = data?.data?.filter((log) => {
+    return (
+      searchData === "" ||
+      (log?.title &&
+        log?.title.toLowerCase().includes(searchData.toLowerCase())) ||
+      (log?.description &&
+        log?.description.toLowerCase().includes(searchData.toLowerCase())) ||
+      (log?.flashCharges &&
+        log?.flashCharges.toString().includes(searchData)) ||
+      (log?.standardCharges &&
+        log?.standardCharges.toString().includes(searchData)) ||
+      (log?.divisor && log?.divisor.toString().includes(searchData))
+    );
+  });
+
   const columns = [
     {
       name: "#",
@@ -229,7 +246,7 @@ export default function Logistics() {
     },
   ];
   const datas = [];
-  data?.data?.map((log, index) =>
+  filterData?.map((log, index) =>
     datas.push({
       id: index + 1,
       title: log?.title,
@@ -286,6 +303,9 @@ export default function Logistics() {
   ) : (
     <Layout
       title="Logistic Companies"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <Modal
@@ -561,7 +581,7 @@ export default function Logistics() {
             </ModalContent>
           </Modal>
           <section className="space-y-3">
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-5">
               <AddButton text="Logistic" modal={setAddModal} />
             </div>
             <MyDataTable columns={columns} data={datas} dependancy={data} />

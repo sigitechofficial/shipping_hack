@@ -25,8 +25,8 @@ import { PutAPI } from "../../utilities/PutAPI";
 
 export default function Notifications() {
   const { data, reFetch } = GetAPI("getnotdata");
-  console.log("🚀 ~ Notifications ~ data:", data?.data);
   const [loader, setLoader] = useState(false);
+  const [searchData, setSearchData] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [sendNotification, setSendNotification] = useState({
     sendTo: "",
@@ -131,6 +131,18 @@ export default function Notifications() {
     setDeleteModal(false);
   };
 
+  const filterData = data?.data?.filter((not) => {
+    return (
+      searchData === "" ||
+      (not?.title &&
+        not?.title.toLowerCase().includes(searchData.toLowerCase())) ||
+      (not?.body &&
+        not?.body.toLowerCase().includes(searchData.toLowerCase())) ||
+      (not?.to && not?.to.toLowerCase().includes(searchData.toLowerCase())) ||
+      (not?.at && not?.at.toLowerCase().includes(searchData.toLowerCase()))
+    );
+  });
+
   const columns = [
     {
       name: "#",
@@ -158,7 +170,7 @@ export default function Notifications() {
     },
   ];
   const datas = [];
-  data?.data?.map((not, index) =>
+  filterData?.map((not, index) =>
     datas.push({
       id: index + 1,
       title: not?.title,
@@ -184,6 +196,9 @@ export default function Notifications() {
   ) : (
     <Layout
       title="Notifications"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <Modal
@@ -302,7 +317,7 @@ export default function Notifications() {
           </Modal>
 
           <section className="space-y-3">
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-5">
               <button
                 onClick={() => setSendModal(true)}
                 className="py-2.5 px-12 rounded bg-themePurple font-medium text-base text-white border border-themePurple hover:bg-transparent hover:text-themePurple"

@@ -32,6 +32,7 @@ export default function Restricted() {
   const { data, reFetch } = GetAPI("restricteditem");
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [searchData, setSearchData] = useState("");
   const [addItem, setAddItem] = useState({
     title: "",
     image: "",
@@ -148,6 +149,15 @@ export default function Restricted() {
       setDisabled(false);
     }
   };
+
+  const filterData = data?.data?.filter((faq) => {
+    return (
+      searchData === "" ||
+      (faq?.title &&
+        faq?.title.toLowerCase().includes(searchData.toLowerCase()))
+    );
+  });
+
   const columns = [
     {
       name: "#",
@@ -170,8 +180,9 @@ export default function Restricted() {
       selector: (row) => row.action,
     },
   ];
+
   const datas = [];
-  data?.data?.map((res, index) =>
+  filterData?.map((res, index) =>
     datas.push({
       id: index + 1,
       title: res?.title,
@@ -218,11 +229,15 @@ export default function Restricted() {
       ),
     })
   );
+
   return data.length === 0 ? (
     <Loader />
   ) : (
     <Layout
       title="Restricted Items"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <Modal onClose={closeAddModal} isOpen={addModal} size="xl" isCentered>
@@ -389,7 +404,7 @@ export default function Restricted() {
             </ModalContent>
           </Modal>
           <section className="space-y-3">
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-5">
               <AddButton text="Item" modal={setAddModal} />
             </div>
             <MyDataTable columns={columns} data={datas} dependancy={data} />

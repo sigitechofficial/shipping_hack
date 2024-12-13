@@ -36,6 +36,7 @@ export default function Warehouses() {
   };
   const navigate = useNavigate();
   const { data, reFetch } = GetAPI("allwarehouses");
+  const [searchData, setSearchData] = useState("");
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [warehouseId, setWarehouseId] = useState("");
@@ -139,6 +140,19 @@ export default function Warehouses() {
       setDisabled(false);
     }
   };
+
+  const filterData = data?.data?.filter((ware) => {
+    return (
+      searchData === "" ||
+      (ware?.companyName &&
+        ware?.companyName.toLowerCase().includes(searchData.toLowerCase())) ||
+      (ware?.email &&
+        ware?.email.toLowerCase().includes(searchData.toLowerCase())) ||
+      (ware?.located &&
+        ware?.located?.toLowerCase().includes(searchData.toLowerCase()))
+    );
+  });
+
   const columns = [
     {
       name: "#",
@@ -166,7 +180,7 @@ export default function Warehouses() {
     },
   ];
   const datas = [];
-  data?.data?.map((ware, index) => {
+  filterData?.map((ware, index) => {
     return datas.push({
       id: index + 1,
       name: ware?.companyName,
@@ -207,6 +221,9 @@ export default function Warehouses() {
   ) : (
     <Layout
       title="Warehouses"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <style>{style}</style>
@@ -333,7 +350,7 @@ export default function Warehouses() {
             </ModalContent>
           </Modal>
           <section className="space-y-3">
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-5">
               <Link
                 to={"/create-warehouse"}
                 className="py-2.5 px-12 rounded bg-themeBlue font-medium text-base text-white border border-themeBlue hover:bg-transparent hover:text-themeBlue"

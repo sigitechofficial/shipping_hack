@@ -29,6 +29,7 @@ import Layout from "../../components/Layout";
 
 export default function Vehicles() {
   const { data, reFetch } = GetAPI("getallvehicle");
+  const [searchData, setSearchData] = useState("");
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [addVehicle, setAddVehicle] = useState({
@@ -193,6 +194,21 @@ export default function Vehicles() {
       setDisabled(false);
     }
   };
+
+  const filterData = data?.data?.vehicleData?.filter((veh) => {
+    return (
+      searchData === "" ||
+      (veh?.title &&
+        veh?.title.toLowerCase().includes(searchData.toLowerCase())) ||
+      (veh?.baseRate && veh?.baseRate.toString().includes(searchData)) ||
+      (veh?.perUnitRate && veh?.perUnitRate.toString().includes(searchData)) ||
+      (veh?.weightCapacity &&
+        veh?.weightCapacity.toString().includes(searchData)) ||
+      (veh?.volumeCapacity &&
+        veh?.volumeCapacity.toString().includes(searchData))
+    );
+  });
+
   const columns = [
     {
       name: "#",
@@ -228,7 +244,7 @@ export default function Vehicles() {
     },
   ];
   const datas = [];
-  data?.data?.vehicleData?.map((veh, index) =>
+  filterData?.map((veh, index) =>
     datas.push({
       id: index + 1,
       vehicle: veh?.title,
@@ -281,6 +297,9 @@ export default function Vehicles() {
   ) : (
     <Layout
       title="Vehicle Types"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <Modal
@@ -561,7 +580,7 @@ export default function Vehicles() {
             </ModalContent>
           </Modal>
           <section className="space-y-3">
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-5">
               <AddButton text="Vehicle" modal={setAddModal} />
             </div>
             <MyDataTable columns={columns} data={datas} dependancy={data} />

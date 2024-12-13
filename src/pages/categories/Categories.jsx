@@ -28,6 +28,7 @@ import Layout from "../../components/Layout";
 
 export default function Categories() {
   const [disabled, setDisabled] = useState(false);
+  const [searchData, setSearchData] = useState("");
   const { data, reFetch } = GetAPI("getallcategory");
   const [loader, setLoader] = useState(false);
   const [delId, setDelId] = useState({
@@ -113,7 +114,7 @@ export default function Categories() {
       }
     }
   };
-  
+
   const changeCategoryFunc = async () => {
     setDisabled(true);
     setLoader(true);
@@ -158,6 +159,15 @@ export default function Categories() {
     setDeleteModal(true);
   };
 
+  const filterData = data?.data?.filter((cat) => {
+    return (
+      searchData === "" ||
+      (cat?.title &&
+        cat?.title.toLowerCase().includes(searchData.toLowerCase())) ||
+      (cat?.charge && cat?.charge.toString().includes(searchData))
+    );
+  });
+
   const columns = [
     {
       name: "#",
@@ -177,7 +187,7 @@ export default function Categories() {
     },
   ];
   const datas = [];
-  data?.data?.map((cat, index) =>
+  filterData?.map((cat, index) =>
     datas.push({
       id: index + 1,
       title: cat?.title,
@@ -199,11 +209,15 @@ export default function Categories() {
       ),
     })
   );
+
   return data.length === 0 ? (
     <Loader />
   ) : (
     <Layout
       title="Categories"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <Modal onClose={closeAddModal} isOpen={addModal} size="xl" isCentered>
@@ -360,7 +374,7 @@ export default function Categories() {
           </Modal>
 
           <section className="space-y-3">
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-5">
               <AddButton text="Category" modal={setAddModal} />
             </div>
             <MyDataTable columns={columns} data={datas} dependancy={data} />

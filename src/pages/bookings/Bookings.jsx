@@ -8,15 +8,39 @@ import Layout from "../../components/Layout";
 
 export default function Bookings() {
   const [disabled, setDisabled] = useState(false);
+  const [searchData, setSearchData] = useState("");
   const navigate = useNavigate();
   const { data } = GetAPI("bookings");
   const bookingDetails = async (id) => {
     setDisabled(true);
     localStorage.setItem("orderId", id);
-    localStorage.removeItem("trackId")
+    localStorage.removeItem("trackId");
     navigate("/booking-details");
   };
-  const columns = [ 
+
+  const filterData = data?.data?.filter((det) => {
+    return (
+      searchData === "" ||
+      (det?.bookingData?.trackingId &&
+        det?.bookingData?.trackingId
+          .toLowerCase()
+          .includes(searchData.toLowerCase())) ||
+      (det?.description &&
+        det?.description.toLowerCase().includes(searchData.toLowerCase())) ||
+      (det?.bookingData?.distance &&
+        det?.bookingData?.distance.toString().includes(searchData)) ||
+      (det?.bookingData?.totalWeight &&
+        det?.bookingData?.totalWeight.toString().includes(searchData)) ||
+      (det?.bookingData?.total &&
+        det?.bookingData?.total.toString().includes(searchData)) ||
+      (det?.dropoffAddress?.streetAddress &&
+        det?.dropoffAddress?.streetAddress
+          .toLowerCase()
+          .includes(searchData.toLowerCase()))
+    );
+  });
+  
+  const columns = [
     {
       name: "#",
       selector: (row) => row.id,
@@ -48,7 +72,7 @@ export default function Bookings() {
     },
   ];
   const datas = [];
-  data?.data?.map((det, index) => {
+  filterData?.map((det, index) => {
     return datas.push({
       id: index + 1,
       // id: det?.bookingData && det?.bookingData?.id,
@@ -70,11 +94,14 @@ export default function Bookings() {
   ) : (
     <Layout
       title="Bookings"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <MyDataTable columns={columns} data={datas} dependancy={data} />
         </>
-      } 
+      }
     />
   );
 }

@@ -16,7 +16,7 @@ export default function MainSection(props) {
       } bg-themeGray2 top-[92px] py-12 px-10 float-right`}
     >
       <div className="flex items-center justify-between">
-        <h1 className={`font-bold text-2xl mb-5 `}>{props.title}</h1>
+        <h1 className={`font-bold text-2xl mb-5`}>{props.title}</h1>
         {props?.showSearchBar && (
           <div className="relative">
             <input

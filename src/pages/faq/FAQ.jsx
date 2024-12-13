@@ -33,6 +33,7 @@ export default function FAQ() {
     userType === "Admin" ? "allfaqs" : "allfaqs/?featureId=2"
   );
   const [loader, setLoader] = useState(false);
+  const [searchData, setSearchData] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [modalType, setModalType] = useState("");
   const [addFAQ, setAddFAQ] = useState({
@@ -125,6 +126,15 @@ export default function FAQ() {
       setDisabled(false);
     }
   };
+  const filterData = data?.data?.filter((faq) => {
+    return (
+      searchData === "" ||
+      (faq?.title &&
+        faq?.title.toLowerCase().includes(searchData.toLowerCase())) ||
+      (faq?.answer &&
+        faq?.charge.toLowerCase().includes(searchData.toLowerCase()))
+    );
+  });
   const columns = [
     {
       name: "#",
@@ -152,7 +162,7 @@ export default function FAQ() {
     },
   ];
   const datas = [];
-  data?.data?.map((faq, index) =>
+  filterData?.map((faq, index) =>
     datas.push({
       id: index + 1,
       title: faq?.title,
@@ -207,6 +217,9 @@ export default function FAQ() {
   ) : (
     <Layout
       title="FAQ's"
+      showSearchBar={true}
+      setSearchData={setSearchData}
+      searchData={searchData}
       content={
         <>
           <Modal onClose={closeAddModal} isOpen={addModal} size="xl" isCentered>
@@ -333,7 +346,7 @@ export default function FAQ() {
             </ModalContent>
           </Modal>
           <section className="space-y-3">
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-5">
               <AddButton text="FAQ" modal={setAddModal} />
             </div>
             <MyDataTable columns={columns} data={datas} dependancy={data} />
