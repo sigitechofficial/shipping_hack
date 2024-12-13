@@ -28,7 +28,10 @@ import { inputStyle, labelStyle } from "../../utilities/Input";
 import Layout from "../../components/Layout";
 
 export default function FAQ() {
-  const { data, reFetch } = GetAPI("allfaqs");
+  const userType = localStorage.getItem("userType");
+  const { data, reFetch } = GetAPI(
+    userType === "Admin" ? "allfaqs" : "allfaqs/?featureId=1"
+  );
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [modalType, setModalType] = useState("");

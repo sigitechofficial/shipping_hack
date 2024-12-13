@@ -25,8 +25,13 @@ import { inputStyle, labelStyle } from "../../utilities/Input";
 import Select from "react-select";
 
 export default function Units() {
-  const { data, reFetch } = GetAPI("getallunits");
-  const unitTypes = GetAPI("getunitstypes");
+  const userType = localStorage.getItem("userType");
+  const { data, reFetch } = GetAPI(
+    userType === "Admin" ? "getallunits" : "getallunits/?featureId=1"
+  );
+  const unitTypes = GetAPI(
+    userType === "Admin" ? "getunitstypes" : "getunitstypes/?featureId=1"
+  );
   const [loader, setLoader] = useState(false);
   const [tab, setTab] = useState("");
   const [addUnit, setAddUnit] = useState({

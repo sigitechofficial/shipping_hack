@@ -19,8 +19,6 @@ export default function BookingDetails() {
       ? GetAPI(`trackorder?id=${parseInt(bookingId)}`)
       : GetAPI(`trackorder?s=${trackingId}`);
 
-  // console.log("🚀 ~ BookingDetails ~ data:", data?.data);
-
   const statuses = GetAPI("all-booking-statuses");
   const allStatus = [];
   statuses?.data?.data?.map((sta, index) => {
@@ -32,7 +30,6 @@ export default function BookingDetails() {
   const [parcelOpenStates, setParcelOpenStates] = useState(
     Array(data?.data?.packages.length).fill(false)
   );
-  // console.log("parcelOpenStates", parcelOpenStates);
 
   const toggleParcelOpen = (index) => {
     const newParcelOpenStates = [...parcelOpenStates];
@@ -153,6 +150,18 @@ export default function BookingDetails() {
                     </span>
                     <p className="font-normal text-base">
                       {data?.data?.senderDetails?.number}
+                    </p>
+                  </div>
+                  <div>
+                    <span
+                      className={`font-normal text-sm text-black text-opacity-60`}
+                    >
+                      Virtual Box no
+                    </span>
+                    <p className="font-normal text-base">
+                      {data?.data?.senderDetails?.virtualBoxNumber
+                        ? data?.data?.senderDetails?.virtualBoxNumber
+                        : "N/A"}
                     </p>
                   </div>
                 </div>
@@ -281,12 +290,32 @@ export default function BookingDetails() {
                 <h1 className="font-medium text-2xl">Shipping Company</h1>
                 <div className="border border-black border-opacity-20 rounded-md p-5 flex justify-between items-center">
                   <div className="flex items-center gap-x-5">
-                    <IoMdPaper size={32} />
+                    <div className="w-5">
+                      <IoMdPaper size={32} />
+                    </div>
                     <div>
                       <h4 className="font-medium text-base">Tracking Number</h4>
-                      <div className="font-normal text-sm text-black text-opacity-60">
+                      {/* <div className="font-normal text-sm text-black text-opacity-60">
                         {data?.data?.logisticCompanyTrackingNum}
-                      </div>
+                      </div> */}
+                      {data?.data?.packages?.map(
+                        (
+                          { trackingNum, logisticCompanyTrackingNum },
+                          index
+                        ) => (
+                          <div key={index}>
+                            <p className="text-sm text-menuColor">
+                              The Tracking Number of Package{" "}
+                              <b>{trackingNum}</b> is{" "}
+                              {logisticCompanyTrackingNum ? (
+                                <b>{logisticCompanyTrackingNum}</b>
+                              ) : (
+                                <b>N/A</b>
+                              )}
+                            </p>
+                          </div>
+                        )
+                      )}
                     </div>
                   </div>
                   <div className="font-medium text-xl capitalize">

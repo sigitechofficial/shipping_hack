@@ -25,6 +25,7 @@ import { PutAPI } from "../../utilities/PutAPI";
 
 export default function Notifications() {
   const { data, reFetch } = GetAPI("getnotdata");
+  console.log("🚀 ~ Notifications ~ data:", data?.data);
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [sendNotification, setSendNotification] = useState({
@@ -32,6 +33,8 @@ export default function Notifications() {
     title: "",
     body: "",
   });
+  const [delId, setDelId] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
   const [sendModal, setSendModal] = useState(false);
   const closeSendModal = () => {
     setSendModal(false);
@@ -97,20 +100,37 @@ export default function Notifications() {
       setDisabled(false);
     }
   };
-  const deleteNotificationFunc = async (notId) => {
+  const deleteNotificationFunc = async () => {
     setDisabled(true);
+    setLoader(true);
     let res = await PutAPI("deletenotification", {
-      notId: notId,
+      notId: delId,
     });
+    console.log("🚀 ~ deleteNotificationFunc ~ PutAPI:", res);
     if (res?.data?.status === "1") {
       reFetch();
       success_toaster(res?.data?.message);
       setDisabled(false);
+      setLoader(false);
+      setDeleteModal(false);
     } else {
       error_toaster(res?.data?.message);
       setDisabled(false);
+      setLoader(false);
+      setDeleteModal(false);
     }
   };
+
+  const handleDeleteChargeFunc = (notId) => {
+    setDelId(notId);
+    setDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDelId("");
+    setDeleteModal(false);
+  };
+
   const columns = [
     {
       name: "#",
@@ -152,7 +172,7 @@ export default function Notifications() {
             disabled={disabled}
           />
           <DTDel
-            del={() => deleteNotificationFunc(not?.id)}
+            del={() => handleDeleteChargeFunc(not?.id)}
             disabled={disabled}
           />
         </div>
@@ -243,6 +263,44 @@ export default function Notifications() {
               </form>
             </ModalContent>
           </Modal>
+
+          <Modal
+            onClose={closeDeleteModal}
+            isOpen={deleteModal}
+            size="xl"
+            isCentered
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>
+                {!loader && (
+                  <h1 className="text-center">Delete Notification</h1>
+                )}
+              </ModalHeader>
+              <ModalBody>
+                {loader ? (
+                  <div className="relative h-32">
+                    <MiniLoader />
+                  </div>
+                ) : (
+                  <p className="text-lg">
+                    Are you sure, you want to delete notification?
+                  </p>
+                )}
+              </ModalBody>
+              <ModalFooter>
+                {!loader && (
+                  <ModalButtons
+                    text="Delete"
+                    close={closeDeleteModal}
+                    action={deleteNotificationFunc}
+                    disabled={disabled}
+                  />
+                )}
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
           <section className="space-y-3">
             <div className="flex justify-end">
               <button

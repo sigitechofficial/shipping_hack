@@ -50,8 +50,8 @@ export default function Bookings() {
   const datas = [];
   data?.data?.map((det, index) => {
     return datas.push({
-      // id: index + 1,
-      id: det?.bookingData && det?.bookingData?.id,
+      id: index + 1,
+      // id: det?.bookingData && det?.bookingData?.id,
       trackingId: det?.bookingData && det?.bookingData?.trackingId,
       distance: det?.bookingData && det?.bookingData?.distance,
       weight: det?.bookingData && det?.bookingData?.totalWeight,

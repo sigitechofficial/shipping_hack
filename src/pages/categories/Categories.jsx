@@ -30,6 +30,11 @@ export default function Categories() {
   const [disabled, setDisabled] = useState(false);
   const { data, reFetch } = GetAPI("getallcategory");
   const [loader, setLoader] = useState(false);
+  const [delId, setDelId] = useState({
+    status: false,
+    id: "",
+  });
+  const [deleteModal, setDeleteModal] = useState(false);
   const [addCategory, setAddCategory] = useState({
     title: "",
     charge: "",
@@ -108,21 +113,51 @@ export default function Categories() {
       }
     }
   };
-  const changeCategoryFunc = async (status, categoryId) => {
+  
+  const changeCategoryFunc = async () => {
     setDisabled(true);
+    setLoader(true);
     let res = await PutAPI("categorystatus", {
-      status: status,
-      categoryId: categoryId,
+      status: delId?.status,
+      categoryId: delId?.id,
     });
     if (res?.data?.status === "1") {
       reFetch();
+      setLoader(false);
+      setDeleteModal(false);
       success_toaster("Category deleted successfully!");
       setDisabled(false);
+      setDelId({
+        status: false,
+        id: "",
+      });
     } else {
       error_toaster(res?.data?.message);
       setDisabled(false);
+      setLoader(false);
+      setDeleteModal(false);
+      setDelId({
+        status: false,
+        id: "",
+      });
     }
   };
+
+  const closeDeleteModal = () => {
+    setDelId({
+      status: false,
+      id: "",
+    });
+    setDeleteModal(false);
+    setDisabled(false);
+  };
+
+  const handleDelCat = (status, id) => {
+    setDelId({ status: status, id: id });
+    setDisabled(false);
+    setDeleteModal(true);
+  };
+
   const columns = [
     {
       name: "#",
@@ -159,10 +194,7 @@ export default function Categories() {
               });
             }}
           />
-          <DTDel
-            del={() => changeCategoryFunc(false, cat?.id)}
-            disabled={disabled}
-          />
+          <DTDel del={() => handleDelCat(false, cat?.id)} disabled={disabled} />
         </div>
       ),
     })
@@ -292,6 +324,41 @@ export default function Categories() {
               </form>
             </ModalContent>
           </Modal>
+          <Modal
+            onClose={closeDeleteModal}
+            isOpen={deleteModal}
+            size="xl"
+            isCentered
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>
+                {!loader && <h1 className="text-center">Delete Category</h1>}
+              </ModalHeader>
+              <ModalBody>
+                {loader ? (
+                  <div className="relative h-32">
+                    <MiniLoader />
+                  </div>
+                ) : (
+                  <p className="text-lg">
+                    Are you sure, you want to delete Category?
+                  </p>
+                )}
+              </ModalBody>
+              <ModalFooter>
+                {!loader && (
+                  <ModalButtons
+                    text="Delete"
+                    close={closeDeleteModal}
+                    action={changeCategoryFunc}
+                    disabled={disabled}
+                  />
+                )}
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
           <section className="space-y-3">
             <div className="flex justify-end">
               <AddButton text="Category" modal={setAddModal} />

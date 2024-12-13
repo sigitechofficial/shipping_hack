@@ -45,11 +45,11 @@ export default function UpdateDriver3() {
       formData.append("licIssueDate", license.licIssueDate);
       formData.append("licExpiryDate", license.licExpiryDate);
       license.imageUpdated
-        ? formData.append("frontImageLic", license.frontImageLic)
-        : formData.append("frontImageLic", "");
+        ? formData.append("frontImage", license.frontImageLic)
+        : formData.append("frontImage", "");
       license.imageUpdated
-        ? formData.append("backImageLic", license.backImageLic)
-        : formData.append("backImageLic", "");
+        ? formData.append("backImage", license.backImageLic)
+        : formData.append("backImage", "");
       formData.append("userId", license.userId);
       let res = await PutAPI("updateDriverLicense", formData);
       if (res?.data?.status === "1") {
@@ -65,7 +65,7 @@ export default function UpdateDriver3() {
         });
         setLoader(false);
       } else {
-        error_toaster(res?.data?.message);
+        error_toaster(res?.data?.error);
         setLoader(false);
       }
     }

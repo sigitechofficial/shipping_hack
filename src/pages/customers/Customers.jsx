@@ -16,10 +16,13 @@ import { BASE_URL } from "../../utilities/URL";
 import Layout from "../../components/Layout";
 
 export default function Customers() {
+  const userType = localStorage.getItem("userType");
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(false);
   const [loader, setLoader] = useState(false);
-  const { data, reFetch } = GetAPI("allcustomers");
+  const { data, reFetch } = GetAPI(
+    userType === "Admin" ? "allcustomers" : "allcustomers/?featureId=1"
+  );
   const changeCustomerStatus = async (status, userId) => {
     setDisabled(true);
     let change = await PutAPI("userstatus", {
@@ -77,6 +80,10 @@ export default function Customers() {
       selector: (row) => row.name,
     },
     {
+      name: "VBN",
+      selector: (row) => row.vbn,
+    },
+    {
       name: "Email",
       selector: (row) => row.email,
     },
@@ -99,6 +106,7 @@ export default function Customers() {
   data?.data?.map((cust, index) => {
     return datas.push({
       id: index + 1,
+      vbn: cust?.virtualBox,
       name: cust?.firstName + " " + cust?.lastName,
       email: cust?.email,
       phone: cust?.countryCode + " " + cust?.phoneNum,

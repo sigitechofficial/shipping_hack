@@ -25,7 +25,10 @@ import {
 import { inputStyle, labelStyle } from "../../utilities/Input";
 
 export default function Logistics() {
-  const { data, reFetch } = GetAPI("getLogCompanies");
+  const userType = localStorage.getItem("userType");
+  const { data, reFetch } = GetAPI(
+    userType === "Admin" ? "getLogCompanies" : "getLogCompanies/?featureId=1"
+  );
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [addLogistic, setAddLogistic] = useState({
@@ -478,10 +481,7 @@ export default function Logistics() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label
-                          className={labelStyle}
-                          htmlFor="updateDivisor"
-                        >
+                        <label className={labelStyle} htmlFor="updateDivisor">
                           Divisor
                         </label>
                         <input

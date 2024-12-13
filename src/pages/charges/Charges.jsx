@@ -33,12 +33,17 @@ export default function Charges() {
   const [tab, setTab] = useState("General");
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [delId, setDelId] = useState({
+    type: "",
+    id: "",
+  });
+  const [deleteModal, setDeleteModal] = useState(false);
   const gen = GetAPI("getgencharges");
-  console.log("🚀 ~ Charges ~ gen:", gen?.data?.data);
   const dist = GetAPI("getdistancecharge");
   const weight = GetAPI("getweightcharge");
   const vol = GetAPI("getvolweicharge");
   const log = GetAPI("getLogCharges");
+  console.log("🚀 ~ Charges ~ log:", log?.data?.data?.charges);
   const activeLog = GetAPI("activeLog");
   const [genCharge, setGenCharge] = useState({
     value: "",
@@ -335,28 +340,53 @@ export default function Charges() {
       }
     }
   };
-  const deleteChargeFunc = async (url, chargeId) => {
+
+  const deleteChargeFunc = async () => {
     setDisabled(true);
-    let res = await PutAPI(url, {
-      chargeId: chargeId,
+    setLoader(true);
+    let res = await PutAPI(delId?.type, {
+      chargeId: delId?.id,
     });
     if (res?.data?.status === "1") {
-      if (url === "deletedistancecharge") {
+      if (delId?.type === "deletedistancecharge") {
         dist.reFetch();
-      } else if (url === "deleteweightcharge") {
+      } else if (delId?.type === "deleteweightcharge") {
         weight.reFetch();
-      } else if (url === "deletevolweicharge") {
+      } else if (delId?.type === "deletevolweicharge") {
         vol.reFetch();
-      } else if (url === "deleteChargesForLog") {
+      } else if (delId?.type === "deleteChargesForLog") {
         log.reFetch();
       }
       success_toaster(res?.data?.message);
       setDisabled(false);
+      setLoader(false);
+      setDeleteModal(false);
+      setDelId({ type: "", id: "" });
     } else {
       error_toaster(res?.data?.message);
       setDisabled(false);
+      setLoader(false);
+      setDeleteModal(false);
+      setDelId({ type: "", id: "" });
     }
   };
+
+  const handleDeleteChargeFunc = (type, id) => {
+    setDelId({
+      type: type,
+      id: id,
+    });
+    setDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDelId({
+      type: "",
+      id: "",
+    });
+    setDeleteModal(false);
+  };
+
   const options = [];
   activeLog?.data?.data?.data?.map((ele, index) => {
     return options.push({
@@ -390,6 +420,10 @@ export default function Charges() {
       {
         name: "Logistic Company",
         selector: (row) => row.company,
+      },
+      {
+        name: "Type",
+        selector: (row) => row.type,
       },
       {
         name: "Action",
@@ -448,7 +482,10 @@ export default function Charges() {
               }}
             />
             <DTDel
-              del={() => deleteChargeFunc("deletedistancecharge", dist?.id)}
+              del={() =>
+                handleDeleteChargeFunc("deletedistancecharge", dist?.id)
+              }
+              // del={() => deleteChargeFunc("deletedistancecharge", dist?.id)}
               disabled={disabled}
             />
           </div>
@@ -478,7 +515,10 @@ export default function Charges() {
               }}
             />
             <DTDel
-              del={() => deleteChargeFunc("deleteweightcharge", weight?.id)}
+              del={() =>
+                handleDeleteChargeFunc("deleteweightcharge", weight?.id)
+              }
+              // del={() => deleteChargeFunc("deleteweightcharge", weight?.id)}
               disabled={disabled}
             />
           </div>
@@ -508,7 +548,8 @@ export default function Charges() {
               }}
             />
             <DTDel
-              del={() => deleteChargeFunc("deletevolweicharge", vol?.id)}
+              del={() => handleDeleteChargeFunc("deletevolweicharge", vol?.id)}
+              // del={() => deleteChargeFunc("deletevolweicharge", vol?.id)}
               disabled={disabled}
             />
           </div>
@@ -524,6 +565,7 @@ export default function Charges() {
         price: log?.charges,
         flash: log?.flash ? "Yes" : "No",
         company: log?.logisticCompany && log?.logisticCompany?.title,
+        type: log?.bookingType,
         action: (
           <div className="flex gap-x-2">
             <DTEdit
@@ -539,7 +581,8 @@ export default function Charges() {
               }}
             />
             <DTDel
-              del={() => deleteChargeFunc("deleteChargesForLog", log?.id)}
+              del={() => handleDeleteChargeFunc("deleteChargesForLog", log?.id)}
+              // del={() => deleteChargeFunc("deleteChargesForLog", log?.id)}
               disabled={disabled}
             />
           </div>
@@ -984,6 +1027,54 @@ export default function Charges() {
               </form>
             </ModalContent>
           </Modal>
+
+          <Modal
+            onClose={closeDeleteModal}
+            isOpen={deleteModal}
+            size="xl"
+            isCentered
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>
+                {!loader && (
+                  <h1 className="text-center">
+                    Delete{" "}
+                    {delId?.type === "deletedistancecharge"
+                      ? "Distance"
+                      : delId?.type === "deleteweightcharge"
+                      ? "Weight"
+                      : delId?.type === "deletevolweicharge"
+                      ? "Volume weight"
+                      : "Company"}{" "}
+                    Charges
+                  </h1>
+                )}
+              </ModalHeader>
+              <ModalBody>
+                {loader ? (
+                  <div className="relative h-32">
+                    <MiniLoader />
+                  </div>
+                ) : (
+                  <p className="text-lg">
+                    Are you sure, you want to delete Charge?
+                  </p>
+                )}
+              </ModalBody>
+              <ModalFooter>
+                {!loader && (
+                  <ModalButtons
+                    text="Delete"
+                    close={closeDeleteModal}
+                    action={deleteChargeFunc}
+                    disabled={disabled}
+                  />
+                )}
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
           <section className="space-y-12">
             <div className="flex">
               <TabButton text="General" set={setTab} tab={tab} width="w-40" />

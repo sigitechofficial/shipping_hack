@@ -32,12 +32,17 @@ export default function Login() {
         if (res?.data?.status === "1") {
           setLoader(false);
           localStorage.setItem("accessToken", res?.data?.data?.accessToken);
+          localStorage.setItem("userType", res?.data?.data?.adminType);
           setLoginStatus(true);
-          navigate("/");
+          if (res?.data?.data?.adminType === "Admin") {
+            navigate("/");
+          } else {
+            navigate("/customers");
+          }
           success_toaster(res?.data?.message);
         } else {
           setLoader(false);
-          error_toaster(res?.data?.message);
+          error_toaster(res?.data?.error);
         }
         action.resetForm();
       },

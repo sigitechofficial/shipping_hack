@@ -63,9 +63,10 @@ export default function UpdateDriver2() {
       formData.append("imageUpdated", vehicle.imageUpdated);
       vehicle.imageUpdated &&
         vehicle.vehImages.forEach((file) => {
-          formData.append("vehImages", file);
+          formData.append("profileImage", file);
         });
       let res = await PutAPI("updateDriverVehicle", formData);
+      console.log("🚀 ~ vehicleFunc ~ res:", res);
       if (res?.data?.status === "1") {
         setVehicle({
           userId: "",
@@ -81,7 +82,7 @@ export default function UpdateDriver2() {
         success_toaster(res?.data?.message);
         setLoader(false);
       } else {
-        error_toaster(res?.data?.message);
+        error_toaster(res?.data?.error);
         setLoader(false);
       }
     }

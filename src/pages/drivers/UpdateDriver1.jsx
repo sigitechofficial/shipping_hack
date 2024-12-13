@@ -50,6 +50,7 @@ export default function UpdateDriver1() {
     } else if (driver.imageUpdated && driver.profileImage === "") {
       info_toaster("Please enter Driver's Profile Image");
     } else {
+      console.log("driver details:- ", driver);
       setLoader(true);
       const formData = new FormData();
       formData.append("userId", driver.userId);
@@ -61,6 +62,9 @@ export default function UpdateDriver1() {
       driver.imageUpdated
         ? formData.append("profileImage", driver.profileImage)
         : formData.append("profileImage", "");
+      driver.imageUpdated
+        ? formData.append("isProfileChanged", true)
+        : formData.append("isProfileChanged", false);
       let res = await PutAPI("updateDriverProfile", formData);
       if (res?.data?.status === "1") {
         setDriver({
@@ -75,7 +79,7 @@ export default function UpdateDriver1() {
         navigate("/drivers");
         success_toaster(res?.data?.message);
       } else {
-        error_toaster(res?.data?.message);
+        error_toaster(res?.data?.error);
       }
     }
   };
