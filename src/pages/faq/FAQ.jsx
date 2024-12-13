@@ -30,7 +30,7 @@ import Layout from "../../components/Layout";
 export default function FAQ() {
   const userType = localStorage.getItem("userType");
   const { data, reFetch } = GetAPI(
-    userType === "Admin" ? "allfaqs" : "allfaqs/?featureId=1"
+    userType === "Admin" ? "allfaqs" : "allfaqs/?featureId=2"
   );
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);

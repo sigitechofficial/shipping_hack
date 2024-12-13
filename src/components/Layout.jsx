@@ -7,6 +7,8 @@ import Header from "./Header";
 export const LayoutContext = createContext(null);
 export default function Layout(props) {
   const [loader, setLoader] = useState(false);
+  const [searchData, setSearchData] = useState("");
+
   return loader ? (
     <Loader />
   ) : (

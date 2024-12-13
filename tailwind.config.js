@@ -28,6 +28,7 @@ module.exports = {
         themeWhite: "#EDF2F7",
         themeGreen: "#319795",
         themeGreen2: "#20E0A5",
+        menuColor: "#00000099",
       },
       colors: {
         themePurple: "#202053",
@@ -45,6 +46,7 @@ module.exports = {
         themeWhite: "#EDF2F7",
         themeGreen: "#319795",
         themeGreen2: "#20E0A5",
+        menuColor: "#00000099",
       },
     },
   },

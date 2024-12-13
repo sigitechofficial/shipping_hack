@@ -29,6 +29,7 @@ export default function Login() {
           password: values.password,
           dvToken: "2179be7w9sk19",
         });
+        console.log("🚀 ~ onSubmit: ~ res:", res?.data?.data);
         if (res?.data?.status === "1") {
           setLoader(false);
           localStorage.setItem("accessToken", res?.data?.data?.accessToken);

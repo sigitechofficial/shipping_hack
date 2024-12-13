@@ -20,8 +20,9 @@ export default function Customers() {
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(false);
   const [loader, setLoader] = useState(false);
+
   const { data, reFetch } = GetAPI(
-    userType === "Admin" ? "allcustomers" : "allcustomers/?featureId=1"
+    userType === "Admin" ? "allcustomers" : "allcustomers/?featureId=4"
   );
   const changeCustomerStatus = async (status, userId) => {
     setDisabled(true);
@@ -70,6 +71,9 @@ export default function Customers() {
       setLoader(false);
     }
   };
+
+  // const filterData = data?.data?.map((cust, index) => {});
+
   const columns = [
     {
       name: "#",
@@ -132,6 +136,7 @@ export default function Customers() {
       ),
     });
   });
+
   return data.length === 0 || loader ? (
     <Loader />
   ) : (

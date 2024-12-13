@@ -5,13 +5,15 @@ import { Link } from "react-router-dom";
 import { imgURL } from "../utilities/URL";
 
 export default function Header() {
+  const userType = localStorage.getItem("userType");
+
   return (
     <header className="bg-themeBlue fixed z-20 w-full">
       <nav className="w-11/12 m-auto py-5 flex justify-between items-center">
         <Link to="/">
           <img src={`${imgURL}logo.webp`} alt="logo" className="w-44 xl:w-52" />
         </Link>
-        <div className="relative">
+        {/* <div className="relative">
           <input
             type="search"
             placeholder="Search for anything.."
@@ -22,14 +24,14 @@ export default function Header() {
             size={20}
             color="white"
           />
-        </div>
+        </div> */}
         <div className="flex items-center gap-x-2">
           <div className="w-12 h-12 bg-[#336598] rounded-full flex items-center justify-center">
             <FaUser size={28} color="white" />
           </div>
           <div>
             <h2 className="text-white text-sm font-semibold">Arsel T</h2>
-            <p className="text-white text-xs font-normal">Administrator</p>
+            <p className="text-white text-xs font-normal">{userType}</p>
           </div>
         </div>
       </nav>

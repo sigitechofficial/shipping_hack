@@ -27,7 +27,7 @@ import { inputStyle, labelStyle } from "../../utilities/Input";
 export default function Logistics() {
   const userType = localStorage.getItem("userType");
   const { data, reFetch } = GetAPI(
-    userType === "Admin" ? "getLogCompanies" : "getLogCompanies/?featureId=1"
+    userType === "Admin" ? "getLogCompanies" : "getLogCompanies/?featureId=3"
   );
   const [loader, setLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);

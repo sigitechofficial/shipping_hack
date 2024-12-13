@@ -27,10 +27,10 @@ import Select from "react-select";
 export default function Units() {
   const userType = localStorage.getItem("userType");
   const { data, reFetch } = GetAPI(
-    userType === "Admin" ? "getallunits" : "getallunits/?featureId=1"
+    userType === "Admin" ? "getallunits" : "getallunits/?featureId=0"
   );
   const unitTypes = GetAPI(
-    userType === "Admin" ? "getunitstypes" : "getunitstypes/?featureId=1"
+    userType === "Admin" ? "getunitstypes" : "getunitstypes/?featureId=0"
   );
   const [loader, setLoader] = useState(false);
   const [tab, setTab] = useState("");
