@@ -169,6 +169,7 @@ export default function Notifications() {
       selector: (row) => row.action,
     },
   ];
+
   const datas = [];
   filterData?.map((not, index) =>
     datas.push({
