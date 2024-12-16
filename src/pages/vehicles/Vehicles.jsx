@@ -579,7 +579,7 @@ export default function Vehicles() {
               </form>
             </ModalContent>
           </Modal>
-          
+
           <section className="space-y-3">
             <div className="flex justify-end pt-5">
               <AddButton text="Vehicle" modal={setAddModal} />
